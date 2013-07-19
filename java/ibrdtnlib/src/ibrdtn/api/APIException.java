@@ -1,5 +1,5 @@
 /*
- * ExtensionBlock.java
+ * APIException.java
  * 
  * Copyright (C) 2011 IBR, TU Braunschweig
  *
@@ -18,29 +18,16 @@
  * limitations under the License.
  *
  */
-package ibrdtn.api.object;
+package ibrdtn.api;
 
-public class ExtensionBlock extends Block {
+/**
+ * This exception is thrown if something went wrong during an API call.
+ */
+public class APIException extends Exception {
 
-    private Data _data;
+    private static final long serialVersionUID = 7146079367557056047L;
 
-    public ExtensionBlock(int type) {
-        super(type);
-    }
-
-    public ExtensionBlock(int type, Data data) {
-        super(type);
-        _data = data;
-    }
-
-    @Override
-    public Data getData() {
-        return _data;
-    }
-
-    @Override
-    public String toString() {
-        return "ExtensionBlock: length=" + _data.size()
-                + ",type=" + getType();
+    public APIException(String what) {
+        super(what);
     }
 }

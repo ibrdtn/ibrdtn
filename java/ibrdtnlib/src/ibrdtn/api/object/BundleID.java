@@ -3,7 +3,8 @@
  * 
  * Copyright (C) 2011 IBR, TU Braunschweig
  *
- * Written-by: Johannes Morgenroth <morgenroth@ibr.cs.tu-bs.de>
+ * Written-by:  Johannes Morgenroth <morgenroth@ibr.cs.tu-bs.de>
+ *              Julian Timpner      <timpner@ibr.cs.tu-bs.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,49 +21,135 @@
  */
 package ibrdtn.api.object;
 
+import ibrdtn.api.Timestamp;
+
 public class BundleID {
-	
-	private String source = null;
-	private Long timestamp = null;
-	private Long sequencenumber = null;
 
-	public BundleID()
-	{
-	}
-	
-	public BundleID(String source, Long timestamp, Long sequencenumber)
-	{
-		this.source = source;
-		this.timestamp = timestamp;
-		this.sequencenumber = sequencenumber;
-	}
+    private SingletonEndpoint source = null;
+    private Timestamp timestamp = null;
+    private Long sequenceNumber = null;
+    private Long procFlags = null;
+    private boolean isFragment = false;
+    private Long fragOffset = null;
 
-	public String getSource() {
-		return source;
-	}
+    public BundleID() {
+    }
 
-	public void setSource(String source) {
-		this.source = source;
-	}
+    public BundleID(Bundle b) {
+        this.source = b.getSource();
+        this.timestamp = b.getTimestamp();
+        this.sequenceNumber = b.getSequenceNumber();
 
-	@Override
-	public String toString() {
-		return String.valueOf(this.timestamp) + " " + String.valueOf(this.sequencenumber) + " " + this.source;
-	}
+        this.isFragment = b.getFlag(Bundle.Flags.FRAGMENT);
+        this.fragOffset = b.getFragmentOffset();
+    }
 
-	public Long getTimestamp() {
-		return timestamp;
-	}
+    public BundleID(SingletonEndpoint source, Timestamp timestamp, Long sequenceNumber) {
+        this.source = source;
+        this.timestamp = timestamp;
+        this.sequenceNumber = sequenceNumber;
+    }
 
-	public void setTimestamp(Long timestamp) {
-		this.timestamp = timestamp;
-	}
+    public SingletonEndpoint getSource() {
+        return source;
+    }
 
-	public Long getSequencenumber() {
-		return sequencenumber;
-	}
+    public void setSource(SingletonEndpoint source) {
+        this.source = source;
+    }
 
-	public void setSequencenumber(Long sequencenumber) {
-		this.sequencenumber = sequencenumber;
-	}
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Long getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(Long seq) {
+        this.sequenceNumber = seq;
+    }
+
+    public long getProcflags() {
+        return procFlags;
+    }
+
+    public void setProcflags(Long procFlags) {
+        this.procFlags = procFlags;
+    }
+
+    public void setFragOffset(long fragOffset) {
+        this.isFragment = true;
+        this.fragOffset = fragOffset;
+    }
+
+    public Long getFragOffset() {
+        return fragOffset;
+    }
+
+    public boolean isFragment() {
+        return isFragment;
+    }
+
+    public void setFragment(boolean isFragment) {
+        this.isFragment = isFragment;
+    }
+
+    @Override
+    public String toString() {
+        if (isFragment) {
+            return ((this.timestamp == null) ? "null" : String.valueOf(this.timestamp.getValue()))
+                    + " " + String.valueOf(this.sequenceNumber)
+                    + " " + String.valueOf(this.fragOffset)
+                    + " " + this.source;
+        } else {
+            return ((this.timestamp == null) ? "null" : String.valueOf(this.timestamp.getValue()))
+                    + " " + String.valueOf(this.sequenceNumber)
+                    + " " + this.source;
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof BundleID) {
+            BundleID foreignId = (BundleID) obj;
+
+            if (timestamp != null) {
+                if (!timestamp.equals(foreignId.timestamp)) {
+                    return false;
+                }
+            }
+
+            if (sequenceNumber != null) {
+                if (!sequenceNumber.equals(foreignId.sequenceNumber)) {
+                    return false;
+                }
+            }
+
+            if (source != null) {
+                if (!source.equals(foreignId.source)) {
+                    return false;
+                }
+            }
+
+            if (isFragment) {
+                if (!foreignId.isFragment) {
+                    return false;
+                }
+
+                if (fragOffset != null) {
+                    if (!fragOffset.equals(foreignId.fragOffset)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+        return super.equals(obj);
+    }
 }

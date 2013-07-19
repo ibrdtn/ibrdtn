@@ -20,6 +20,7 @@
  */
 package ibrdtn.api;
 
+import ibrdtn.api.Client;
 import ibrdtn.api.object.EID;
 import ibrdtn.api.object.SingletonEndpoint;
 
@@ -33,131 +34,136 @@ import java.io.OutputStreamWriter;
 import java.net.UnknownHostException;
 
 public class StreamingClient extends Client {
-	
-	public String endpoint = null; 
-	public EID destination = null;
-	
-	public Integer chunksize = null;
-	public Integer lifetime = null;
-	public Integer timeout = null;
 
-	@Override
-	public void open() throws UnknownHostException, IOException {
-		super.open();
-		
-		BufferedReader reader = new BufferedReader( new InputStreamReader(istream) );
-		BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(ostream) );
-		
-		// switch to event protocol
-		writer.write("protocol streaming");
-		writer.newLine();
-		writer.flush();
-		
-		// read confirmation
-		if (readResponse(reader) != 200) throw new IOException();
-		
-		// set endpoint
-		if (endpoint != null)
-		{
-			writer.write("set endpoint " + endpoint);
-			writer.newLine();
-			writer.flush();
-			
-			// read confirmation
-			if (readResponse(reader) != 200) throw new IOException();
-		}
-		
-		// set endpoint
-		if (destination != null)
-		{
-			if (destination instanceof SingletonEndpoint)
-			{
-				writer.write("set destination " + destination.toString());
-			}
-			else
-			{
-				writer.write("set group " + destination.toString());
-			}
-			writer.newLine();
-			writer.flush();
-			
-			// read confirmation
-			if (readResponse(reader) != 200) throw new IOException();
-		}
-		
-		// set lifetime
-		if (lifetime != null)
-		{
-			writer.write("set lifetime " + lifetime.toString());
-			writer.newLine();
-			writer.flush();
-			
-			// read confirmation
-			if (readResponse(reader) != 200) throw new IOException();
-		}
-		
-		// set timeout
-		if (timeout != null)
-		{
-			writer.write("set timeout " + timeout.toString());
-			writer.newLine();
-			writer.flush();
-			
-			// read confirmation
-			if (readResponse(reader) != 200) throw new IOException();
-		}
-		
-		// set chunksize
-		if (chunksize != null)
-		{
-			writer.write("set chunksize " + chunksize.toString());
-			writer.newLine();
-			writer.flush();
-			
-			// read confirmation
-			if (readResponse(reader) != 200) throw new IOException();
-		}
-		
-		// finally connect
-		writer.write("connect");
-		writer.newLine();
-		writer.flush();
-		
-		// read confirmation
-		if (readResponse(reader) != 100) throw new IOException();
-	}
+    public String endpoint = null;
+    public EID destination = null;
+    public Integer chunksize = null;
+    public Integer lifetime = null;
+    public Integer timeout = null;
 
-	private Integer readResponse(BufferedReader reader) throws IOException
-	{
-		String data = reader.readLine();
+    @Override
+    public void open() throws UnknownHostException, IOException {
+        super.open();
 
-		// if the data is null, just return
-		if (data == null) return null;
-		
-		// empty line are unexpected here
-		if (data.length() == 0) return null;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(istream));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ostream));
 
-		// split the line into status code and parameter
-		String[] values = data.split(" ", 2);
-		
-		// check the count of values
-		if (values.length == 0)
-		{
-			// error
-			return null;
-		}
-		
-		Integer code = Integer.valueOf(values[0]);
-		return code;
-	}
-	
-	public OutputStream getOutputStream()
-	{
-		return this.ostream;
-	}
-	
-	public InputStream getInputStream()
-	{
-		return this.istream;
-	}
+        // switch to event protocol
+        writer.write("protocol streaming");
+        writer.newLine();
+        writer.flush();
+
+        // read confirmation
+        if (readResponse(reader) != 200) {
+            throw new IOException();
+        }
+
+        // set endpoint
+        if (endpoint != null) {
+            writer.write("set endpoint " + endpoint);
+            writer.newLine();
+            writer.flush();
+
+            // read confirmation
+            if (readResponse(reader) != 200) {
+                throw new IOException();
+            }
+        }
+
+        // set endpoint
+        if (destination != null) {
+            if (destination instanceof SingletonEndpoint) {
+                writer.write("set destination " + destination.toString());
+            } else {
+                writer.write("set group " + destination.toString());
+            }
+            writer.newLine();
+            writer.flush();
+
+            // read confirmation
+            if (readResponse(reader) != 200) {
+                throw new IOException();
+            }
+        }
+
+        // set lifetime
+        if (lifetime != null) {
+            writer.write("set lifetime " + lifetime.toString());
+            writer.newLine();
+            writer.flush();
+
+            // read confirmation
+            if (readResponse(reader) != 200) {
+                throw new IOException();
+            }
+        }
+
+        // set timeout
+        if (timeout != null) {
+            writer.write("set timeout " + timeout.toString());
+            writer.newLine();
+            writer.flush();
+
+            // read confirmation
+            if (readResponse(reader) != 200) {
+                throw new IOException();
+            }
+        }
+
+        // set chunksize
+        if (chunksize != null) {
+            writer.write("set chunksize " + chunksize.toString());
+            writer.newLine();
+            writer.flush();
+
+            // read confirmation
+            if (readResponse(reader) != 200) {
+                throw new IOException();
+            }
+        }
+
+        // finally connect
+        writer.write("connect");
+        writer.newLine();
+        writer.flush();
+
+        // read confirmation
+        if (readResponse(reader) != 100) {
+            throw new IOException();
+        }
+    }
+
+    private Integer readResponse(BufferedReader reader) throws IOException {
+        String data = reader.readLine();
+
+        // if the data is null, just return
+        if (data == null) {
+            return null;
+        }
+
+        // empty line are unexpected here
+        if (data.length() == 0) {
+            return null;
+        }
+
+        // split the line into status code and parameter
+        String[] values = data.split(" ", 2);
+
+        // check the count of values
+        if (values.length == 0) {
+            // error
+            return null;
+        }
+
+        Integer code = Integer.valueOf(values[0]);
+        return code;
+    }
+
+    public OutputStream getOutputStream() {
+        return this.ostream;
+    }
+
+    public InputStream getInputStream() {
+        return this.istream;
+    }
 }

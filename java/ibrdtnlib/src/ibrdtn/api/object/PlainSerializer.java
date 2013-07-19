@@ -50,11 +50,11 @@ public class PlainSerializer {
 	
 	private void serializePrimaryBlock(Bundle bundle) throws IOException
 	{
-		writeString("Processing flags: " + bundle.procflags + "\n");
+		writeString("Processing flags: " + bundle.procFlags + "\n");
 		if(bundle.timestamp != null)
 			writeString("Timestamp: " + bundle.timestamp + "\n");
-		if(bundle.sequencenumber != null)
-			writeString("Sequencenumber: " + bundle.sequencenumber + "\n");
+		if(bundle.sequenceNumber != null)
+			writeString("Sequencenumber: " + bundle.sequenceNumber + "\n");
 		if(bundle.source != null)
 			writeString("Source: " + bundle.source + "\n");
 		if(bundle.destination != null)
