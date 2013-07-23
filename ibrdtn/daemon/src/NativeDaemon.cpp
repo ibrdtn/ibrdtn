@@ -100,6 +100,10 @@
 #include "net/WifiP2PManager.h"
 #endif
 
+#ifdef HAVE_VMIME
+#include "net/EMailConvergenceLayer.h"
+#endif
+
 #ifdef WITH_BUNDLE_SECURITY
 #include "security/SecurityManager.h"
 #include "security/SecurityKeyManager.h"
@@ -1270,6 +1274,19 @@ namespace dtn
 							}
 							break;
 						}
+
+#ifdef HAVE_VMIME
+						case dtn::daemon::Configuration::NetConfig::NETWORK_EMAIL:
+						{
+							try {
+								_components[RUNLEVEL_NETWORK].push_back( new EMailConvergenceLayer() );
+								IBRCOMMON_LOGGER_TAG(NativeDaemon::TAG, info) << "EMail Convergence Layer (MCL) added" << IBRCOMMON_LOGGER_ENDL;
+							}catch(const ibrcommon::Exception &ex) {
+								IBRCOMMON_LOGGER_TAG(NativeDaemon::TAG, error) << "Failed to add EMail Convergence Layer (MCL): " << ex.what() << IBRCOMMON_LOGGER_ENDL;
+							}
+							break;
+						}
+#endif
 
 						default:
 							break;

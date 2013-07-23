@@ -220,11 +220,29 @@ void dtn::dht::DHTNameService::componentRun() throw () {
 							sizeof(struct dtn_convergence_layer_arg));
 			arg->key = (char*) malloc(5);
 			arg->key[4] = '\n';
+
+#ifdef HAVE_VMIME
+			if(cltype_ == "email") {
+				memcpy(arg->key, "email", 5);
+				arg->keylen = 5;
+				const std::string &email =
+					dtn::daemon::Configuration::getInstance().getEMail().getOwnAddress();
+				arg->value = (char*) malloc(email.size());
+				memcpy(arg->value, email.c_str(), email.size());
+				arg->valuelen = email.size();
+			}else{
+#endif
+
 			memcpy(arg->key, "port", 4);
 			arg->keylen = 4;
 			arg->value = (char*) malloc(port_.size());
 			memcpy(arg->value, port_.c_str(), port_.size());
 			arg->valuelen = port_.size();
+
+#ifdef HAVE_VMIME
+			}
+#endif
+
 			arg->next = NULL;
 			clstruct->args = arg;
 			clstruct->next = _context.clayer;
@@ -528,6 +546,9 @@ std::string dtn::dht::DHTNameService::getConvergenceLayerName(
 	case dtn::daemon::Configuration::NetConfig::NETWORK_UDP:
 		cltype_ = "udp";
 		break;
+	case dtn::daemon::Configuration::NetConfig::NETWORK_EMAIL:
+		cltype_ = "email";
+		break;
 		//	case dtn::daemon::Configuration::NetConfig::NETWORK_HTTP:
 		//		cltype_ = "http";
 		//		break;
@@ -830,6 +851,8 @@ void dtn_dht_handle_lookup_result(const struct dtn_dht_lookup_result *result) {
 			proto__ = Node::CONN_TCPIP;
 		} else if (clname__ == "udp") {
 			proto__ = Node::CONN_UDPIP;
+		} else if (clname__ == "email") {
+			proto__ = Node::CONN_EMAIL;
 		} else {
 			proto__ = Node::CONN_UNDEFINED;
 			//TODO find the right string to be added to service string

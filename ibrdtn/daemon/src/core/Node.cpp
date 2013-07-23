@@ -54,7 +54,7 @@ namespace dtn
 			{
 				std::vector<string> p = dtn::utils::Utils::tokenize("=", (*param_iter));
 
-				if (p[0].compare("ip") == 0)
+				if (p[0].compare("ip") == 0 || p[0].compare("email") == 0)
 				{
 					address = p[1];
 				}
@@ -220,6 +220,9 @@ namespace dtn
 
 			case Node::CONN_P2P_BT:
 				return "P2P:BT";
+
+			case Node::CONN_EMAIL:
+				return "EMAIL";
 			}
 
 			return "unknown";

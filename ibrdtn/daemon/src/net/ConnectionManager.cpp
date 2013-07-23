@@ -180,6 +180,39 @@ namespace dtn
 
 		void ConnectionManager::add(const dtn::core::Node &n)
 		{
+			// If node contains MCL
+			if(n.has(Node::CONN_EMAIL) && !n.getEID().getScheme().compare("mail") == 0)
+			{
+				dtn::core::Node node = n;
+
+				std::list<Node::URI> uri = node.get(Node::CONN_EMAIL);
+				for(std::list<Node::URI>::iterator iter = uri.begin(); iter != uri.end(); iter++)
+				{
+					std::string address;
+					unsigned int port;
+					(*iter).decode(address, port);
+
+					dtn::core::Node fakeNode("mail://" + address);
+
+					fakeNode.add(Node::URI((*iter).type, Node::CONN_EMAIL, "email=" + address + ";", (*iter).expire - dtn::utils::Clock::getTime(), (*iter).priority));
+
+					// Announce faked node
+					updateNeighbor(fakeNode);
+
+					// Add route to faked node
+					dtn::core::BundleCore::getInstance().addRoute(node.getEID(), fakeNode.getEID(), 0);
+
+					node.remove((*iter));
+
+					if(node.getAll().size() == 0)
+						return;
+				}
+
+				updateNeighbor(node);
+
+				return;
+			}
+
 			ibrcommon::MutexLock l(_node_lock);
 			pair<nodemap::iterator,bool> ret = _nodes.insert( pair<dtn::data::EID, dtn::core::Node>(n.getEID(), n) );
 

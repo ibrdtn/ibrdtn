@@ -57,7 +57,8 @@ namespace dtn
 				CONN_DGRAM_LOWPAN = 8,
 				CONN_DGRAM_ETHERNET = 9,
 				CONN_P2P_WIFI = 10,
-				CONN_P2P_BT = 11
+				CONN_P2P_BT = 11,
+				CONN_EMAIL = 12
 			};
 
 			/**

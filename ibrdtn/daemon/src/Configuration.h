@@ -67,7 +67,8 @@ namespace dtn
 					NETWORK_FILE = 5,
 					NETWORK_DGRAM_UDP = 6,
 					NETWORK_DGRAM_LOWPAN = 7,
-					NETWORK_DGRAM_ETHERNET = 8
+					NETWORK_DGRAM_ETHERNET = 8,
+					NETWORK_EMAIL = 9
 				};
 
 				NetConfig(std::string name, NetType type, const std::string &url);
@@ -698,6 +699,221 @@ namespace dtn
 				bool enabled() const;
 			};
 
+			class EMail: public Configuration::Extension
+			{
+				friend class Configuration;
+			protected:
+				EMail();
+				virtual ~EMail();
+				void load(const ibrcommon::ConfigFile &conf);
+			private:
+				std::string _address;
+				std::string _smtpServer;
+				int _smtpPort;
+				std::string _smtpUsername;
+				std::string _smtpPassword;
+				bool _smtpUseTLS;
+				bool _smtpUseSSL;
+				bool _smtpNeedAuth;
+				size_t _smtpInterval;
+				size_t _smtpConnectionTimeout;
+				size_t _smtpKeepAliveTimeout;
+				std::string _imapServer;
+				int _imapPort;
+				std::string _imapUsername;
+				std::string _imapPassword;
+				bool _imapUseTLS;
+				bool _imapUseSSL;
+				std::vector<std::string> _imapFolder;
+				size_t _imapInterval;
+				size_t _imapConnectionTimeout;
+				bool _imapPurgeMail;
+				std::vector<std::string> _tlsCACerts;
+				std::vector<std::string> _tlsUserCerts;
+				size_t _availableTime;
+				size_t _returningMailsCheck;
+
+			public:
+				/**
+				 * Will return the nodes email address. If no address was set
+				 * in the configuration file it will return "root@localhost"
+				 *
+				 * @return The nodes email address
+				 */
+				std::string getOwnAddress() const;
+
+				/**
+				 * Will return the SMTP server for this node. If no SMTP server
+				 * was defined it will return "localhost"
+				 *
+				 * @return The SMTP server for this node
+				 */
+				std::string getSmtpServer() const;
+
+				/**
+				 * Will return the port for the SMTP server. If this option was
+				 * not defined the standard SMTP port (25) will be returned
+				 *
+				 * @return The port of the SMTP server
+				 */
+				int getSmtpPort() const;
+
+				/**
+				 * Will return the user name for the SMTP server. If no name
+				 * was specified "root" will be returned
+				 *
+				 * @return The user name for the SMTP server
+				 */
+				std::string getSmtpUsername() const;
+
+				/**
+				 * Will return the password for the SMTP server. If no password
+				 * was specified an empty string will be returned
+				 *
+				 * @return The password for the SMTP server
+				 */
+				std::string getSmtpPassword() const;
+
+				/**
+				 * Will return the SMTP submit interval. This interval defines
+				 * how many seconds will be between two consecutive SMTP submit
+				 * intervals. If nothing was specified in the configuration file
+				 * "60" will be returned
+				 *
+				 * @return The SMTP submit interval in seconds
+				 */
+				size_t getSmtpSubmitInterval() const;
+
+				/**
+				 * @return The timeout for the SMTP connection in seconds
+				 */
+				size_t getSmtpConnectionTimeout() const;
+
+				/**
+				 * After a successful SMTP submit the connection will be kept
+				 * alive the specified time to allow an immediate transmission
+				 * of following bundles
+				 *
+				 * @return The keep alive interval of an SMTP connection in
+				 *         seconds
+				 */
+				size_t getSmtpKeepAliveTimeout() const;
+
+				/**
+				 * @return True, if the SMTP server needs authentication before
+				 *         submit
+				 */
+				bool smtpAuthenticationNeeded() const;
+
+				/**
+				 * @return True, if the SMTP server uses an TLS secured
+				 *         connection
+				 */
+				bool smtpUseTLS() const;
+
+				/**
+				 * @return True, if the SMTP server uses an SSL secured
+				 *         connection
+				 */
+				bool smtpUseSSL() const;
+
+				/**
+				 * Will return the IMAP server for this node. If no IMAP server
+				 * was defined it will return "localhost"
+				 *
+				 * @return The IMAP server for this node
+				 */
+				std::string getImapServer() const;
+
+				/**
+				 * Will return the port for the IMAP server. If this option was
+				 * not defined the standard IMAP port (143) will be returned
+				 *
+				 * @return The port of the IMAP server
+				 */
+				int getImapPort() const;
+
+				/**
+				 * Will return the user name for the IMAP server. If no name
+				 * was specified the SMTP user name will be reused
+				 *
+				 * @return The user name for the IMAP server
+				 */
+				std::string getImapUsername() const;
+
+				/**
+				 * Will return the password for the IMAP server. If no password
+				 * was specified the SMTP user name will be reused
+				 *
+				 * @return The password for the IMAP server
+				 */
+				std::string getImapPassword() const;
+
+				/**
+				 * Will return the folder on the IMAP server which will be used
+				 * for the lookup for new mails. If no folder was specified
+				 * the default folder defined by the IMAP server will be used
+				 *
+				 * @return The lookup folder on the IMAP server
+				 */
+				std::vector<std::string> getImapFolder() const;
+
+				/**
+				 * Will return the IMAP lookup interval. This interval defines
+				 * how many seconds will be between two consecutive IMAP lookup
+				 * intervals. If nothing was specified in the configuration file
+				 * "60" will be returned
+				 *
+				 * @return The SMTP submit interval in seconds
+				 */
+				size_t getImapLookupInterval() const;
+
+				/**
+				 * @return The timeout for the IMAP connection in seconds
+				 */
+				size_t getImapConnectionTimeout() const;
+
+				/**
+				 * @return True, if the IMAP server uses an TLS secured
+				 *         connection
+				 */
+				bool imapUseTLS() const;
+
+				/**
+				 * @return True, if the IMAP server uses an SSL secured
+				 *         connection
+				 */
+				bool imapUseSSL() const;
+
+				/**
+				 * @return True, if a parsed email should be deleted
+				 */
+				bool imapPurgeMail() const;
+
+				/**
+				 * @return Returns a vector containing paths to defined
+				 *         certificate authorities
+				 */
+				std::vector<std::string> getTlsCACerts() const;
+
+				/**
+				 * @return Returns a vector containing paths to defined
+				 *         user certificates
+				 */
+				std::vector<std::string> getTlsUserCerts() const;
+
+				/**
+				 * @return The time in seconds for how long a discovered
+				 *         node with MCL will be available
+				 */
+				size_t getNodeAvailableTime() const;
+
+				/**
+				 * @return Number of checks for returning mails for a bundle
+				 */
+				size_t getReturningMailChecks() const;
+			};
+
 			const Configuration::Discovery& getDiscovery() const;
 			const Configuration::Debug& getDebug() const;
 			const Configuration::Logger& getLogger() const;
@@ -707,6 +923,7 @@ namespace dtn
 			const Configuration::TimeSync& getTimeSync() const;
 			const Configuration::DHT& getDHT() const;
 			const Configuration::P2P& getP2P() const;
+			const Configuration::EMail& getEMail() const;
 
 		private:
 			ibrcommon::ConfigFile _conf;
@@ -719,6 +936,7 @@ namespace dtn
 			Configuration::TimeSync _timesync;
 			Configuration::DHT _dht;
 			Configuration::P2P _p2p;
+			Configuration::EMail _email;
 
 			std::string _filename;
 			bool _doapi;

@@ -68,8 +68,13 @@ if WIFIP2P
 net_SOURCES += WifiP2PManager.h WifiP2PManager.cpp
 endif
 
-AM_CPPFLAGS = -I$(top_srcdir)/src $(ibrdtn_CFLAGS) $(CURL_CFLAGS) $(DTNDHT_CFLAGS) $(WIFIP2P_CFLAGS)
-AM_LDFLAGS = $(ibrdtn_LIBS) $(CURL_LIBS) $(DTNDHT_LIBS) $(WIFIP2P_LIBS)
+if VMIME
+net_SOURCES += EMailConvergenceLayer.cpp EMailConvergenceLayer.h
+net_SOURCES += EMailSmtpService.cpp EMailSmtpService.h EMailImapService.cpp EMailImapService.h
+endif
+
+AM_CPPFLAGS = -I$(top_srcdir)/src $(ibrdtn_CFLAGS) $(CURL_CFLAGS) $(DTNDHT_CFLAGS) $(WIFIP2P_CFLAGS) $(VMIME_CFLAGS)
+AM_LDFLAGS = $(ibrdtn_LIBS) $(CURL_LIBS) $(DTNDHT_LIBS) $(WIFIP2P_LIBS) $(VMIME_LIBS)
 
 if ANDROID
 noinst_DATA = Android.mk

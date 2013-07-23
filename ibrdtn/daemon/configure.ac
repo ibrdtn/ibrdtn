@@ -308,6 +308,20 @@ AS_IF([test "x$enable_android" = "xyes"], [
 				AC_MSG_WARN([wifi-p2p library not found. wifi-p2p support is disabled.])
 			])
 
+    dnl -----------------------------------------------
+    dnl optional parameter: VMime support
+    dnl -----------------------------------------------
+
+    PKG_CHECK_MODULES([VMIME], vmime >= 0.9.1 , [
+                with_vmime="yes"
+                AC_SUBST(VMIME_CFLAGS)
+                AC_SUBST(VMIME_LIBS)
+                AC_DEFINE(HAVE_VMIME, [1], ["Email Convergence Layer is available"])
+                AC_CHECK_HEADERS([vmime/utility/smartPtrInt.hpp])
+            ], [
+                with_vmime="no"
+                AC_MSG_WARN([VMime library not found. Email Convergence Layer is disabled.])
+            ])
 
 	dnl -----------------------------------------------
 	dnl check for regex capabilities
@@ -333,6 +347,7 @@ AM_CONDITIONAL(DTNDHT, test x$with_dht = xyes)
 AM_CONDITIONAL(REGEX, test x$have_regex = xyes)
 AM_CONDITIONAL(ANDROID, test x$enable_android = xyes)
 AM_CONDITIONAL(WIFIP2P, test x$with_wifi_p2p = xyes)
+AM_CONDITIONAL(VMIME, test x$with_vmime = xyes)
 
 dnl -----------------------------------------------
 dnl Generates Makefiles, configuration files and scripts
