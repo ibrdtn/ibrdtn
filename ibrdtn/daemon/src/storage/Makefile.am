@@ -20,7 +20,7 @@ storage_SOURCES = \
 	
 
 if SQLITE
-storage_SOURCES += SQLiteConfigure.h SQLiteConfigure.cpp SQLiteBundleStorage.h SQLiteBundleStorage.cpp SQLiteDatabase.h SQLiteDatabase.cpp
+storage_SOURCES += SQLiteConfigure.h SQLiteConfigure.cpp SQLiteBundleStorage.h SQLiteBundleStorage.cpp SQLiteDatabase.h SQLiteDatabase.cpp SQLiteBundleSet.h SQLiteBundleSet.cpp SQLiteBundleSetFactory.h SQLiteBundleSetFactory.cpp
 endif
 
 AM_CPPFLAGS = -I$(top_srcdir)/src $(ibrdtn_CFLAGS) $(SQLITE_CFLAGS)

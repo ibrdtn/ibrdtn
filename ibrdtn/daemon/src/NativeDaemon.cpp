@@ -946,7 +946,15 @@ namespace dtn
 
 					IBRCOMMON_LOGGER_TAG(NativeDaemon::TAG, info) << "using sqlite bundle storage in " << path.getPath() << IBRCOMMON_LOGGER_ENDL;
 
-					dtn::storage::SQLiteBundleStorage *sbs = new dtn::storage::SQLiteBundleStorage(path, conf.getLimit("storage") );
+
+					dtn::storage::SQLiteBundleStorage *sbs;
+					if(conf.getUsePersistentBundleSets() == "yes")
+					{
+						sbs = new dtn::storage::SQLiteBundleStorage(path, conf.getLimit("storage"),true);
+						IBRCOMMON_LOGGER_TAG(NativeDaemon::TAG, info) << "using persistent bundlesets" << IBRCOMMON_LOGGER_ENDL;
+					} else {
+						sbs = new dtn::storage::SQLiteBundleStorage(path, conf.getLimit("storage"),false );
+					}
 
 					_components[RUNLEVEL_STORAGE].push_back(sbs);
 					storage = sbs;
@@ -955,6 +963,8 @@ namespace dtn
 					throw NativeDaemonException("initialization of the bundle storage failed");
 				}
 			}
+
+
 #endif
 
 			if ((conf.getStorage() == "simple") || (conf.getStorage() == "default"))

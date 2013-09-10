@@ -1,5 +1,5 @@
 /*
- * BundleSet.h
+ * MemoryBundleSet.h
  *
  * Copyright (C) 2013 IBR, TU Braunschweig
  *
@@ -18,12 +18,14 @@
  * limitations under the License.
  *
  *  Created on: 18.12.2012
+ *	renamed from BundleSet.h 04.04.2013
  */
 
-#ifndef BUNDLESET_H_
-#define BUNDLESET_H_
+#ifndef MEMORYBUNDLESET_H_
+#define MEMORYBUNDLESET_H_
 
 #include "ibrdtn/data/BundleSetImpl.h"
+#include "ibrdtn/data/BundleSet.h"
 #include "ibrdtn/data/MetaBundle.h"
 #include <ibrcommon/data/BloomFilter.h>
 #include <set>
@@ -32,22 +34,14 @@ namespace dtn
 {
 	namespace data
 	{
-		class BundleSet
+		class MemoryBundleSet : public BundleSetImpl
 		{
 		public:
-			class Listener {
-			public:
-				virtual ~Listener() = 0;
-				virtual void eventBundleExpired(const dtn::data::MetaBundle&) = 0;
-			};
-
 			/**
 			 * @param bf_size Initial size fo the bloom-filter.
 			 */
-			BundleSet(BundleSet::Listener *listener = NULL, Length bf_size = 1024);
-			BundleSet(std::string name,BundleSet::Listener *listener = NULL, Length bf_size = 1024);
-			BundleSet(BundleSetImpl* ptr);
-			virtual ~BundleSet();
+			MemoryBundleSet(BundleSet::Listener *listener = NULL, Length bf_size = 1024);
+			virtual ~MemoryBundleSet();
 
 			virtual void add(const dtn::data::MetaBundle &bundle) throw ();
 			virtual void clear() throw ();
@@ -60,7 +54,6 @@ namespace dtn
 			 */
 			virtual Size size() const throw ();
 
-
 			/**
 			 * Returns the data length of the serialized BundleSet
 			 */
@@ -70,20 +63,25 @@ namespace dtn
 
 			std::set<dtn::data::MetaBundle> getNotIn(ibrcommon::BloomFilter &filter) const throw ();
 
-			std::ostream& serialize(std::ostream &stream) const;
-			std::istream& deserialize(std::istream &stream);
+			virtual std::ostream &serialize(std::ostream &stream) const;
+            virtual std::istream &deserialize(std::istream &stream);
 
-			friend std::ostream &operator<<(std::ostream &stream, const BundleSet &obj);
-			friend std::istream &operator>>(std::istream &stream, BundleSet &obj);
-
-			std::string getType();
-			bool isPersistent();
-			std::string getName();
+			virtual std::string getType();
+			virtual bool isPersistent();
+			virtual std::string getName();
 
 
 		private:
-			refcnt_ptr<BundleSetImpl> _set_impl;
+
+			std::set<dtn::data::MetaBundle> _bundles;
+			std::set<BundleSetImpl::ExpiringBundle> _expire;
+
+			ibrcommon::BloomFilter _bf;
+
+			BundleSet::Listener *_listener;
+
+			bool _consistent;
 		};
 	} /* namespace data */
 } /* namespace dtn */
-#endif /* BUNDLESET_H_ */
+#endif /* MEMORYBUNDLESET_H_ */

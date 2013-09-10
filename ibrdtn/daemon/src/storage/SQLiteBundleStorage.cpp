@@ -112,9 +112,13 @@ namespace dtn
 			return ibrcommon::BLOB::Reference(new SQLiteBLOB(_blobPath));
 		}
 
-		SQLiteBundleStorage::SQLiteBundleStorage(const ibrcommon::File &path, const dtn::data::Length &maxsize)
-		 : BundleStorage(maxsize), _database(path.get("sqlite.db"), *this)
+		SQLiteBundleStorage::SQLiteBundleStorage(const ibrcommon::File &path, const dtn::data::Length &maxsize, bool usePersistentBundleSets)
+		 : BundleStorage(maxsize), _database(path.get("sqlite.db"), *this), _setFactory(_database)
 		{
+			//let the factory create SQLiteBundleSets
+			if(usePersistentBundleSets)
+				dtn::data::BundleSetFactory::bundleSetFactory = new dtn::storage::SQLiteBundleSetFactory(_database);
+
 			// use sqlite storage as BLOB provider, auto delete off
 			ibrcommon::BLOB::changeProvider(this, false);
 
@@ -194,6 +198,9 @@ namespace dtn
 		void SQLiteBundleStorage::componentDown() throw ()
 		{
 			// routine checked for throw() on 15.02.2013
+
+			//stop factory from creating SQLiteBundleSets
+			dtn::data::BundleSetFactory::bundleSetFactory = NULL;
 
 			//unregister Events
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::remove(this);

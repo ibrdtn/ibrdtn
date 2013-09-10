@@ -81,7 +81,6 @@ void BundleStorageTest::setUp()
 
 	// enable the blob provider
 	ibrcommon::BLOB::changeProvider(new ibrcommon::FileBLOBProvider(blob_path), true);
-
 	switch (testCounter++)
 	{
 	case 0:
@@ -470,6 +469,7 @@ void BundleStorageTest::testRestore(dtn::storage::BundleStorage &storage)
 		dtn::daemon::Component &c = dynamic_cast<dtn::daemon::Component&>(storage);
 
 		// create some bundles
+		CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, storage.count());
 		for (int i = 0; i < 2000; ++i)
 		{
 			dtn::data::Bundle b;
@@ -482,19 +482,19 @@ void BundleStorageTest::testRestore(dtn::storage::BundleStorage &storage)
 
 			storage.store(b);
 		}
-
+		CPPUNIT_ASSERT_EQUAL((dtn::data::Size)2000, storage.count());
 		// shutdown the storage
 		c.terminate();
 
 		// check if the storage is empty now
 		CPPUNIT_ASSERT_EQUAL(true, storage.empty());
-
 		// reboot the storage system
 		c.initialize();
 		c.startup();
 
 		// the storage should contain 2000 bundles
 		CPPUNIT_ASSERT_EQUAL((dtn::data::Size)2000, storage.count());
+
 	} catch (const std::bad_cast&) {
 
 	};

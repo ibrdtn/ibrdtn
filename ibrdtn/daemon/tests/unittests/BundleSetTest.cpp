@@ -1,0 +1,311 @@
+/*
+ * BundleSetTest.cpp
+ *
+ * Copyright (C) 2013 IBR, TU Braunschweig
+ *
+ * Written-by: David Goltzsche <goltzsch@ibr.cs.tu-bs.de>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *  Created on: May 14, 2013
+ */
+
+#include "BundleSetTest.hh"
+#include "Component.h"
+
+#include "storage/MemoryBundleStorage.h"
+
+#ifdef HAVE_SQLITE
+#include "storage/SQLiteBundleStorage.h"
+#endif
+
+size_t BundleSetTest::testCounter;
+dtn::storage::BundleStorage* BundleSetTest::_storage = NULL;
+std::vector<std::string> BundleSetTest::_storage_names;
+
+
+CPPUNIT_TEST_SUITE_REGISTRATION(BundleSetTest);
+void BundleSetTest::setUp()
+{
+	// create a new event switch
+	esl = new ibrtest::EventSwitchLoop();
+
+
+	switch(testCounter++){
+	//MemoryBundleSet
+	case 0: {
+		_storage = new dtn::storage::MemoryBundleStorage();
+		break;
+	}
+
+	//SQLiteBundleSet
+#ifdef HAVE_SQLITE
+	case 1: {
+			ibrcommon::File path("/tmp/sqlite-bundleset-test");
+			if (path.exists()) path.remove(true);
+			ibrcommon::File::createDirectory(path);
+
+			_storage = new dtn::storage::SQLiteBundleStorage(path, 0);
+
+			break;
+
+	}
+#endif
+	}
+
+
+	if (testCounter >= _storage_names.size()) testCounter = 0;
+
+	esl->start();
+	try {
+		dtn::daemon::Component &c = dynamic_cast<dtn::daemon::Component&>(*_storage);
+		c.initialize();
+		c.startup();
+	} catch (const bad_cast&) {
+	}
+}
+
+void BundleSetTest::tearDown()
+{
+	esl->stop();
+
+	try {
+		dtn::daemon::Component &c = dynamic_cast<dtn::daemon::Component&>(*_storage);
+		c.terminate();
+	} catch (const bad_cast&) {
+	}
+
+	esl->join();
+	delete esl;
+	esl = NULL;
+
+	delete _storage;
+}
+
+/*========================== tests below ==========================*/
+
+void BundleSetTest::containTest(){
+	ExpiredBundleCounter ebc;
+	dtn::data::BundleSet l(&ebc,1024);
+
+	dtn::data::Bundle b1;
+	b1.source = dtn::data::EID("dtn:test");
+	b1.timestamp = 1;
+	b1.sequencenumber = 1;
+
+	dtn::data::Bundle b2;
+	b2.source = dtn::data::EID("dtn:test");
+	b2.timestamp = 2;
+	b2.sequencenumber = 3;
+
+	CPPUNIT_ASSERT(l.has(b1) == false);
+	CPPUNIT_ASSERT(l.has(b2) == false);
+
+	l.add(b1);
+
+	CPPUNIT_ASSERT(l.has(b1) == true);
+	CPPUNIT_ASSERT(l.has(b2) == false);
+
+	l.add(b2);
+
+	CPPUNIT_ASSERT(l.has(b1) == true);
+	CPPUNIT_ASSERT(l.has(b2) == true);
+
+	l.clear();
+
+	CPPUNIT_ASSERT(l.has(b1) == false);
+	CPPUNIT_ASSERT(l.has(b2) == false);
+
+	l.add(b1);
+
+	CPPUNIT_ASSERT(l.has(b1) == true);
+	CPPUNIT_ASSERT(l.has(b2) == false);
+
+	l.add(b2);
+
+	CPPUNIT_ASSERT(l.has(b1) == true);
+	CPPUNIT_ASSERT(l.has(b2) == true);
+}
+void BundleSetTest::orderTest(){
+
+	dtn::data::BundleSet l;
+
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0,l.size());
+
+	genbundles(l, 500, 0, 500);
+	genbundles(l, 500, 600, 1000);
+
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)1000,l.size());
+
+
+	for (int i = 0; i < 550; ++i)
+	{
+		l.expire(i);
+	}
+
+
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)500,l.size());
+
+	for (int i = 0; i < 1050; ++i)
+	{
+		l.expire(i);
+	}
+
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0,l.size());
+
+}
+
+void BundleSetTest::namingTest(){
+
+	std::string name1 = "test1BundleSet1";
+	std::string name2 = "test2BundleSet2";
+
+	dtn::data::BundleSet a; //automatically named BundleSet
+	dtn::data::BundleSet b(name1);
+	dtn::data::BundleSet c;
+	dtn::data::BundleSet d(name2);
+	dtn::data::BundleSet e(name2);
+
+	if(		a.getType() == "MemoryBundleSet" ||
+			b.getType() == "MemoryBundleSet" ||
+			c.getType() == "MemoryBundleSet" ||
+			d.getType() == "MemoryBundleSet" ||
+			e.getType() == "MemoryBundleSet" ){
+		return; //MemoryBundleSet does not support naming
+	}
+
+
+	//check persistency
+	CPPUNIT_ASSERT(!a.isPersistent());
+	CPPUNIT_ASSERT(b.isPersistent());
+	CPPUNIT_ASSERT(!c.isPersistent());
+	CPPUNIT_ASSERT(d.isPersistent());
+	CPPUNIT_ASSERT(e.isPersistent());
+
+	//check correct names in persistent bundles
+	CPPUNIT_ASSERT_EQUAL(name1,b.getName());
+	CPPUNIT_ASSERT_EQUAL(name2,d.getName());
+
+
+	//create bundles in each set, check if size is correct
+	genbundles(a,500,1,0);
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)500, a.size());
+	genbundles(b,500,1,0);
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)500, b.size());
+	genbundles(c,500,1,0);
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)500, c.size());
+	genbundles(d,500,1,0);
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)500, d.size());
+	genbundles(e,500,1,0);
+
+	//bundle with same should have double as many bundles
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)1000, d.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)1000, e.size());
+
+	//clear each set individually, check if size is correct
+	a.clear();
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, a.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)500, b.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)500, c.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)1000, d.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)1000, e.size());
+
+	b.clear();
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, a.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, b.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)500, c.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)1000, d.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)1000, e.size());
+
+	c.clear();
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, a.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, b.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, c.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)1000, d.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)1000, e.size());
+
+	d.clear();
+	e.clear();
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, a.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, b.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, c.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, d.size());
+	CPPUNIT_ASSERT_EQUAL((dtn::data::Size)0, e.size());
+
+
+}
+
+void BundleSetTest::performanceTest()
+{
+	BundleSet set("a");
+	tm.start();
+	int i = 1000;
+	MetaBundle last;
+	while(i>0)
+	{
+		i--;
+
+		if(i%2 == 0)
+		{
+			genbundles(set,100,10,15);
+		} else
+		{
+			set.clear();
+		}
+
+	}
+	tm.stop();
+
+	std::cout << std::endl << "completed after " << tm ;
+
+}
+void BundleSetTest::genbundles(dtn::data::BundleSet &l, int number, int offset, int max)
+{
+	int range = max - offset;
+
+	for (int i = 0; i < number; ++i)
+	{
+		l.add(genBundle(offset,range));
+	}
+}
+dtn::data::MetaBundle BundleSetTest::genBundle(int offset, int range)
+{
+	dtn::data::MetaBundle b;
+	int random_integer = offset + (rand() % range);
+
+	b.lifetime = random_integer;
+	b.expiretime = random_integer;
+
+	b.timestamp = 1;
+	b.sequencenumber = random_integer;
+
+	stringstream ss; ss << rand();
+
+	b.source = dtn::data::EID("dtn://node" + ss.str() + "/application");
+	return b;
+}
+BundleSetTest::ExpiredBundleCounter::ExpiredBundleCounter()
+ : counter(0)
+{
+
+}
+
+BundleSetTest::ExpiredBundleCounter::~ExpiredBundleCounter()
+{
+}
+
+void BundleSetTest::ExpiredBundleCounter::eventBundleExpired(const dtn::data::MetaBundle&) throw ()
+{
+	counter++;
+}
+

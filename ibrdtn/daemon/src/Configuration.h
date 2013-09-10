@@ -144,6 +144,11 @@ namespace dtn
 			std::string getStorage() const;
 
 			/**
+			 * returns, whether Persistent BundleSets are used (stored in SQL database)
+			 */
+
+			std::string getUsePersistentBundleSets() const;
+			/**
 			 * Returns true if traffic stats should be recorded
 			 */
 			bool enableTrafficStats() const;

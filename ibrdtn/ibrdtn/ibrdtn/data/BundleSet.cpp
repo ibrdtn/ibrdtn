@@ -1,12 +1,28 @@
 /*
  * BundleSet.cpp
  *
+ * Copyright (C) 2013 IBR, TU Braunschweig
+ *
+ * Written-by: David Goltzsche <goltzsch@ibr.cs.tu-bs.de>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  *  Created on: 18.12.2012
- *      Author: morgenro
+ *  Recreated on: 04.04.2013  as interface
  */
 
 #include "ibrdtn/data/BundleSet.h"
-#include <vector>
+#include "ibrdtn/data/BundleSetFactory.h"
 
 namespace dtn
 {
@@ -15,8 +31,15 @@ namespace dtn
 		BundleSet::Listener::~Listener()
 		{ }
 
-		BundleSet::BundleSet(BundleSet::Listener *listener, Length bf_size)
-		 : _bf(bf_size * 8), _listener(listener), _consistent(true)
+		BundleSet::BundleSet(BundleSet::Listener *listener, Size bf_size) : _set_impl(BundleSetFactory::create(listener,bf_size))
+		{
+		}
+		BundleSet::BundleSet(std::string name,BundleSet::Listener *listener, Size bf_size)
+			: _set_impl(BundleSetFactory::create(name,listener,bf_size))
+		{
+		}
+
+		BundleSet::BundleSet(BundleSetImpl* ptr) : _set_impl(ptr)
 		{
 		}
 
@@ -26,172 +49,78 @@ namespace dtn
 
 		void BundleSet::add(const dtn::data::MetaBundle &bundle) throw ()
 		{
-			// insert bundle id to the private list
-			pair<std::set<dtn::data::MetaBundle>::iterator,bool> ret = _bundles.insert(bundle);
-
-			ExpiringBundle exb(*ret.first);
-			_expire.insert(exb);
-
-			// add bundle to the bloomfilter
-			_bf.insert(bundle.toString());
+			_set_impl->add(bundle);
 		}
 
 		void BundleSet::clear() throw ()
 		{
-			_consistent = true;
-			_bundles.clear();
-			_expire.clear();
-			_bf.clear();
+			_set_impl->clear();
 		}
 
 		bool BundleSet::has(const dtn::data::BundleID &bundle) const throw ()
 		{
-			// check bloom-filter first
-			if (_bf.contains(bundle.toString())) {
-				// Return true if the bloom-filter is not consistent with
-				// the bundles set. This happen if the BundleSet gets deserialized.
-				if (!_consistent) return true;
-
-				std::set<dtn::data::MetaBundle>::iterator iter = _bundles.find(dtn::data::MetaBundle::mockUp(bundle));
-				return (iter != _bundles.end());
-			}
-
-			return false;
+			return _set_impl->has(bundle);
 		}
 
 		Size BundleSet::size() const throw ()
 		{
-			return _bundles.size();
+			return _set_impl->size();
 		}
 
 		void BundleSet::expire(const Timestamp timestamp) throw ()
 		{
-			bool commit = false;
-
-			// we can not expire bundles if we have no idea of time
-			if (timestamp == 0) return;
-
-			std::set<ExpiringBundle>::iterator iter = _expire.begin();
-
-			while (iter != _expire.end())
-			{
-				const ExpiringBundle &b = (*iter);
-
-				if ( b.bundle.expiretime >= timestamp ) break;
-
-				// raise expired event
-				if (_listener != NULL)
-					_listener->eventBundleExpired( b.bundle );
-
-				// remove this item in public list
-				_bundles.erase( b.bundle );
-
-				// remove this item in private list
-				_expire.erase( iter++ );
-
-				// set commit to true (triggers bloom-filter rebuild)
-				commit = true;
-			}
-
-			if (commit)
-			{
-				// rebuild the bloom-filter
-				_bf.clear();
-				for (std::set<dtn::data::MetaBundle>::const_iterator iter = _bundles.begin(); iter != _bundles.end(); ++iter)
-				{
-					_bf.insert( (*iter).toString() );
-				}
-			}
+			_set_impl->expire(timestamp);
 		}
 
 		const ibrcommon::BloomFilter& BundleSet::getBloomFilter() const throw ()
 		{
-			return _bf;
+			return _set_impl->getBloomFilter();
 		}
 
 		std::set<dtn::data::MetaBundle> BundleSet::getNotIn(ibrcommon::BloomFilter &filter) const throw ()
 		{
-			std::set<dtn::data::MetaBundle> ret;
-
-//			// if the lists are equal return an empty list
-//			if (filter == _bf) return ret;
-
-			// iterate through all items to find the differences
-			for (std::set<dtn::data::MetaBundle>::const_iterator iter = _bundles.begin(); iter != _bundles.end(); ++iter)
-			{
-				if (!filter.contains( (*iter).toString() ) )
-				{
-					ret.insert( (*iter) );
-				}
-			}
-
-			return ret;
-		}
-
-		BundleSet::ExpiringBundle::ExpiringBundle(const MetaBundle &b)
-		 : bundle(b)
-		{ }
-
-		BundleSet::ExpiringBundle::~ExpiringBundle()
-		{ }
-
-		bool BundleSet::ExpiringBundle::operator!=(const ExpiringBundle& other) const
-		{
-			return !(other == *this);
-		}
-
-		bool BundleSet::ExpiringBundle::operator==(const ExpiringBundle& other) const
-		{
-			return (other.bundle == this->bundle);
-		}
-
-		bool BundleSet::ExpiringBundle::operator<(const ExpiringBundle& other) const
-		{
-			if (bundle.expiretime < other.bundle.expiretime) return true;
-			if (bundle.expiretime != other.bundle.expiretime) return false;
-
-			if (bundle < other.bundle) return true;
-
-			return false;
-		}
-
-		bool BundleSet::ExpiringBundle::operator>(const ExpiringBundle& other) const
-		{
-			return !(((*this) < other) || ((*this) == other));
+			return _set_impl->getNotIn(filter);
 		}
 
 		Length BundleSet::getLength() const throw ()
 		{
-			return dtn::data::Number(_bf.size()).getLength() + _bf.size();
+			return _set_impl->getLength();
+		}
+
+		std::ostream& BundleSet::serialize(std::ostream &stream) const
+		{
+			return _set_impl->serialize(stream);
+		}
+
+		std::istream& BundleSet::deserialize(std::istream &stream)
+		{
+			return _set_impl->deserialize(stream);
 		}
 
 		std::ostream &operator<<(std::ostream &stream, const BundleSet &obj)
 		{
-			dtn::data::Number size(obj._bf.size());
-			stream << size;
-
-			const char *data = reinterpret_cast<const char*>(obj._bf.table());
-			stream.write(data, obj._bf.size());
-
-			return stream;
+			return obj.serialize(stream);
 		}
 
 		std::istream &operator>>(std::istream &stream, BundleSet &obj)
 		{
-			dtn::data::Number count;
-			stream >> count;
-
-			std::vector<char> buffer(count.get<size_t>());
-
-			stream.read(&buffer[0], buffer.size());
-
-			obj.clear();
-			obj._bf.load((unsigned char*)&buffer[0], buffer.size());
-
-			// set the set to in-consistent mode
-			obj._consistent = false;
-
-			return stream;
+			return obj.deserialize(stream);
 		}
+
+		std::string BundleSet::getType()
+		{
+			return _set_impl->getType();
+		}
+
+		bool BundleSet::isPersistent()
+		{
+			return _set_impl->isPersistent();
+		}
+
+		std::string BundleSet::getName()
+		{
+			return _set_impl->getName();
+		}
+
 	} /* namespace data */
 } /* namespace dtn */

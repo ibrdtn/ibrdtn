@@ -26,6 +26,8 @@
 
 #include "storage/BundleStorage.h"
 #include "storage/SQLiteDatabase.h"
+#include "storage/SQLiteBundleSet.h"
+#include "storage/SQLiteBundleSetFactory.h"
 
 #include "Component.h"
 #include "core/EventReceiver.h"
@@ -62,8 +64,9 @@ namespace dtn
 			 * @param Pfad zum Ordner in denen die Datein gespeichert werden.
 			 * @param Dateiname der Datenbank
 			 * @param maximale Größe der Datenbank
+			 * @param should bundleSets be stored persistently in database? standard: false
 			 */
-			SQLiteBundleStorage(const ibrcommon::File &path, const dtn::data::Length &maxsize);
+			SQLiteBundleStorage(const ibrcommon::File &path, const dtn::data::Length &maxsize, bool usePersistentBundleSets = false);
 
 			/**
 			 * destructor
@@ -138,6 +141,7 @@ namespace dtn
 			void eventBundleExpired(const dtn::data::BundleID &id) throw ();
 			void iterateDatabase(const dtn::data::MetaBundle &bundle);
 
+
 			/*** BEGIN: methods for unit-testing ***/
 
 			/**
@@ -152,6 +156,7 @@ namespace dtn
 			virtual void setFaulty(bool mode);
 
 			/*** END: methods for unit-testing ***/
+
 
 		protected:
 			virtual void componentRun() throw ();
@@ -297,6 +302,8 @@ namespace dtn
 			ibrcommon::Queue<Task*> _tasks;
 
 			ibrcommon::RWMutex _global_lock;
+
+			SQLiteBundleSetFactory _setFactory;
 
 //			ibrcommon::AccessLockContext _al_context;
 		};

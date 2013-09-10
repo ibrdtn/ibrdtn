@@ -2,6 +2,7 @@
 noinst_HEADERS = \
 	BaseRouterTest.hh \
 	BundleStorageTest.hh \
+	BundleSetTest.hh \
 	ConfigurationTest.hh \
 	DaemonTest.hh \
 	DatagramClTest.h \
@@ -14,6 +15,7 @@ unittest_SOURCES = \
 	Main.cpp \
 	BaseRouterTest.cpp \
 	BundleStorageTest.cpp \
+	BundleSetTest.cpp \
 	ConfigurationTest.cpp \
 	DaemonTest.cpp \
 	DatagramClTest.cpp \
@@ -21,7 +23,7 @@ unittest_SOURCES = \
 	FakeDatagramService.cpp \
 	NativeSerializerTest.cpp \
 	NodeTest.cpp
-	
+
 # what flags you want to pass to the C compiler & linker
 AM_CPPFLAGS = $(ibrdtn_CFLAGS) $(CPPUNIT_CFLAGS) $(CURL_CFLAGS) $(SQLITE_CFLAGS)
 AM_LDFLAGS = $(ibrdtn_LIBS) $(CPPUNIT_LIBS) $(CURL_LIBS) $(SQLITE_LIBS)
