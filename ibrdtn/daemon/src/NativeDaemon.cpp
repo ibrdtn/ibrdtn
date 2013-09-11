@@ -851,6 +851,10 @@ namespace dtn
 				conf.load();
 			}
 
+			//configure link manager
+			size_t interval = conf.getNetwork().getLinkRequestInterval();
+			ibrcommon::LinkManager::setLinkRequestInterval(interval);
+
 			// greeting
 			if (conf.getDebug().enabled())
 			{

@@ -11,6 +11,7 @@
 #include "ibrcommon/link/LinkManager.h"
 #include "ibrcommon/net/vinterface.h"
 #include "ibrcommon/net/vaddress.h"
+#include "ibrcommon/link/LinkMonitor.h"
 #include <list>
 #include <set>
 
@@ -26,6 +27,9 @@ namespace ibrcommon
 		Win32LinkManager();
 		virtual ~Win32LinkManager();
 
+		void up() throw();
+		void down() throw();
+
 		const vinterface getInterface(int index) const;
 		const std::list<vaddress> getAddressList(const vinterface &iface, const std::string &scope = "");
 
@@ -35,6 +39,8 @@ namespace ibrcommon
 		void freeAdapterInfo(IP_ADAPTER_ADDRESSES *pAddresses) const;
 		IP_ADAPTER_ADDRESSES* getAdapterInfo() const;
 		vaddress getAddress(SOCKET_ADDRESS &address) const;
+
+		LinkMonitor _lm;
 	};
 } /* namespace ibrcommon */
 #endif /* DEFAULTLINKMANAGER_H_ */

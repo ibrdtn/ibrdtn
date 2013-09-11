@@ -100,7 +100,7 @@ namespace dtn
 		 : _quiet(false), _options(0), _timestamps(false), _verbose(false) {}
 
 		Configuration::Network::Network()
-		 : _routing("default"), _forwarding(true), _tcp_nodelay(true), _tcp_chunksize(4096), _tcp_idle_timeout(0), _default_net("lo"), _use_default_net(false), _auto_connect(0), _fragmentation(false), _scheduling(false)
+		 : _routing("default"), _forwarding(true), _tcp_nodelay(true), _tcp_chunksize(4096), _tcp_idle_timeout(0), _default_net("lo"), _use_default_net(false), _auto_connect(0), _fragmentation(false), _scheduling(false), _link_request_interval(5000)
 		{}
 
 		Configuration::Security::Security()
@@ -882,6 +882,11 @@ namespace dtn
 			 * scheduling support
 			 */
 			_scheduling = (conf.read<std::string>("scheduling", "no") == "yes");
+
+			/**
+			 * read link-request-interval
+			 */
+			_link_request_interval = conf.read<dtn::data::Timeout>("link_request_interval",5000);
 		}
 
 		const std::multimap<std::string, std::string>& Configuration::Network::getStaticRoutes() const
@@ -990,6 +995,11 @@ namespace dtn
 		std::set<ibrcommon::vinterface> Configuration::Network::getInternetDevices() const
 		{
 			return _internet_devices;
+		}
+
+		size_t Configuration::Network::getLinkRequestInterval() const
+		{
+			return _link_request_interval;
 		}
 
 		dtn::data::Size Configuration::getLimit(const std::string &suffix) const

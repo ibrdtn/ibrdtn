@@ -328,6 +328,7 @@ namespace dtn
 				bool _scheduling;
 				ProphetConfig _prophet_config;
 				std::set<ibrcommon::vinterface> _internet_devices;
+				size_t _link_request_interval;
 
 			public:
 				/**
@@ -395,6 +396,11 @@ namespace dtn
 				 * @return The interfaces which are potentially connected to the internet
 				 */
 				std::set<ibrcommon::vinterface> getInternetDevices() const;
+
+				/**
+				 * @return Number of milliseconds between two linkstate-requests (as netlink-fallback)
+				 */
+				size_t getLinkRequestInterval() const;
 			};
 
 			class Security : public Configuration::Extension

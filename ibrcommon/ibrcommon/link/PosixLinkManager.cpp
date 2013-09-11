@@ -26,12 +26,25 @@
 
 namespace ibrcommon
 {
-	PosixLinkManager::PosixLinkManager()
+	PosixLinkManager::PosixLinkManager() : _lm(LinkMonitor(*this))
 	{
 	}
 
 	PosixLinkManager::~PosixLinkManager()
 	{
+		down();
+	}
+
+	void PosixLinkManager::up() throw()
+	{
+
+		_lm.start();
+	}
+
+	void PosixLinkManager::down() throw()
+	{
+		_lm.stop();
+		_lm.join();
 	}
 
 	const vinterface PosixLinkManager::getInterface(int index) const
