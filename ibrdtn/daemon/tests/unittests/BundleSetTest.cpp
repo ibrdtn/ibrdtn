@@ -24,6 +24,7 @@
 #include "Component.h"
 
 #include "storage/MemoryBundleStorage.h"
+#include "ibrdtn/data/MemoryBundleSet.h"
 
 #ifdef HAVE_SQLITE
 #include "storage/SQLiteBundleStorage.h"
@@ -37,6 +38,7 @@ std::vector<std::string> BundleSetTest::_storage_names;
 CPPUNIT_TEST_SUITE_REGISTRATION(BundleSetTest);
 void BundleSetTest::setUp()
 {
+	srand ( time(NULL) );
 	// create a new event switch
 	esl = new ibrtest::EventSwitchLoop();
 
@@ -45,6 +47,9 @@ void BundleSetTest::setUp()
 	//MemoryBundleSet
 	case 0: {
 		_storage = new dtn::storage::MemoryBundleStorage();
+
+		ibrcommon::File path("/tmp/memory-bundleset-test");
+		MemoryBundleSet::setPath(path);
 		break;
 	}
 
@@ -90,6 +95,7 @@ void BundleSetTest::tearDown()
 	esl = NULL;
 
 	delete _storage;
+
 }
 
 /*========================== tests below ==========================*/
@@ -246,6 +252,27 @@ void BundleSetTest::performanceTest()
 	tm.stop();
 
 	std::cout << std::endl << "completed after " << tm ;
+}
+
+
+void BundleSetTest::persistanceTest()
+{
+	size_t num_bundles = 1000;
+	size_t size_before = 0;
+	size_t size_after = 0;
+
+	stringstream ss; ss << rand();
+	{
+		BundleSet set(ss.str());
+		genbundles(set,num_bundles,10,15);
+		size_before = set.size();
+	}
+	CPPUNIT_ASSERT_EQUAL(num_bundles,size_before);
+	{
+		BundleSet set(ss.str());
+		size_after = set.size();
+	}
+	CPPUNIT_ASSERT_EQUAL(num_bundles,size_after);
 }
 
 void BundleSetTest::genbundles(dtn::data::BundleSet &l, int number, int offset, int max)

@@ -228,23 +228,68 @@ namespace dtn
 			}
 		}
 
-        void MemoryBundleSet::store()
-        {
-        	// abort if the store path is not set
-        	if (!MemoryBundleSet::__store_path_set__) return;
+		void MemoryBundleSet::store()
+		{
+			// abort if the store path is not set
+			if (!MemoryBundleSet::__store_path_set__) return;
 
-        	// abort it the name is not set
-        	if (_name.length() == 0) return;
+			// abort it the name is not set
+			if (_name.length() == 0) return;
 
-        	// TODO: ...
-        }
+			// create directory, if it does not existt
+			if (!__store_path__.exists())
+			ibrcommon::File::createDirectory(__store_path__);
 
-        void MemoryBundleSet::restore()
-        {
-        	// abort if the store path is not set
-        	if (!MemoryBundleSet::__store_path_set__) return;
+			//delete file for bundles, if it exists
+			std::stringstream ss; ss << __store_path__.getPath() << "/" << _name;
+			ibrcommon::File path_bundles(ss.str().c_str());
+			if(path_bundles.exists())
+			path_bundles.remove();
 
-        	// TODO: ...
-        }
+			//open file
+			ofstream output_file;
+			output_file.open(path_bundles.getPath().c_str());
+
+			//write number of bundles
+			output_file << _bundles.size();
+
+			bundle_set::iterator iter = _bundles.begin();
+			while( iter != _bundles.end())
+			{
+				output_file << (*iter++);
+			}
+
+			output_file.close();
+		}
+
+		void MemoryBundleSet::restore()
+		{
+			// abort if the store path is not set
+			if (!MemoryBundleSet::__store_path_set__) return;
+
+			std::stringstream ss; ss << __store_path__.getPath() << "/" << _name;
+			ibrcommon::File path_bundles(ss.str().c_str());
+
+			//abort if storage files does not exist
+			if(!path_bundles.exists())
+			return;
+
+			ifstream input_file;
+			input_file.open(ss.str().c_str());
+
+			//read number of bundles
+			size_t num_bundles;
+			input_file >> num_bundles;
+			size_t i = 0;
+			while( i < num_bundles)
+			{
+				MetaBundle b;
+				input_file >> b;
+				_bundles.insert(b);
+				i++;
+			}
+
+			input_file.close();
+		}
 	} /* namespace data */
 } /* namespace dtn */
