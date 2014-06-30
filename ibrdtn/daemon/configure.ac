@@ -215,7 +215,6 @@ ANDROID_AC_BUILD([
 	
 	PKG_CHECK_MODULES(OPENSSL, openssl, [
 		AC_DEFINE(HAVE_OPENSSL, [1], ["openssl library is available"])
-		AC_DEFINE(WITH_TLS, [1], ["tls support enabled"])
 		AC_SUBST(OPENSSL_CFLAGS)
 		AC_SUBST(OPENSSL_LIBS)
 		
@@ -253,12 +252,18 @@ ANDROID_AC_BUILD([
 			@<:@default=no@:>@]),
 		[
 		if test "x$with_tls" = "xyes"; then
-			if test "x$with_openssl" = "xyes"; then
-				CPPFLAGS="$CPPFLAGS -DWITH_TLS"
-			else
-				AC_MSG_WARN([no openssl libraries are found. TLS extensions are disabled.])
-				with_tls="no"
-			fi
+			AC_CHECK_IBRCOMMON_SSL([
+				if test "x$with_openssl" = "xyes"; then
+					AC_DEFINE(WITH_TLS, [1], ["tls support enabled"])
+					CPPFLAGS="$CPPFLAGS -DWITH_TLS"
+				else
+					AC_MSG_WARN([no openssl libraries are found. TLS extensions are disabled.])
+					with_tls="no"
+				fi
+			], [
+					AC_MSG_WARN([ibrcommon was compiled without SSL support. TLS extensions are disabled.])
+					with_tls="no"
+			])
 		else
 			with_tls="no"
 		fi
