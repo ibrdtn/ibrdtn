@@ -36,6 +36,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 	
 	// Security API provided by IBR-DTN
 	private SecurityService mSecurityService = null;
+	private boolean mSecurityBound = false;
 	
 	// Security action item
 	private MenuItem mItemKeyInfo = null;
@@ -117,6 +118,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 		// Establish a connection with the security service
 		try {
 			Services.SERVICE_SECURITY.bind(getActivity(), mSecurityConnection, Context.BIND_AUTO_CREATE);
+			mSecurityBound = true;
 		} catch (ServiceNotAvailableException e) {
 			// Security API not available
 		}
@@ -124,7 +126,10 @@ public class MeFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onStop() {
-		getActivity().unbindService(mSecurityConnection);
+		if (mSecurityBound) {
+		    getActivity().unbindService(mSecurityConnection);
+		    mSecurityBound = false;
+		}
 		
 		super.onStop();
 	}
