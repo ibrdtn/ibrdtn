@@ -46,7 +46,6 @@ public class MessageFragment extends Fragment {
 	
 	// Security API provided by IBR-DTN
 	private SecurityService mSecurityService = null;
-	private boolean mSecurityBound = false;
 	
 	private ServiceConnection mSecurityConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName name, IBinder service) {
@@ -247,7 +246,6 @@ public class MessageFragment extends Fragment {
 		// Establish a connection with the security service
 		try {
 			Services.SERVICE_SECURITY.bind(getActivity(), mSecurityConnection, Context.BIND_AUTO_CREATE);
-			mSecurityBound = true;
 		} catch (ServiceNotAvailableException e) {
 			// Security API not available
 		}
@@ -273,10 +271,7 @@ public class MessageFragment extends Fragment {
 
 	@Override
 	public void onStop() {
-		if (mSecurityBound) {
-		    getActivity().unbindService(mSecurityConnection);
-		    mSecurityBound = false;
-		}
+		getActivity().unbindService(mSecurityConnection);
 		
 		super.onStop();
 	}
