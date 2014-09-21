@@ -37,7 +37,9 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -75,6 +77,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
 import de.tubs.ibr.dtn.R;
 import de.tubs.ibr.dtn.api.SingletonEndpoint;
+import de.tubs.ibr.dtn.discovery.WakefulDiscoveryReceiver;
 import de.tubs.ibr.dtn.keyexchange.KeyInformationActivity;
 import de.tubs.ibr.dtn.service.ControlService;
 import de.tubs.ibr.dtn.service.DaemonService;
@@ -90,6 +93,9 @@ public class Preferences extends PreferenceActivity {
 	public static final String KEY_ENDPOINT_ID = "endpoint_id";
 	public static final String KEY_DISCOVERY_MODE = "discovery_mode";
 	public static final String KEY_P2P_ENABLED = "p2p_enabled";
+	public static final String KEY_BLE_ENABLED = "ble_enabled";
+	public static final String KEY_SCAN_DURATION = "scan_duration";
+	public static final String KEY_SCAN_DELAY = "scan_delay";
 	
 	public static final String KEY_LOG_OPTIONS = "log_options";
 	public static final String KEY_LOG_DEBUG_VERBOSITY = "log_debug_verbosity";
@@ -121,6 +127,10 @@ public class Preferences extends PreferenceActivity {
 	private CheckBoxPreference checkBoxPreference = null;
 	private InterfacePreferenceCategory mInterfacePreference = null;
 	private SwitchPreference mP2pSwitch = null;
+	private SwitchPreference mBleSwitch = null;
+	
+    private AlarmManager mAlarmManager;
+    private PendingIntent mBleDiscoveryIntent;
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@SuppressLint("NewApi")
@@ -374,6 +384,13 @@ public class Preferences extends PreferenceActivity {
 			mP2pSwitch = (SwitchPreference)findPreference(KEY_P2P_ENABLED);
 			mP2pSwitch.setEnabled(false);
 		}
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			mBleSwitch = (SwitchPreference)findPreference(KEY_BLE_ENABLED);
+		}
+		
+        mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        mBleDiscoveryIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(WakefulDiscoveryReceiver.ACTION_BLE_DISCOVERY), 0);
 
 		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
 		// their values. When their values change, their summaries are updated
@@ -670,6 +687,9 @@ public class Preferences extends PreferenceActivity {
 			if (Preferences.KEY_P2P_ENABLED.equals(key))
 				prefChangedIntent.putExtra(key, prefs.getBoolean(key, false));
 			
+			if (Preferences.KEY_BLE_ENABLED.equals(key))
+				prefChangedIntent.putExtra(key, prefs.getBoolean(key, false));
+			
 			if (Preferences.KEY_DISCOVERY_MODE.equals(key))
 				prefChangedIntent.putExtra(key, prefs.getString(key, "smart"));
 			
@@ -784,6 +804,17 @@ public class Preferences extends PreferenceActivity {
 					} catch (RemoteException e) {
 						// error
 					}
+				}
+			}
+			else if (Preferences.KEY_BLE_ENABLED.equals(key))
+			{
+				Log.d(TAG, "Preference " + key + " has changed to " + String.valueOf(prefs.getBoolean(key, false)));
+				if (prefs.getBoolean(key, false) == true) {
+					// start node discovery
+                    sendBroadcast(new Intent(WakefulDiscoveryReceiver.ACTION_BLE_DISCOVERY));
+                } else {
+                	// stop node discovery
+                    mAlarmManager.cancel(mBleDiscoveryIntent);
 				}
 			}
 			else if (Preferences.KEY_DISCOVERY_MODE.equals(key))
