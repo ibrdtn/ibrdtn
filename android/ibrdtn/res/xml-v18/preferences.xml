@@ -66,7 +66,7 @@
             android:switchTextOff="@string/pref_ble_off"
             android:switchTextOn="@string/pref_ble_on"
             android:title="@string/pref_ble"
-            android:enabled="true" />
+            android:enabled="false" />
     </PreferenceCategory>
     <de.tubs.ibr.dtn.daemon.InterfacePreferenceCategory
         android:key="prefcat_interfaces"

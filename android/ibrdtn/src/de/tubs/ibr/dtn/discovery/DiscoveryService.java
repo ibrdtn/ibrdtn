@@ -1,5 +1,7 @@
 package de.tubs.ibr.dtn.discovery;
 
+import java.util.Locale;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -11,6 +13,7 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
@@ -29,9 +32,9 @@ public class DiscoveryService extends Service {
     public static final String TAG = DiscoveryService.class.getSimpleName();
 
     /**
-     * Prefix used in the name of a bluetooth device that announces a DTN node
+     * Prefix used in the name of a Bluetooth device that announces a DTN node
      */
-    public static final String DTN_DISCOVERY_PREFIX = "DTN:";
+    public static final String DTN_DISCOVERY_PREFIX = "dtn:";
     
     public static final String ACTION_BLE_NODE_DISCOVERED = "de.tubs.ibr.dtn.Intent.BLE_NODE_DISCOVERED";
     public static final String EXTRA_BLE_NODE = "de.tubs.ibr.dtn.Intent.BLE_NODE";
@@ -49,7 +52,7 @@ public class DiscoveryService extends Service {
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
                     Log.i(TAG, "onLeScan: " + device.getAddress() + " (rssi=" + rssi + ")");
-                    if (device.getName().startsWith(DTN_DISCOVERY_PREFIX)) {
+                    if (device.getName().toLowerCase(Locale.US).startsWith(DTN_DISCOVERY_PREFIX)) {
                         onDtnNodeDiscovered(device.getAddress());
                     }
                 }
@@ -57,29 +60,37 @@ public class DiscoveryService extends Service {
 
     private void onDtnNodeDiscovered(String address) {
 
+    	// transform address to proper format
+    	String nodeAddress = address.toLowerCase(Locale.US).replace(":", "");
+
         // throttle announcements to once per minute
-        int nodeHash = address.hashCode();
+        int nodeHash = nodeAddress.hashCode();
         Long lastDiscoveryTime = mDiscoveredDtnNodes.get(nodeHash);
         if (lastDiscoveryTime != null && System.currentTimeMillis() < lastDiscoveryTime + 60*1000 ) {
             return;
         }
         mDiscoveredDtnNodes.put(nodeHash, System.currentTimeMillis());
 
-        Log.d(TAG, "found DTN node with address: " + address);
-        String ssid = DTN_DISCOVERY_PREFIX + "//" + address;
+        Log.d(TAG, "found DTN node with address: " + nodeAddress);
+        String ssid = DTN_DISCOVERY_PREFIX + "//" + nodeAddress;
+        
+		// connect to network with matching SSID if not already connected
+        WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
+		if (!wifiInfo.getSSID().equals(String.format("\"%s\"", ssid))) {
+			Log.d(TAG, "connecting to SSID " + ssid);
+			WifiConfiguration wifiConfig = new WifiConfiguration();
+			wifiConfig.SSID = String.format("\"%s\"", ssid);
+			wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
 
-        WifiConfiguration wifiConfig = new WifiConfiguration();
-        wifiConfig.SSID = String.format("\"%s\"", ssid);
-        wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+			int networkId = mWifiManager.addNetwork(wifiConfig);
+			mWifiManager.disconnect();
+			mWifiManager.enableNetwork(networkId, true);
+			mWifiManager.reconnect();
+		}
 
-        int networkId = mWifiManager.addNetwork(wifiConfig);
-        mWifiManager.disconnect();
-        mWifiManager.enableNetwork(networkId, true);
-        mWifiManager.reconnect();
-
-        // TODO announce endpoint to IBR-DTN (EID == SSID)
+        // announce endpoint to IBR-DTN daemon
         Intent discoveredIntent = new Intent(ACTION_BLE_NODE_DISCOVERED);
-        discoveredIntent.putExtra(EXTRA_BLE_NODE, ssid);
+        discoveredIntent.putExtra(EXTRA_BLE_NODE, ssid + ".dtn");
         sendBroadcast(discoveredIntent);
     }
 
@@ -142,7 +153,7 @@ public class DiscoveryService extends Service {
 	private void startScan() {
       // TODO set proper values for scan duration and delay
         final int duration = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Preferences.KEY_SCAN_DURATION, "2200"));
-        final int delay = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Preferences.KEY_SCAN_DELAY, "2200"));
+        final int delay = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Preferences.KEY_SCAN_DELAY, "7800"));
 
         if (duration <= 0) {
             Log.i(TAG, "scan duration invalid: " + duration + " ms");
@@ -154,18 +165,25 @@ public class DiscoveryService extends Service {
             @Override
             public void run() {
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                
                 if (!PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(Preferences.KEY_BLE_ENABLED, false))
                     return;
+                
+                // schedule new scan with AlarmManager
                 Log.i(TAG, "scanning again in " + delay + " ms");
-                // TODO schedule new scan with AlarmManager
                 PendingIntent intent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(WakefulDiscoveryReceiver.ACTION_BLE_DISCOVERY), 0);
                 if (Build.VERSION.SDK_INT >= 19) {
                     mAlarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + delay, intent);
                 } else {
                     mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + delay, intent);
                 }
+                
                 // release wakelock after scan has finished
-                WakefulBroadcastReceiver.completeWakefulIntent(mWakefulIntent);
+                if (mWakefulIntent != null) {
+                	WakefulBroadcastReceiver.completeWakefulIntent(mWakefulIntent);
+                } else {
+                	Log.e(TAG, "WakefulIntent is null!");
+                }
             }
         }, duration);
     }

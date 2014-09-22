@@ -26,6 +26,11 @@ public class BleManager extends NativeP2pManager {
 		mService.registerReceiver(mBleEventReceiver, ble_filter);
 	}
 
+	@Override
+	public void connect(String identifier) {
+		// Connection is handled within the Bluetooth LE Discovery Service
+	}
+
 	private BroadcastReceiver mBleEventReceiver = new BroadcastReceiver() {
 
 		@Override

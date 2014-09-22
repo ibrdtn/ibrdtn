@@ -40,6 +40,8 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -51,6 +53,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -129,6 +132,8 @@ public class Preferences extends PreferenceActivity {
 	private SwitchPreference mP2pSwitch = null;
 	private SwitchPreference mBleSwitch = null;
 	
+	private BluetoothManager mBluetoothManager;
+	private BluetoothAdapter mBluetoothAdapter;
     private AlarmManager mAlarmManager;
     private PendingIntent mBleDiscoveryIntent;
 
@@ -305,6 +310,7 @@ public class Preferences extends PreferenceActivity {
 		return false;
 	}
 
+	@SuppressLint("NewApi")
 	@TargetApi(14)
 	@SuppressWarnings("deprecation")
 	@Override
@@ -385,8 +391,14 @@ public class Preferences extends PreferenceActivity {
 			mP2pSwitch.setEnabled(false);
 		}
 		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+		// Check for Bluetooth LE availability
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 &&
+				getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+			mBluetoothManager =
+			        (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+			mBluetoothAdapter = mBluetoothManager.getAdapter();
 			mBleSwitch = (SwitchPreference)findPreference(KEY_BLE_ENABLED);
+			mBleSwitch.setEnabled(true);
 		}
 		
         mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -810,6 +822,12 @@ public class Preferences extends PreferenceActivity {
 			{
 				Log.d(TAG, "Preference " + key + " has changed to " + String.valueOf(prefs.getBoolean(key, false)));
 				if (prefs.getBoolean(key, false) == true) {
+					// Ensures Bluetooth is available on the device and it is enabled. If not,
+					// displays a dialog requesting user permission to enable Bluetooth.
+					if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+					    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+					    startActivityForResult(enableBtIntent, 0);
+					}
 					// start node discovery
                     sendBroadcast(new Intent(WakefulDiscoveryReceiver.ACTION_BLE_DISCOVERY));
                 } else {
