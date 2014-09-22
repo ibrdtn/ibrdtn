@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pref_ble_on">An</string>
+    <string name="pref_ble_summary">Nutze Bluetooth LE zur Node Discovery.</string>
+    <string name="pref_ble_off">Aus</string>
+    <string name="pref_ble">BLE Node Discovery</string>
+    <string name="start_discovery">Start discovery</string>
+    <string name="stop_discovery">Stop discovery</string>
+    
+</resources>
