@@ -43,25 +43,25 @@
 
 	<!-- This app require access to the camera to scan QR codes -->
 	<uses-permission android:name="android.permission.CAMERA" />
-	
+
 	<!-- This app requires access to bluetooth and wake locks to scan for nodes in the background -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    	
+	<uses-permission android:name="android.permission.BLUETOOTH" />
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+
 	<!-- This app uses Bluetooth LE for node discovery  -->
 	<uses-feature android:name="android.hardware.bluetooth_le"
-	    android:required="false"/>
-	
-    <!-- This app uses but not require Wi-Fi direct -->
-    <uses-feature android:name="android.hardware.wifi.direct"
-        android:required="false" />
-    
+		android:required="false"/>
+
+	<!-- This app uses but not require Wi-Fi direct -->
+	<uses-feature android:name="android.hardware.wifi.direct"
+		android:required="false" />
+
 	<!-- This app uses NFC if available -->
 	<uses-feature android:name="android.hardware.nfc"
 		android:required="false" />
 
-	<!-- This app uses the camera to scan QR codes -->
+    <!-- This app uses the camera to scan QR codes -->
 	<uses-feature android:name="android.hardware.camera"
 		android:required="false" />
 
@@ -184,14 +184,14 @@
 		</receiver>
 		
 		<service
-            android:name=".discovery.DiscoveryService"
-            android:enabled="true" />
-		
+			android:name=".discovery.DiscoveryService"
+			android:enabled="true" />
+
 		<receiver android:name=".discovery.WakefulDiscoveryReceiver" >
-            <intent-filter>
-                <action android:name="de.tubs.ibr.dtn.Intent.BLE_DISCOVERY" />
-            </intent-filter>
-        </receiver>
+			<intent-filter>
+				<action android:name="de.tubs.ibr.dtn.Intent.BLE_DISCOVERY" />
+			</intent-filter>
+		</receiver>
 
 		<provider
 			android:name=".stats.StatsContentProvider"

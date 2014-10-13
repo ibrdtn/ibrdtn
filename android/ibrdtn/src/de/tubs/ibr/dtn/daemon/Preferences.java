@@ -134,8 +134,8 @@ public class Preferences extends PreferenceActivity {
 	
 	private BluetoothManager mBluetoothManager;
 	private BluetoothAdapter mBluetoothAdapter;
-    private AlarmManager mAlarmManager;
-    private PendingIntent mBleDiscoveryIntent;
+	private AlarmManager mAlarmManager;
+	private PendingIntent mBleDiscoveryIntent;
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@SuppressLint("NewApi")
