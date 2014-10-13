@@ -61,7 +61,7 @@
 	<uses-feature android:name="android.hardware.nfc"
 		android:required="false" />
 
-    <!-- This app uses the camera to scan QR codes -->
+	<!-- This app uses the camera to scan QR codes -->
 	<uses-feature android:name="android.hardware.camera"
 		android:required="false" />
 
