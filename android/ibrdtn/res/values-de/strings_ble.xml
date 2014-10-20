@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pref_ble_on">An</string>
+    <string name="pref_ble_summary">Verwende Bluetooth LE um Netze zu finden</string>
+    <string name="pref_ble_off">Aus</string>
+    <string name="pref_ble">Bluetooth LE</string>
+    
+</resources>

@@ -44,6 +44,14 @@
 	<!-- This app require access to the camera to scan QR codes -->
 	<uses-permission android:name="android.permission.CAMERA" />
 
+	<!-- This app requires access to bluetooth to scan for nodes in the background -->
+	<uses-permission android:name="android.permission.BLUETOOTH" />
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+	<!-- This app uses Bluetooth LE for node discovery  -->
+	<uses-feature android:name="android.hardware.bluetooth_le"
+		android:required="false"/>
+
 	<!-- This app uses but not require Wi-Fi direct -->
 	<uses-feature android:name="android.hardware.wifi.direct"
 		android:required="false" />

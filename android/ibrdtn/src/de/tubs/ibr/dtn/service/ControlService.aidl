@@ -33,6 +33,16 @@ interface ControlService {
 	void setP2pEnabled(boolean val);
 	
 	/**
+	 * Returns whether BT LE is active or not
+	 */
+	boolean isBleActive();
+	
+	/**
+	 * Enable / disable BT LE extension
+	 */
+	void setBleEnabled(boolean val);
+	
+	/**
 	 * Get the version of the daemon
 	 * @returns A array with the version at position 0 and the build number at position 1
 	 */

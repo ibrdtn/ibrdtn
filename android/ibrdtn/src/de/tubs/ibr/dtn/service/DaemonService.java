@@ -122,6 +122,9 @@ public class DaemonService extends Service {
 
 	// the P2P manager used for wifi direct control
 	private P2pManager mP2pManager = null;
+	
+	// the BLE manager used for node discovery
+	private BleManager mBleManager = null;
 
 	// the daemon process
 	private DaemonProcess mDaemonProcess = null;
@@ -187,6 +190,11 @@ public class DaemonService extends Service {
 		public boolean isP2pActive() throws RemoteException {
 			return mP2pManager.isActive();
 		}
+		
+		@Override
+		public boolean isBleActive() throws RemoteException {
+			return mBleManager.isActive();
+		}
 
 		@Override
 		public String[] getVersion() throws RemoteException {
@@ -206,6 +214,17 @@ public class DaemonService extends Service {
 			} else {
 				if (mP2pManager != null)
 					mP2pManager.setEnabled(false);
+			}
+		}
+
+		@Override
+		public void setBleEnabled(boolean val) throws RemoteException {
+			if (val && mDaemonProcess.getState().equals(DaemonState.ONLINE)) {
+				if (mBleManager != null)
+					mBleManager.setEnabled(true);
+			} else {
+				if (mBleManager != null)
+					mBleManager.setEnabled(false);
 			}
 		}
 	};
@@ -400,6 +419,10 @@ public class DaemonService extends Service {
 				boolean value = intent.getBooleanExtra(Preferences.KEY_P2P_ENABLED, false);
 				prefs.edit().putBoolean(Preferences.KEY_P2P_ENABLED, value).commit();
 			}
+			if (intent.hasExtra(Preferences.KEY_BLE_ENABLED)) {
+				boolean value = intent.getBooleanExtra(Preferences.KEY_BLE_ENABLED, false);
+				prefs.edit().putBoolean(Preferences.KEY_BLE_ENABLED, value).commit();
+			}
 			if (intent.hasExtra(Preferences.KEY_DISCOVERY_MODE)) {
 				String value = intent.getStringExtra(Preferences.KEY_DISCOVERY_MODE);
 				prefs.edit().putString(Preferences.KEY_DISCOVERY_MODE, value).commit();
@@ -545,6 +568,10 @@ public class DaemonService extends Service {
 				if (mP2pManager != null)
 					mP2pManager.startDiscovery();
 				
+				// start BLE discovery
+				if (mBleManager != null)
+					mBleManager.startDiscovery();
+				
 				// set global discovery state
 				mDiscoveryState = true;
 			}
@@ -557,6 +584,10 @@ public class DaemonService extends Service {
 				// stop Wi-Fi P2P discovery
 				if (mP2pManager != null)
 					mP2pManager.stopDiscovery();
+				
+				// stop BLE discovery
+				if (mBleManager != null)
+					mBleManager.stopDiscovery();
 				
 				// set global discovery state
 				mDiscoveryState = false;
@@ -686,6 +717,7 @@ public class DaemonService extends Service {
 		
 		e.putBoolean(Preferences.KEY_ENABLED, prefs.getBoolean(Preferences.KEY_ENABLED, true));
 		e.putBoolean(Preferences.KEY_P2P_ENABLED, prefs.getBoolean(Preferences.KEY_P2P_ENABLED, false));
+		e.putBoolean(Preferences.KEY_BLE_ENABLED, prefs.getBoolean(Preferences.KEY_BLE_ENABLED, false));
 		e.putString(Preferences.KEY_DISCOVERY_MODE, prefs.getString(Preferences.KEY_DISCOVERY_MODE, "smart"));
 		
 		int log_options = Integer.valueOf(prefs.getString(Preferences.KEY_LOG_OPTIONS, "0"));
@@ -731,6 +763,12 @@ public class DaemonService extends Service {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			mP2pManager = new P2pManager(this);
 			mP2pManager.create();
+		}
+		
+		// create BLE Manager
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			mBleManager = new BleManager(this);
+			mBleManager.create();
 		}
 
 		// start initialization of the daemon process
@@ -778,6 +816,10 @@ public class DaemonService extends Service {
 		// disable P2P manager
 		if (mP2pManager != null)
 			mP2pManager.destroy();
+		
+		// disable BLE manager
+		if (mBleManager != null)
+			mBleManager.destroy();
 
 		// stop looper that handles incoming intents
 		mServiceLooper.quit();
@@ -791,6 +833,9 @@ public class DaemonService extends Service {
 
 		// dereference P2P Manager
 		mP2pManager = null;
+		
+		// dereference BLE Manager
+		mBleManager = null;
 
 		// call super method
 		super.onDestroy();
@@ -853,6 +898,11 @@ public class DaemonService extends Service {
 							mP2pManager.setEnabled(false);
 					}
 					
+					if (prefs.getBoolean(Preferences.KEY_BLE_ENABLED, true)) {
+						if (mBleManager != null)
+							mBleManager.setEnabled(false);
+					}
+					
 					// unlisten to device state events
 					unregisterReceiver(mScreenStateReceiver);
 					
@@ -880,6 +930,11 @@ public class DaemonService extends Service {
 					if (prefs.getBoolean(Preferences.KEY_P2P_ENABLED, false)) {
 						if (mP2pManager != null)
 							mP2pManager.setEnabled(true);
+					}
+					
+					if (prefs.getBoolean(Preferences.KEY_BLE_ENABLED, false)) {
+						if (mBleManager != null)
+							mBleManager.setEnabled(true);
 					}
 					
 					// listen to Wi-Fi events

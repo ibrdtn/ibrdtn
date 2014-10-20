@@ -76,6 +76,7 @@ import android.widget.Switch;
 import de.tubs.ibr.dtn.R;
 import de.tubs.ibr.dtn.api.SingletonEndpoint;
 import de.tubs.ibr.dtn.keyexchange.KeyInformationActivity;
+import de.tubs.ibr.dtn.service.BleManager;
 import de.tubs.ibr.dtn.service.ControlService;
 import de.tubs.ibr.dtn.service.DaemonService;
 import de.tubs.ibr.dtn.service.DaemonStorageUtils;
@@ -90,6 +91,7 @@ public class Preferences extends PreferenceActivity {
 	public static final String KEY_ENDPOINT_ID = "endpoint_id";
 	public static final String KEY_DISCOVERY_MODE = "discovery_mode";
 	public static final String KEY_P2P_ENABLED = "p2p_enabled";
+	public static final String KEY_BLE_ENABLED = "ble_enabled";
 	
 	public static final String KEY_LOG_OPTIONS = "log_options";
 	public static final String KEY_LOG_DEBUG_VERBOSITY = "log_debug_verbosity";
@@ -121,7 +123,8 @@ public class Preferences extends PreferenceActivity {
 	private CheckBoxPreference checkBoxPreference = null;
 	private InterfacePreferenceCategory mInterfacePreference = null;
 	private SwitchPreference mP2pSwitch = null;
-
+	private SwitchPreference mBleSwitch = null;
+	
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@SuppressLint("NewApi")
 		public void onServiceConnected(ComponentName name, IBinder service) {
@@ -144,6 +147,15 @@ public class Preferences extends PreferenceActivity {
 					mP2pSwitch.setEnabled(Preferences.this.mService.isP2pActive());
 				} catch (RemoteException e) {
 					mP2pSwitch.setEnabled(false);
+				}
+			}
+			
+			// enable / disable BLE switch
+			if (mBleSwitch != null) {
+				try {
+					mBleSwitch.setEnabled(Preferences.this.mService.isBleActive());
+				} catch (RemoteException e) {
+					mBleSwitch.setEnabled(false);
 				}
 			}
 		}
@@ -374,6 +386,12 @@ public class Preferences extends PreferenceActivity {
 			mP2pSwitch = (SwitchPreference)findPreference(KEY_P2P_ENABLED);
 			mP2pSwitch.setEnabled(false);
 		}
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			// hide Ble control
+			mBleSwitch = (SwitchPreference)findPreference(KEY_BLE_ENABLED);
+			mBleSwitch.setEnabled(false);
+		}
 
 		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
 		// their values. When their values change, their summaries are updated
@@ -452,7 +470,9 @@ public class Preferences extends PreferenceActivity {
 		filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		registerReceiver(mNetworkConditionListener, filter);
 		
-		IntentFilter p2p_filter = new IntentFilter(P2pManager.INTENT_P2P_STATE_CHANGED);
+		IntentFilter p2p_filter = new IntentFilter();
+		p2p_filter.addAction(P2pManager.INTENT_P2P_STATE_CHANGED);
+		p2p_filter.addAction(BleManager.INTENT_BLE_STATE_CHANGED);
 		registerReceiver(mP2pConditionListener, p2p_filter);
 		
 		// enable / disable P2P switch
@@ -461,6 +481,15 @@ public class Preferences extends PreferenceActivity {
 				mP2pSwitch.setEnabled(mService.isP2pActive());
 			} catch (RemoteException e) {
 				mP2pSwitch.setEnabled(false);
+			}
+		}
+		
+		// enable / disable BT LE switch
+		if ((mBleSwitch != null) && (mService != null)) {
+			try {
+				mBleSwitch.setEnabled(mService.isBleActive());
+			} catch (RemoteException e) {
+				mBleSwitch.setEnabled(false);
 			}
 		}
 
@@ -483,11 +512,22 @@ public class Preferences extends PreferenceActivity {
 		@SuppressLint("NewApi")
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Log.d(TAG, "p2p changed");
-			if (mP2pSwitch == null) return;
-			
-			// enable / disable P2P switch
-			mP2pSwitch.setEnabled(intent.getBooleanExtra(P2pManager.EXTRA_P2P_STATE, false));
+			if (P2pManager.INTENT_P2P_STATE_CHANGED.equals(intent.getAction())) {
+				Log.d(TAG, "p2p changed");
+				
+				if (mP2pSwitch == null) return;
+				
+				// enable / disable P2P switch
+				mP2pSwitch.setEnabled(intent.getBooleanExtra(P2pManager.EXTRA_P2P_STATE, false));
+			}
+			else if (BleManager.INTENT_BLE_STATE_CHANGED.equals(intent.getAction())) {
+				Log.d(TAG, "ble changed");
+				
+				if (mBleSwitch == null) return;
+				
+				// enable / disable BLE switch
+				mBleSwitch.setEnabled(intent.getBooleanExtra(BleManager.EXTRA_BLE_STATE, false));
+			}
 		}
 	};
 
@@ -670,6 +710,9 @@ public class Preferences extends PreferenceActivity {
 			if (Preferences.KEY_P2P_ENABLED.equals(key))
 				prefChangedIntent.putExtra(key, prefs.getBoolean(key, false));
 			
+			if (Preferences.KEY_BLE_ENABLED.equals(key))
+				prefChangedIntent.putExtra(key, prefs.getBoolean(key, false));
+			
 			if (Preferences.KEY_DISCOVERY_MODE.equals(key))
 				prefChangedIntent.putExtra(key, prefs.getString(key, "smart"));
 			
@@ -781,6 +824,16 @@ public class Preferences extends PreferenceActivity {
 				if (mService != null) {
 					try {
 						mService.setP2pEnabled(prefs.getBoolean(key, false));
+					} catch (RemoteException e) {
+						// error
+					}
+				}
+			}
+			else if (Preferences.KEY_BLE_ENABLED.equals(key))
+			{
+				if (mService != null) {
+					try {
+						mService.setBleEnabled(prefs.getBoolean(key, false));
 					} catch (RemoteException e) {
 						// error
 					}
