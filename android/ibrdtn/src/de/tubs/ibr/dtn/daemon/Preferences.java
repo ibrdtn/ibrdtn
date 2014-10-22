@@ -37,7 +37,11 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -49,6 +53,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -75,6 +80,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
 import de.tubs.ibr.dtn.R;
 import de.tubs.ibr.dtn.api.SingletonEndpoint;
+import de.tubs.ibr.dtn.discovery.WakefulDiscoveryReceiver;
 import de.tubs.ibr.dtn.keyexchange.KeyInformationActivity;
 import de.tubs.ibr.dtn.service.ControlService;
 import de.tubs.ibr.dtn.service.DaemonService;
@@ -90,6 +96,9 @@ public class Preferences extends PreferenceActivity {
 	public static final String KEY_ENDPOINT_ID = "endpoint_id";
 	public static final String KEY_DISCOVERY_MODE = "discovery_mode";
 	public static final String KEY_P2P_ENABLED = "p2p_enabled";
+	public static final String KEY_BLE_ENABLED = "ble_enabled";
+	public static final String KEY_SCAN_DURATION = "scan_duration";
+	public static final String KEY_SCAN_DELAY = "scan_delay";
 	
 	public static final String KEY_LOG_OPTIONS = "log_options";
 	public static final String KEY_LOG_DEBUG_VERBOSITY = "log_debug_verbosity";
@@ -121,6 +130,12 @@ public class Preferences extends PreferenceActivity {
 	private CheckBoxPreference checkBoxPreference = null;
 	private InterfacePreferenceCategory mInterfacePreference = null;
 	private SwitchPreference mP2pSwitch = null;
+	private SwitchPreference mBleSwitch = null;
+	
+	private BluetoothManager mBluetoothManager;
+	private BluetoothAdapter mBluetoothAdapter;
+	private AlarmManager mAlarmManager;
+	private PendingIntent mBleDiscoveryIntent;
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@SuppressLint("NewApi")
@@ -295,6 +310,7 @@ public class Preferences extends PreferenceActivity {
 		return false;
 	}
 
+	@SuppressLint("NewApi")
 	@TargetApi(14)
 	@SuppressWarnings("deprecation")
 	@Override
@@ -374,6 +390,19 @@ public class Preferences extends PreferenceActivity {
 			mP2pSwitch = (SwitchPreference)findPreference(KEY_P2P_ENABLED);
 			mP2pSwitch.setEnabled(false);
 		}
+		
+		// Check for Bluetooth LE availability
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 &&
+				getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+			mBluetoothManager =
+			        (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+			mBluetoothAdapter = mBluetoothManager.getAdapter();
+			mBleSwitch = (SwitchPreference)findPreference(KEY_BLE_ENABLED);
+			mBleSwitch.setEnabled(true);
+		}
+		
+        mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        mBleDiscoveryIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(WakefulDiscoveryReceiver.ACTION_BLE_DISCOVERY), 0);
 
 		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
 		// their values. When their values change, their summaries are updated
@@ -670,6 +699,9 @@ public class Preferences extends PreferenceActivity {
 			if (Preferences.KEY_P2P_ENABLED.equals(key))
 				prefChangedIntent.putExtra(key, prefs.getBoolean(key, false));
 			
+			if (Preferences.KEY_BLE_ENABLED.equals(key))
+				prefChangedIntent.putExtra(key, prefs.getBoolean(key, false));
+			
 			if (Preferences.KEY_DISCOVERY_MODE.equals(key))
 				prefChangedIntent.putExtra(key, prefs.getString(key, "smart"));
 			
@@ -784,6 +816,23 @@ public class Preferences extends PreferenceActivity {
 					} catch (RemoteException e) {
 						// error
 					}
+				}
+			}
+			else if (Preferences.KEY_BLE_ENABLED.equals(key))
+			{
+				Log.d(TAG, "Preference " + key + " has changed to " + String.valueOf(prefs.getBoolean(key, false)));
+				if (prefs.getBoolean(key, false) == true) {
+					// Ensures Bluetooth is available on the device and it is enabled. If not,
+					// displays a dialog requesting user permission to enable Bluetooth.
+					if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+					    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+					    startActivityForResult(enableBtIntent, 0);
+					}
+					// start node discovery
+                    sendBroadcast(new Intent(WakefulDiscoveryReceiver.ACTION_BLE_DISCOVERY));
+                } else {
+                	// stop node discovery
+                    mAlarmManager.cancel(mBleDiscoveryIntent);
 				}
 			}
 			else if (Preferences.KEY_DISCOVERY_MODE.equals(key))

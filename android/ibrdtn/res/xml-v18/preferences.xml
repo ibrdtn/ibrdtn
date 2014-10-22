@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="prefcat_general"
+        android:title="@string/general" >
+        <de.tubs.ibr.dtn.daemon.EndpointListPreference
+            android:defaultValue="dtn"
+            android:key="endpoint_id"
+            android:entries="@array/endpoint_scheme_names"
+            android:entryValues="@array/endpoint_scheme_values"
+            android:summary="@string/eid_description"
+            android:title="@string/endpoint_id">
+        </de.tubs.ibr.dtn.daemon.EndpointListPreference>
+
+        <ListPreference
+            android:defaultValue="prophet"
+            android:entries="@array/routing_scheme_names"
+            android:entryValues="@array/routing_scheme_values"
+            android:key="routing"
+            android:summary="@string/routing_description"
+            android:title="@string/routing" >
+        </ListPreference>
+        
+        <ListPreference
+            android:defaultValue="disk-persistent"
+            android:entries="@array/storage_modes_names"
+            android:entryValues="@array/storage_modes_values"
+            android:key="storage_mode"
+            android:summary="@string/pref_storage_description"
+            android:title="@string/pref_storage" >
+        </ListPreference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="prefcat_connection"
+        android:title="@string/pref_connection" >
+        <ListPreference
+            android:defaultValue="smart"
+            android:entries="@array/discovery_modes_names"
+            android:entryValues="@array/discovery_modes_values"
+            android:key="discovery_mode"
+            android:title="@string/pref_discovery_title" >
+        </ListPreference>
+        <ListPreference
+            android:defaultValue="off"
+            android:entries="@array/uplink_modes_names"
+            android:entryValues="@array/uplink_modes_values"
+            android:key="uplink_mode"
+            android:summary="@string/pref_uplink_summary"
+            android:title="@string/pref_uplink_title" >
+        </ListPreference>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:disableDependentsState="false"
+            android:key="p2p_enabled"
+            android:summary="@string/pref_p2p_summary"
+            android:switchTextOff="@string/pref_p2p_off"
+            android:switchTextOn="@string/pref_p2p_on"
+            android:title="@string/pref_p2p"
+            android:enabled="false" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:disableDependentsState="false"
+            android:key="ble_enabled"
+            android:summary="@string/pref_ble_summary"
+            android:switchTextOff="@string/pref_ble_off"
+            android:switchTextOn="@string/pref_ble_on"
+            android:title="@string/pref_ble"
+            android:enabled="false" />
+    </PreferenceCategory>
+    <de.tubs.ibr.dtn.daemon.InterfacePreferenceCategory
+        android:key="prefcat_interfaces"
+        android:title="@string/interfaces" >
+    </de.tubs.ibr.dtn.daemon.InterfacePreferenceCategory>
+    <PreferenceCategory
+        android:key="prefcat_security"
+        android:title="@string/security" >
+        <ListPreference
+            android:defaultValue="disabled"
+            android:entries="@array/security_modes_names"
+            android:entryValues="@array/security_modes_values"
+            android:key="security_mode"
+            android:summary="@string/pref_security_mode_desc"
+            android:title="@string/pref_security_mode" />
+
+        <EditTextPreference
+            android:key="security_bab_key"
+            android:summary="@string/pref_bab_key_desc"
+            android:title="@string/pref_bab_key"
+            android:singleLine="true" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:key="prefcat_timesync"
+        android:title="@string/timesync" >
+        <ListPreference
+            android:defaultValue="disabled"
+            android:entries="@array/timesync_modes_names"
+            android:entryValues="@array/timesync_modes_values"
+            android:key="timesync_mode"
+            android:summary="@string/pref_timesync_mode_desc"
+            android:title="@string/pref_timesync_mode" />
+
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:key="prefcat_logging"
+        android:title="@string/pref_logging" >
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/log_options_names"
+            android:entryValues="@array/log_options_values"
+            android:key="log_options"
+            android:summary="@string/pref_log_options_desc"
+            android:title="@string/pref_log_options" />
+
+        <EditTextPreference
+            android:defaultValue="99"
+            android:key="log_debug_verbosity"
+            android:summary="@string/pref_log_debug_verbosity_desc"
+            android:title="@string/pref_log_debug_verbosity"
+            android:inputType="number"
+            android:singleLine="true" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="log_enable_file"
+            android:summary="@string/pref_log_enable_file_desc"
+            android:title="@string/pref_log_enable_file" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_system" >
+        <CheckBoxPreference
+            android:key="collect_stats"
+            android:summary="@string/pref_collect_stats_desc"
+            android:title="@string/pref_collect_stats" />
+
+        <Preference
+            android:key="system_version"
+            android:title="@string/system_version" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -122,6 +122,9 @@ public class DaemonService extends Service {
 
 	// the P2P manager used for wifi direct control
 	private P2pManager mP2pManager = null;
+	
+	// the BLE manager used for node discovery
+	private BleManager mBleManager = null;
 
 	// the daemon process
 	private DaemonProcess mDaemonProcess = null;
@@ -732,6 +735,11 @@ public class DaemonService extends Service {
 			mP2pManager = new P2pManager(this);
 			mP2pManager.create();
 		}
+		
+		// create BLE Manager
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+					mBleManager = new BleManager(this);
+				}
 
 		// start initialization of the daemon process
 		final Intent intent = new Intent(this, DaemonService.class);
