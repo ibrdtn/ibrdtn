@@ -1,3 +1,6 @@
 [submodule "android/speex"]
 	path = android/speex
 	url = https://github.com/yayanyang/speex-android.git
+[submodule "java/easy-to-use"]
+	path = java/easy-to-use
+	url = https://github.com/auzias/ibrdtn-api.git
