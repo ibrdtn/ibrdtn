@@ -26,12 +26,50 @@ namespace ibrcommon
 {
 	RWMutex::RWMutex()
 	{
-		pthread_rwlock_init(&_rwlock, NULL);
+		switch(pthread_rwlock_init(&_rwlock, NULL))
+		{
+			case 0:
+				break;
+			
+			case EAGAIN:
+				throw MutexException("The mutex could not be initialized because the system lacked the necessary resources (EAGAIN).");
+				break;
+			case ENOMEM:
+				throw MutexException("The mutex could not be initialized because insufficient memory exists  (ENOMEM).");
+				break;
+			case EPERM:
+				throw MutexException("The mutex could not be initialized because the caller does not have sufficient privileges (EPERM).");
+				break;
+			case EBUSY:
+				throw MutexException("The mutex could not be initialized because the system has detected an attempt to re-initialize a previously initialized but not yet destroyed read/write lock (EBUSY).");
+				break;
+			case EINVAL:
+				throw MutexException("The mutex could not be initialized because a paramter is invalid (EINVAL).");
+				break;
+			default:
+				throw MutexException("The mutex could not be initialized. Reason unknown.");
+		}
 	}
 
 	RWMutex::~RWMutex()
 	{
-		pthread_rwlock_destroy(&_rwlock);
+		switch(pthread_rwlock_destroy(&_rwlock))
+		{
+			case 0:
+				break;
+				
+			case EPERM:
+				throw MutexException("The mutex could not be destroyed because the caller does not have sufficient privileges (EPERM).");
+				break;	
+			case EBUSY:
+				throw MutexException("The mutex could not be destroyed because it is still locked (EBUSY).");
+				break;
+			case EINVAL:
+				throw MutexException("The mutex could not be destroyed because a paramter is invalid (EINVAL).");
+				break;
+			default:
+				throw MutexException("The mutex could not be destroyed. Reason unknown.");			
+		}
 	}
 
 	void RWMutex::trylock() throw (MutexException)
