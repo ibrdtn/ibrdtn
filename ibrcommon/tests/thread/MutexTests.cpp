@@ -103,6 +103,9 @@ void MutexTests::rwmutex_test_readonly()
 
 	// try to lock the mutex for a read-write access (should fail)
 	CPPUNIT_ASSERT_THROW(rwm.trylock_wr(), ibrcommon::MutexException);
+	
+	//Release original lock
+	CPPUNIT_ASSERT_NO_THROW(rwm.leave());
 }
 
 void MutexTests::rwmutex_test_readwrite()
