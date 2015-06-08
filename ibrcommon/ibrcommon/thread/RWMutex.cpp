@@ -21,11 +21,14 @@
 
 #include "ibrcommon/thread/RWMutex.h"
 #include <errno.h>
+#include <cstring>
 
 namespace ibrcommon
 {
 	RWMutex::RWMutex()
 	{
+		std::memset(&_rwlock,0,sizeof(pthread_rwlock_t));
+		
 		switch(pthread_rwlock_init(&_rwlock, NULL))
 		{
 			case 0:
