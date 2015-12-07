@@ -22,7 +22,7 @@ APP_PLATFORM:=android-9
 
 # See for documentation on Androids c++ support: $(NDK_PATH)/docs/CPLUSPLUS-SUPPORT.html
 # select c++ gnu stl, because we need exception support
-APP_STL:=gnustl_shared
+APP_STL:=c++_shared
 
 # enable exceptions and rtti (information about data types at runtime)
 APP_CPPFLAGS:=-fexceptions -frtti -Wall -Wextra -Wconversion

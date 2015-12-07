@@ -684,7 +684,7 @@ namespace dtn
 
 			while (conf.keyExists( key ))
 			{
-				vector<string> route = dtn::utils::Utils::tokenize(" ", conf.read<string>(key, "dtn:none dtn:none"));
+				std::vector<string> route = dtn::utils::Utils::tokenize(" ", conf.read<string>(key, "dtn:none dtn:none"));
 				_static_routes.insert( pair<std::string, std::string>( route.front(), route.back() ) );
 
 				keynumber++;
@@ -829,8 +829,8 @@ namespace dtn
 			}
 			else try
 			{
-				vector<string> nets = dtn::utils::Utils::tokenize(" ", conf.read<string>("net_interfaces") );
-				for (vector<string>::const_iterator iter = nets.begin(); iter != nets.end(); ++iter)
+				std::vector<string> nets = dtn::utils::Utils::tokenize(" ", conf.read<string>("net_interfaces") );
+				for (std::vector<string>::const_iterator iter = nets.begin(); iter != nets.end(); ++iter)
 				{
 					const std::string &netname = (*iter);
 
