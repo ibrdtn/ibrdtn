@@ -353,7 +353,7 @@ namespace ibrcommon {
 		void bind(const vaddress &addr) throw (socket_exception);
 
 	private:
-		const vaddress _address;
+		vaddress _address;
 		const int _listen;
 	};
 
