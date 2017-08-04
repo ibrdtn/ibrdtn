@@ -78,6 +78,19 @@ namespace dtn
 			// do not allow any futher binding if we already bound to any interface
 			if (_any_port > 0) return;
 
+			// If the port number is 0, we must obtain a valid
+			// port number from the OS. To do so we create a
+			// temporary socket (dyn_sock) on local port 0. Once
+			// this socket is up we grab its actual port number,
+			// and use this number to create the other sockets.
+			ibrcommon::tcpserversocket *dyn_sock = NULL;
+			if (port == 0) {
+			  dyn_sock = new ibrcommon::tcpserversocket(port);
+			  dyn_sock->up();
+			  port = dyn_sock->get_port();
+			  IBRCOMMON_LOGGER_TAG(TCPConvergenceLayer::TAG, info) << "Assigned local port=" << port << " dynamically (was 0)" << IBRCOMMON_LOGGER_ENDL;
+			}
+
 			if (net.isAny()) {
 				// bind to any interface
 				_vsocket.add(new ibrcommon::tcpserversocket(port));
@@ -94,6 +107,15 @@ namespace dtn
 				_vsocket.add(new ibrcommon::tcpserversocket(addr4));
 			} else {
 				listen(net, port);
+			}
+
+			// If the port number has been assigned
+			// dynamically, let us close and delete the
+			// socket we created temporarily in order to
+			// obtain that port
+			if (dyn_sock != NULL) {
+			  dyn_sock->down();
+			  delete dyn_sock;
 			}
 		}
 
