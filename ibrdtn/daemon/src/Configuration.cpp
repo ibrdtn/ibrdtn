@@ -101,7 +101,8 @@ namespace dtn
 		{}
 
 		Configuration::Daemon::Daemon()
-		 : _daemonize(false), _kill(false), _threads(0)
+		 : _daemonize(false), _kill(false), _threads(0),
+		    _start_time(-1), _stop_time(-1), _seed(-1)
 		{}
 
 		Configuration::TimeSync::TimeSync()
@@ -230,6 +231,10 @@ namespace dtn
 #ifdef __WIN32__
 						{"interfaces", no_argument, 0, 'I'},
 #endif
+						{"start", required_argument, 0, 'b'},
+						{"stop", required_argument, 0, 's'},
+						{"seed", required_argument, 0, 'r'},
+
 						{0, 0, 0, 0}
 				};
 
@@ -282,6 +287,9 @@ namespace dtn
 #ifdef __WIN32__
 					std::cout << " --interfaces    list all available interfaces" << std::endl;
 #endif
+					std::cout << " --start <time>  start time (EPOCH in ms)" << std::endl;
+					std::cout << " --stop <time>   stop time (EPOCH in ms)" << std::endl;
+					std::cout << " --seed <val>    random seed (uint)" << std::endl;
 					exit(0);
 					break;
 
@@ -352,6 +360,18 @@ namespace dtn
 				case '?':
 					/* getopt_long already printed an error message. */
 					break;
+
+				case 'b': 
+				  _daemon._start_time = atol(optarg);
+				  break;
+				  
+				case 's': 
+				  _daemon._stop_time = atol(optarg);
+				  break;
+
+				case 'r': 
+				  _daemon._seed = atol(optarg);
+				  break;
 
 				default:
 					abort();
@@ -1330,6 +1350,21 @@ namespace dtn
 			return _pidfile;
 		}
 
+	        long Configuration::Daemon::start_time() const
+		{
+		  return _start_time;
+		}
+
+	        long Configuration::Daemon::stop_time() const
+		{
+		  return _stop_time;
+		}
+
+	        long Configuration::Daemon::seed() const
+		{
+		  return _seed;
+		}
+	  
 		bool Configuration::TimeSync::hasReference() const
 		{
 			return _reference;
