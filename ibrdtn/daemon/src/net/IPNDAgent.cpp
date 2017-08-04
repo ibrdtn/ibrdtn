@@ -333,6 +333,21 @@ namespace dtn
 		{
 			// routine checked for throw() on 15.02.2013
 
+		  // If the discovery port number is 0, we must obtain
+		  // a valid port number from the OS. To do so we
+		  // create a temporary socket (dyn_sock) on local
+		  // port 0. Once this socket is up we grab its actual
+		  // port number, and use this number to create the
+		  // other sockets.
+		  ibrcommon::multicastsocket *dyn_sock = NULL;
+		  if (_port == 0) {
+		    const ibrcommon::vaddress any_addr("0.0.0.0", 0, AF_INET);
+		    dyn_sock = new ibrcommon::multicastsocket(any_addr);
+		    dyn_sock->up();
+		    _port = dyn_sock->get_port();
+		    IBRCOMMON_LOGGER_TAG(IPNDAgent::TAG, info) << "Assigned local port=" << _port << " dynamically (was 0)" << IBRCOMMON_LOGGER_ENDL;
+		  }
+
 			try {
 				// setup the sockets
 				_socket.up();
@@ -379,6 +394,15 @@ namespace dtn
 				}
 			}
 #endif
+
+			// If the port number has been assigned
+			// dynamically, let us close and delete the
+			// socket we created temporarily in order to
+			// obtain that port
+			if (dyn_sock != NULL) {
+			  dyn_sock->down();
+			  delete dyn_sock;
+			}
 
 			// listen to P2P dial-up events
 			dtn::core::EventDispatcher<dtn::net::P2PDialupEvent>::add(this);
