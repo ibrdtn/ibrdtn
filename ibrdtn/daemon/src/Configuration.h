@@ -184,6 +184,7 @@ namespace dtn
 				int version() const;
 				const std::set<ibrcommon::vaddress> address() const throw (ParameterNotFoundException);
 				int port() const;
+				int localPort() const;
 				unsigned int interval() const;
 				bool enableCrosslayer() const;
 			};

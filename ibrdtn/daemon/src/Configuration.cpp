@@ -621,6 +621,11 @@ namespace dtn
 			return Configuration::getInstance()._conf.read<int>("discovery_port", 4551);
 		}
 
+		int Configuration::Discovery::localPort() const
+		{
+       		  return Configuration::getInstance()._conf.read<int>("discovery_local_port", port());
+		}
+
 		unsigned int Configuration::Discovery::interval() const
 		{
 			return _interval;

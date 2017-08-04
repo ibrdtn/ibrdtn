@@ -1509,7 +1509,7 @@ namespace dtn
 			if (conf.getDiscovery().enabled())
 			{
 				// get the discovery port
-				int disco_port = conf.getDiscovery().port();
+				int disco_port = conf.getDiscovery().localPort();
 
 				// create the IPND agent
 				dtn::net::IPNDAgent *ipnd = new dtn::net::IPNDAgent( disco_port );
