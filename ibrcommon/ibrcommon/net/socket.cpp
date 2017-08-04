@@ -312,6 +312,17 @@ namespace ibrcommon
 		}
 	}
 
+        int basesocket::get_port()
+	{
+	  struct   sockaddr_in sin;
+	  socklen_t addrlen = sizeof(sin);
+	  memset(&sin, 0, addrlen);
+	  getsockname(_fd,(struct sockaddr*)&sin,&addrlen);  
+	  int port = ntohs(sin.sin_port);
+	  
+	  return port;
+	}
+
 	clientsocket::clientsocket()
 	{
 	}
