@@ -594,7 +594,8 @@ namespace dtn
 				}
 				else
 				{
-					throw dtn::InvalidDataException("unknown block header");
+					/* API documentation states "while header fields except the length field may be omitted" */
+					//throw dtn::InvalidDataException("unknown block header");
 				}
 			}
 

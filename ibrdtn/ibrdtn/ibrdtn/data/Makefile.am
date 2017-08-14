@@ -5,6 +5,7 @@ h_sources = \
 	AgeBlock.h \
 	ScopeControlHopLimitBlock.h \
 	Block.h \
+	BlobBlock.h \
 	Bundle.h \
 	BundleID.h \
 	BundleList.h \

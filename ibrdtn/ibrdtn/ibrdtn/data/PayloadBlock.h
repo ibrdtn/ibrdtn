@@ -27,12 +27,13 @@
 #include "ibrdtn/data/Number.h"
 #include "ibrdtn/data/Block.h"
 #include "ibrcommon/data/BLOB.h"
+#include "ibrdtn/data/BlobBlock.h"
 
 namespace dtn
 {
 	namespace data
 	{
-		class PayloadBlock : public Block
+		class PayloadBlock : public BlobBlock
 		{
 		public:
 			static const dtn::data::block_t BLOCK_TYPE;

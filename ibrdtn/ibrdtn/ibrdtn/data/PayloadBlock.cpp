@@ -31,12 +31,12 @@ namespace dtn
 		const dtn::data::block_t PayloadBlock::BLOCK_TYPE = 1;
 
 		PayloadBlock::PayloadBlock()
-		 : Block(PayloadBlock::BLOCK_TYPE), _blobref(ibrcommon::BLOB::create())
+		 : BlobBlock(PayloadBlock::BLOCK_TYPE), _blobref(ibrcommon::BLOB::create())
 		{
 		}
 
 		PayloadBlock::PayloadBlock(ibrcommon::BLOB::Reference ref)
-		 : Block(PayloadBlock::BLOCK_TYPE), _blobref(ref)
+		 : BlobBlock(PayloadBlock::BLOCK_TYPE), _blobref(ref)
 		{
 		}
 

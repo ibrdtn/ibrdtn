@@ -23,6 +23,7 @@
 #define EXTENSIONBLOCK_H_
 
 #include "ibrdtn/data/Block.h"
+#include "ibrdtn/data/BlobBlock.h"
 #include <ibrcommon/data/BLOB.h>
 #include <ibrdtn/data/Number.h>
 #include <map>
@@ -31,7 +32,7 @@ namespace dtn
 {
 	namespace data
 	{
-		class ExtensionBlock : public Block
+		class ExtensionBlock : public BlobBlock
 		{
 		public:
 			class Factory

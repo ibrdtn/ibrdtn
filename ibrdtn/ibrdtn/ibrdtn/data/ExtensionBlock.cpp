@@ -93,12 +93,12 @@ namespace dtn
 		}
 
 		ExtensionBlock::ExtensionBlock()
-		 : Block(0), _blobref(ibrcommon::BLOB::create())
+		 : BlobBlock(0), _blobref(ibrcommon::BLOB::create())
 		{
 		}
 
 		ExtensionBlock::ExtensionBlock(ibrcommon::BLOB::Reference ref)
-		 : Block(0), _blobref(ref)
+		 : BlobBlock(0), _blobref(ref)
 		{
 		}
 
