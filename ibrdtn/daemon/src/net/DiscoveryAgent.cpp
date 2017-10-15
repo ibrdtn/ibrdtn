@@ -23,6 +23,7 @@
 #include "net/DiscoveryAgent.h"
 #include "net/DiscoveryService.h"
 #include "net/DiscoveryBeacon.h"
+#include "net/Discovery.h"
 #include "core/BundleCore.h"
 #include "core/NodeEvent.h"
 #include "core/EventDispatcher.h"
@@ -165,21 +166,25 @@ namespace dtn
 
 		DiscoveryBeacon DiscoveryAgent::obtainBeacon() const
 		{
-			DiscoveryBeacon::Protocol version;
+			Discovery::Protocol version;
 
 			switch (_config.version())
 			{
+			case 3:
+				version = Discovery::DISCO_VERSION_02;
+				break;
+
 			case 2:
-				version = DiscoveryBeacon::DISCO_VERSION_01;
+				version = Discovery::DISCO_VERSION_01;
 				break;
 
 			default:
-				version = DiscoveryBeacon::DISCO_VERSION_00;
+				version = Discovery::DISCO_VERSION_00;
 				break;
 
 			case 0:
 				IBRCOMMON_LOGGER_TAG("DiscoveryAgent", info) << "DTN2 compatibility mode" << IBRCOMMON_LOGGER_ENDL;
-				version = DiscoveryBeacon::DTND_IPDISCOVERY;
+				version = Discovery::DTND_IPDISCOVERY;
 				break;
 			};
 

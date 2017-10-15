@@ -385,8 +385,8 @@ namespace dtn
 			if (!_announce_rating) throw NoServiceHereException("Discovery of time sync mechanisms disabled.");
 
 			std::stringstream ss;
-			ss << "version=" << PROTO_VERSION << ";quality=" << dtn::utils::Clock::getRating() << ";timestamp=" << dtn::utils::Clock::getTime().toString() << ";";
-			announcement.addService( DiscoveryService("dtntp", ss.str()));
+			DTNTPServiceParam p(PROTO_VERSION, dtn::utils::Clock::getRating(), dtn::utils::Clock::getTime());
+			announcement.addService(DiscoveryService(dtn::core::Node::CONN_DTNTP, &p));
 		}
 
 		void DTNTPWorker::decode(const dtn::core::Node::Attribute &attr, unsigned int &version, dtn::data::Timestamp &timestamp, float &quality) const

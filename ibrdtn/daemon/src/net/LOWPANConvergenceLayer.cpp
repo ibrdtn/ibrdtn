@@ -85,10 +85,12 @@ namespace dtn
 				// Get address via netlink
 				ibrcommon::lowpansocket::getAddress(&address.addr, iface);
 
+
 				//FIXME better naming for address and panid. This will need updates to the service parser.
 				service << "ip=" << address.addr.short_addr << ";port=" << _panid << ";";
 
-				announcement.addService( DiscoveryService(getDiscoveryProtocol(), service.str()));
+				LOWPANServiceParam p(address.addr.short_addr, _panid);
+				announcement.addService(DiscoveryService(getDiscoveryProtocol(), &p));
 			}
 			else
 			{

@@ -199,11 +199,12 @@ namespace dtn
 
 			// announce port only if we are bound to any interface
 			if (_interfaces.empty() && (_any_port > 0)) {
-				std::stringstream service;
 				// ... set the port only
 				ibrcommon::MutexLock l(_portmap_lock);
-				service << "port=" << _portmap[iface] << ";";
-				beacon.addService( DiscoveryService(getDiscoveryProtocol(), service.str()));
+
+				IPServiceParam param("", _portmap[iface]);
+				beacon.addService(DiscoveryService(getDiscoveryProtocol(), &param));
+
 				return;
 			}
 
@@ -240,11 +241,11 @@ namespace dtn
 								sa_family_t f = addr.family();
 								if ((f != AF_INET) && (f != AF_INET6)) continue;
 
-								std::stringstream service;
 								// fill in the ip address
 								ibrcommon::MutexLock l(_portmap_lock);
-								service << "ip=" << addr.address() << ";port=" << _portmap[iface] << ";";
-								beacon.addService( DiscoveryService(getDiscoveryProtocol(), service.str()));
+
+								IPServiceParam param(addr.address(), _portmap[iface]);
+								beacon.addService(DiscoveryService(getDiscoveryProtocol(), &param));
 
 								// set the announce mark
 								announced = true;
@@ -259,11 +260,10 @@ namespace dtn
 
 					// if we still not announced anything...
 					if (!announced) {
-						std::stringstream service;
 						// ... set the port only
 						ibrcommon::MutexLock l(_portmap_lock);
-						service << "port=" << _portmap[iface] << ";";
-						beacon.addService( DiscoveryService(getDiscoveryProtocol(), service.str()));
+						IPServiceParam param("", _portmap[iface]);
+						beacon.addService(DiscoveryService(getDiscoveryProtocol(), &param));
 					}
 					return;
 				}

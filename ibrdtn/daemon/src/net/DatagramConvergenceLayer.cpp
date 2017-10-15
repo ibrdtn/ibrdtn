@@ -326,7 +326,8 @@ namespace dtn
 						}
 
 						// add discovered service entry
-						beacon.addService(dtn::net::DiscoveryService(_service->getProtocol(), address));
+						DatagramServiceParam p(address);
+						beacon.addService(dtn::net::DiscoveryService(_service->getProtocol(), &p));
 
 						BeaconReceived *bc = new BeaconReceived();
 						bc->address = address;

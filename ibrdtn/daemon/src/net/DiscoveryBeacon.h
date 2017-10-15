@@ -26,6 +26,7 @@
 #include <ibrdtn/data/EID.h>
 #include <ibrdtn/data/BundleString.h>
 #include "net/DiscoveryService.h"
+#include "net/Discovery.h"
 #include <string>
 #include <list>
 
@@ -50,14 +51,8 @@ namespace dtn
 			};
 
 		public:
-			enum Protocol
-			{
-				DTND_IPDISCOVERY = 0x00,
-				DISCO_VERSION_00 = 0x01,
-				DISCO_VERSION_01 = 0x02
-			};
 
-			DiscoveryBeacon(const Protocol version = DISCO_VERSION_00, const dtn::data::EID &eid = dtn::data::EID());
+			DiscoveryBeacon(const Discovery::Protocol version = Discovery::DISCO_VERSION_00, const dtn::data::EID &eid = dtn::data::EID());
 
 			virtual ~DiscoveryBeacon();
 
@@ -87,7 +82,7 @@ namespace dtn
 			friend std::ostream &operator<<(std::ostream &stream, const DiscoveryBeacon &announcement);
 			friend std::istream &operator>>(std::istream &stream, DiscoveryBeacon &announcement);
 
-			unsigned int _version;
+			Discovery::Protocol _version;
 			unsigned char _flags;
 			dtn::data::EID _canonical_eid;
 			uint16_t _sn;

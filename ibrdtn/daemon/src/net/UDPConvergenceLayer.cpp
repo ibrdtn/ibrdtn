@@ -96,10 +96,10 @@ namespace dtn
 		{
 			// announce port only if we are bound to any interface
 			if (_net.isAny()) {
-				std::stringstream service;
 				// ... set the port only
-				service << "port=" << _port << ";";
-				announcement.addService( DiscoveryService(getDiscoveryProtocol(), service.str()));
+				IPServiceParam param("", _port);
+				announcement.addService(DiscoveryService(getDiscoveryProtocol(), &param));
+
 				return;
 			}
 
@@ -134,10 +134,8 @@ namespace dtn
 						sa_family_t f = addr.family();
 						if ((f != AF_INET) && (f != AF_INET6)) continue;
 
-						std::stringstream service;
-						// fill in the ip address
-						service << "ip=" << addr.address() << ";port=" << _port << ";";
-						announcement.addService( DiscoveryService(getDiscoveryProtocol(), service.str()));
+						IPServiceParam param(addr.address(), _port);
+						announcement.addService(DiscoveryService(getDiscoveryProtocol(), &param));
 
 						// set the announce mark
 						announced = true;
@@ -152,9 +150,8 @@ namespace dtn
 			// if we still not announced anything...
 			if (!announced) {
 				// announce at least our local port
-				std::stringstream service;
-				service << "port=" << _port << ";";
-				announcement.addService( DiscoveryService(getDiscoveryProtocol(), service.str()));
+				IPServiceParam param("", _port);
+				announcement.addService(DiscoveryService(getDiscoveryProtocol(), &param));
 			}
 		}
 

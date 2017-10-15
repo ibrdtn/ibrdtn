@@ -470,7 +470,8 @@ namespace dtn
 									beacon.setEID( dtn::data::EID("udp://[" + sender.address() + "]:4556") );
 
 									// add generated tcpcl service if the services list is empty
-									beacon.addService(dtn::net::DiscoveryService(dtn::core::Node::CONN_TCPIP, "ip=" + sender.address() + ";port=4556;"));
+									IPServiceParam p(sender.address(), 4556);
+									beacon.addService(DiscoveryService(dtn::core::Node::CONN_TCPIP, &p));
 								}
 
 								DiscoveryBeacon::service_list &services = beacon.getServices();
@@ -478,13 +479,19 @@ namespace dtn
 								// add source address if not set
 								for (dtn::net::DiscoveryBeacon::service_list::iterator iter = services.begin(); iter != services.end(); ++iter) {
 									DiscoveryService &service = (*iter);
+									DiscoveryServiceParam * param = service.getParam();
 
-									if ( (service.getParameters().find("port=") != std::string::npos) &&
-											(service.getParameters().find("ip=") == std::string::npos) ) {
-
-										// update service entry
-										service.update("ip=" + sender.address() + ";" + service.getParameters());
+									// update service entry if neccessary
+									try
+									{
+										IPServiceParam * p = dynamic_cast<IPServiceParam *>(param);
+										if(p->_port != 0 && p->_address.size() > 0)
+										{
+											IPServiceParam new_p(sender.address(), p->_port);
+											service.update(&new_p);
+										}
 									}
+									catch (const std::bad_cast& e) { }
 								}
 
 								// announce the received beacon

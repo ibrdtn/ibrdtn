@@ -9,6 +9,7 @@ noinst_HEADERS = \
 	DataStorageTest.h \
 	FakeDatagramService.h \
 	NativeSerializerTest.h \
+	IPNDTest.h \
 	NodeTest.hh
 
 unittest_SOURCES = \
@@ -22,6 +23,7 @@ unittest_SOURCES = \
 	DataStorageTest.cpp \
 	FakeDatagramService.cpp \
 	NativeSerializerTest.cpp \
+	IPNDTest.cpp \
 	NodeTest.cpp
 
 # what flags you want to pass to the C compiler & linker

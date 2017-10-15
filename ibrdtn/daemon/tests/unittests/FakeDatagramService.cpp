@@ -37,7 +37,7 @@ FakeDatagramService::~FakeDatagramService() {
 }
 
 void FakeDatagramService::fakeDiscovery() {
-	dtn::net::DiscoveryBeacon announcement(dtn::net::DiscoveryBeacon::DISCO_VERSION_01, _fake_peer);
+	dtn::net::DiscoveryBeacon announcement(dtn::net::Discovery::DISCO_VERSION_01, _fake_peer);
 
 	// set sequencenumber
 	announcement.setSequencenumber(_discovery_sn);

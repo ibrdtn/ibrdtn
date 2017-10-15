@@ -806,15 +806,16 @@ void dtn::dht::DHTNameService::bootstrappingIPs() {
 void dtn::dht::DHTNameService::onUpdateBeacon(const ibrcommon::vinterface&, DiscoveryBeacon &beacon)
 		throw (dtn::net::DiscoveryBeaconHandler::NoServiceHereException) {
 	if (this->_initialized) {
-		stringstream service;
-		service << "port=" << this->_context.port << ";";
+		bool proxy = true;
 		if (!this->_config.isNeighbourAllowedToAnnounceMe()) {
-			service << "proxy=false;";
+			proxy = false;
 		}
-		beacon.addService( DiscoveryService("dhtns", service.str()));
+		DHTServiceParam p(this->_context.port, proxy);
+		beacon.addService( DiscoveryService(dtn::core::Node::CONN_DHT, &p));
 	} else {
 		if(!this->_config.isNeighbourAllowedToAnnounceMe()) {
-			beacon.addService( DiscoveryService("dhtns", "proxy=false;"));
+			DHTServiceParam p(0, false);
+			beacon.addService( DiscoveryService(dtn::core::Node::CONN_DHT, &p));
 		} else {
 			throw dtn::net::DiscoveryBeaconHandler::NoServiceHereException();
 		}

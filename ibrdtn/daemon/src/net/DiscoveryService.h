@@ -23,8 +23,9 @@
 #define DISCOVERYSERVICE_H_
 
 #include "core/Node.h"
+#include "net/Discovery.h"
+#include "net/DiscoveryServiceParam.h"
 #include <ibrdtn/data/Number.h>
-#include <stdlib.h>
 #include <iostream>
 
 namespace dtn
@@ -35,20 +36,37 @@ namespace dtn
 		{
 		public:
 			DiscoveryService();
-			DiscoveryService(const dtn::core::Node::Protocol p, const std::string &parameters);
-			DiscoveryService(const std::string &name, const std::string &parameters);
+			DiscoveryService(const dtn::core::Node::Protocol p, DiscoveryServiceParam * param);
+			DiscoveryService(const DiscoveryService& other);
 			virtual ~DiscoveryService();
 
-			dtn::data::Length getLength() const;
+			DiscoveryService& operator=(const DiscoveryService& other);
+			bool operator==(const DiscoveryService& other) const;
+
+			dtn::data::Length getLength(Discovery::Protocol version) const throw (WrongVersionException);
 
 			dtn::core::Node::Protocol getProtocol() const;
-			const std::string& getName() const;
-			const std::string& getParameters() const;
+			DiscoveryServiceParam * getParam();
+			const DiscoveryServiceParam * getParam() const;
 
-			/**
-			 * Update the parameters of this service
-			 */
-			void update(const std::string &parameters);
+			/** get protocol name as string, or empty string if protocol not set */
+			std::string getName() const
+			{
+				return asTag(_service_protocol);
+			}
+			/** get parameters as key-value string, or empty if parameters not set */
+			std::string getParameters() const
+			{
+				return (_param ? _param->pack(Discovery::DISCO_VERSION_01) : "");
+			}
+
+			/** Update the parameters of this service */
+			void update(DiscoveryServiceParam * param);
+
+			/** Get byte representation */
+			virtual std::string pack(Discovery::Protocol version) const throw (WrongVersionException, IllegalServiceException);
+			/** Generate instance from byte representation */
+			virtual DiscoveryService& unpack(std::istream& stream, Discovery::Protocol version) throw (ParseException, IllegalServiceException, WrongVersionException);
 
 			/**
 			 * convert a protocol identifier to a tag
@@ -57,13 +75,11 @@ namespace dtn
 			static dtn::core::Node::Protocol asProtocol(const std::string &tag);
 
 		protected:
-			dtn::core::Node::Protocol _service_protocol;
-			std::string _service_name;
-			std::string _service_parameters;
+			typedef dtn::core::Node::Protocol ServiceProtocol;
 
 		private:
-			friend std::ostream &operator<<(std::ostream &stream, const DiscoveryService &service);
-			friend std::istream &operator>>(std::istream &stream, DiscoveryService &service);
+			ServiceProtocol _service_protocol;
+			DiscoveryServiceParam * _param;
 		};
 	}
 }
