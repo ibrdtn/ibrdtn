@@ -456,17 +456,17 @@ namespace dtn
 		{
 			_enabled = (conf.read<std::string> ("dht_enabled", "no") == "yes");
 			_port = conf.read<int> ("dht_port", 9999);
-			_id = conf.read<string> ("dht_id", "");
+			_id = conf.read<std::string> ("dht_id", "");
 			_blacklist = (conf.read<std::string> ("dht_blacklist", "yes") == "yes");
 			_selfannounce = (conf.read<std::string> ("dht_self_announce", "yes") == "yes");
 			_dnsbootstrapping = (conf.read<std::string> ("dht_bootstrapping", "yes") == "yes");
-			string list = conf.read<string> ("dht_bootstrapping_domains", "");
+			std::string list = conf.read<std::string> ("dht_bootstrapping_domains", "");
 			_bootstrappingdomains = dtn::utils::Utils::tokenize(" ", list);
-			list = conf.read<string> ("dht_bootstrapping_ips", "");
+			list = conf.read<std::string> ("dht_bootstrapping_ips", "");
 			_bootstrappingips = dtn::utils::Utils::tokenize(";", list);
-			_ipv4bind = conf.read<string> ("dht_bind_ipv4", "");
-			_ipv6bind = conf.read<string> ("dht_bind_ipv6", "");
-			_nodesFilePath = conf.read<string> ("dht_nodes_file", "");
+			_ipv4bind = conf.read<std::string> ("dht_bind_ipv4", "");
+			_ipv6bind = conf.read<std::string> ("dht_bind_ipv6", "");
+			_nodesFilePath = conf.read<std::string> ("dht_nodes_file", "");
 			_ipv4 = (conf.read<std::string> ("dht_enable_ipv4", "yes") == "yes");
 			_ipv6 = (conf.read<std::string> ("dht_enable_ipv6", "yes") == "yes");
 			_minRating = conf.read<int> ("dht_min_rating", 1);
@@ -506,16 +506,16 @@ namespace dtn
 			_imapPort = conf.read<int> ("email_imap_port", 143);
 			_imapUsername = conf.read<std::string> ("email_imap_username", _smtpUsername);
 			_imapPassword = conf.read<std::string> ("email_imap_password", _smtpPassword);
-			tmp = conf.read<string> ("email_imap_folder", "");
+			tmp = conf.read<std::string> ("email_imap_folder", "");
 			_imapFolder = dtn::utils::Utils::tokenize("/", tmp);
 			_imapInterval = conf.read<size_t> ("email_imap_lookup_interval", 60);
 			_imapConnectionTimeout = conf.read<size_t> ("email_imap_connection_timeout", -1);
 			_imapUseTLS = (conf.read<std::string> ("email_imap_socket_type", "") == "tls");
 			_imapUseSSL = (conf.read<std::string> ("email_imap_socket_type", "") == "ssl");
 			_imapPurgeMail = (conf.read<std::string> ("email_imap_purge_mail", "no") == "yes");
-			tmp = conf.read<string> ("email_certs_ca", "");
+			tmp = conf.read<std::string> ("email_certs_ca", "");
 			_tlsCACerts = dtn::utils::Utils::tokenize(",", tmp);
-			tmp = conf.read<string> ("email_certs_user", "");
+			tmp = conf.read<std::string> ("email_certs_user", "");
 			_tlsUserCerts = dtn::utils::Utils::tokenize(",", tmp);
 			_availableTime = conf.read<size_t> ("email_node_available_time", 1800);
 			_returningMailsCheck = conf.read<size_t> ("email_returning_mails_checks", 3);
@@ -544,7 +544,7 @@ namespace dtn
 		std::string Configuration::getNodename() const
 		{
 			try {
-				return _conf.read<string>("local_uri");
+				return _conf.read<std::string>("local_uri");
 			} catch (const ibrcommon::ConfigFile::key_not_found&) {
 				std::vector<char> hostname_array(255);
 				if ( gethostname(&hostname_array[0], hostname_array.size()) != 0 )
@@ -603,7 +603,7 @@ namespace dtn
 			std::set<ibrcommon::vaddress> ret;
 
 			try {
-				std::string address_str = Configuration::getInstance()._conf.read<string>("discovery_address");
+				std::string address_str = Configuration::getInstance()._conf.read<std::string>("discovery_address");
 				std::vector<std::string> addresses = dtn::utils::Utils::tokenize(" ", address_str);
 
 				for (std::vector<std::string>::iterator iter = addresses.begin(); iter != addresses.end(); ++iter) {
@@ -675,16 +675,16 @@ namespace dtn
 			 */
 			_static_routes.clear();
 
-			string key = "route1";
+			std::string key = "route1";
 			unsigned int keynumber = 1;
 
 			while (conf.keyExists( key ))
 			{
-				vector<string> route = dtn::utils::Utils::tokenize(" ", conf.read<string>(key, "dtn:none dtn:none"));
-				_static_routes.insert( pair<std::string, std::string>( route.front(), route.back() ) );
+				std::vector<std::string> route = dtn::utils::Utils::tokenize(" ", conf.read<std::string>(key, "dtn:none dtn:none"));
+				_static_routes.insert( std::pair<std::string, std::string>( route.front(), route.back() ) );
 
 				keynumber++;
-				stringstream ss; ss << "route" << keynumber; ss >> key;
+				std::stringstream ss; ss << "route" << keynumber; ss >> key;
 			}
 
 			/**
@@ -760,7 +760,7 @@ namespace dtn
 			/**
 			 * get routing extension
 			 */
-			_routing = conf.read<string>("routing", "default");
+			_routing = conf.read<std::string>("routing", "default");
 
 			if(_routing == "prophet"){
 				/* read prophet parameters */
@@ -826,8 +826,8 @@ namespace dtn
 			}
 			else try
 			{
-				vector<string> nets = dtn::utils::Utils::tokenize(" ", conf.read<string>("net_interfaces") );
-				for (vector<string>::const_iterator iter = nets.begin(); iter != nets.end(); ++iter)
+				std::vector<std::string> nets = dtn::utils::Utils::tokenize(" ", conf.read<std::string>("net_interfaces") );
+				for (std::vector<std::string>::const_iterator iter = nets.begin(); iter != nets.end(); ++iter)
 				{
 					const std::string &netname = (*iter);
 
@@ -838,7 +838,7 @@ namespace dtn
 					const std::string key_path = "net_" + netname + "_path";
 					const std::string key_mtu = "net_" + netname + "_mtu";
 
-					const std::string type_name = conf.read<string>(key_type, "tcp");
+					const std::string type_name = conf.read<std::string>(key_type, "tcp");
 					Configuration::NetConfig::NetType type = Configuration::NetConfig::NETWORK_UNKNOWN;
 
 					if (type_name == "tcp") type = Configuration::NetConfig::NETWORK_TCP;
@@ -935,8 +935,8 @@ namespace dtn
 			 * read internet devices
 			 */
 			try {
-				std::vector<string> inets = dtn::utils::Utils::tokenize(" ", conf.read<string>("net_internet") );
-				for (std::vector<string>::const_iterator iter = inets.begin(); iter != inets.end(); ++iter)
+				std::vector<std::string> inets = dtn::utils::Utils::tokenize(" ", conf.read<std::string>("net_internet") );
+				for (std::vector<std::string>::const_iterator iter = inets.begin(); iter != inets.end(); ++iter)
 				{
 					ibrcommon::vinterface inet_dev(*iter);
 					_internet_devices.insert(inet_dev);
@@ -964,14 +964,14 @@ namespace dtn
 			return _nodes;
 		}
 
-		ibrcommon::File Configuration::getPath(string name) const
+		ibrcommon::File Configuration::getPath(std::string name) const
 		{
-			stringstream ss;
+			std::stringstream ss;
 			ss << name << "_path";
-			string key; ss >> key;
+			std::string key; ss >> key;
 
 			try {
-				return ibrcommon::File(_conf.read<string>(key));
+				return ibrcommon::File(_conf.read<std::string>(key));
 			} catch (const ConfigFile::key_not_found&) { }
 
 			throw ParameterNotSetException();
@@ -1385,7 +1385,7 @@ namespace dtn
 			return _port;
 		}
 
-		string Configuration::DHT::getID() const
+		std::string Configuration::DHT::getID() const
 		{
 			return _id;
 		}
@@ -1400,7 +1400,7 @@ namespace dtn
 			return _dnsbootstrapping;
 		}
 
-		std::vector<string> Configuration::DHT::getDNSBootstrappingNames() const
+		std::vector<std::string> Configuration::DHT::getDNSBootstrappingNames() const
 		{
 			return _bootstrappingdomains;
 		}
@@ -1410,21 +1410,21 @@ namespace dtn
 			return !_bootstrappingips.empty();
 		}
 
-		std::vector<string> Configuration::DHT::getIPBootstrappingIPs() const
+		std::vector<std::string> Configuration::DHT::getIPBootstrappingIPs() const
 		{
 			return _bootstrappingips;
 		}
 
-		string Configuration::DHT::getIPv4Binding() const
+		std::string Configuration::DHT::getIPv4Binding() const
 		{
 			return _ipv4bind;
 		}
-		string Configuration::DHT::getIPv6Binding() const
+		std::string Configuration::DHT::getIPv6Binding() const
 		{
 			return _ipv6bind;
 		}
 
-		string Configuration::DHT::getPathToNodeFiles() const
+		std::string Configuration::DHT::getPathToNodeFiles() const
 		{
 			return _nodesFilePath;
 		}

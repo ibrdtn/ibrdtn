@@ -1560,7 +1560,7 @@ namespace dtn
 			// announce static nodes, create a list of static nodes
 			const std::list<Node> &static_nodes = conf.getNetwork().getStaticNodes();
 
-			for (list<Node>::const_iterator iter = static_nodes.begin(); iter != static_nodes.end(); ++iter)
+			for (std::list<Node>::const_iterator iter = static_nodes.begin(); iter != static_nodes.end(); ++iter)
 			{
 				core.getConnectionManager().add(*iter);
 			}
@@ -1574,7 +1574,7 @@ namespace dtn
 			// announce static nodes, create a list of static nodes
 			const std::list<Node> &static_nodes = conf.getNetwork().getStaticNodes();
 
-			for (list<Node>::const_iterator iter = static_nodes.begin(); iter != static_nodes.end(); ++iter)
+			for (std::list<Node>::const_iterator iter = static_nodes.begin(); iter != static_nodes.end(); ++iter)
 			{
 				core.getConnectionManager().remove(*iter);
 			}

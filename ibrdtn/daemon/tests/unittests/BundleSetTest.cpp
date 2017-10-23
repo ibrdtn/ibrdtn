@@ -78,7 +78,7 @@ void BundleSetTest::setUp()
 		dtn::daemon::Component &c = dynamic_cast<dtn::daemon::Component&>(*_storage);
 		c.initialize();
 		c.startup();
-	} catch (const bad_cast&) {
+	} catch (const std::bad_cast&) {
 	}
 }
 
@@ -89,7 +89,7 @@ void BundleSetTest::tearDown()
 	try {
 		dtn::daemon::Component &c = dynamic_cast<dtn::daemon::Component&>(*_storage);
 		c.terminate();
-	} catch (const bad_cast&) {
+	} catch (const std::bad_cast&) {
 	}
 
 	esl->join();
@@ -268,7 +268,7 @@ void BundleSetTest::persistanceTest()
 	size_t size_before = 0;
 	size_t size_after = 0;
 
-	stringstream ss; ss << rand();
+	std::stringstream ss; ss << rand();
 	{
 		BundleSet set(ss.str());
 		genbundles(set,num_bundles,10,15);
@@ -322,7 +322,7 @@ dtn::data::MetaBundle BundleSetTest::genBundle(int offset, int range)
 	b.timestamp = 1;
 	b.sequencenumber = random_integer;
 
-	stringstream ss; ss << rand();
+	std::stringstream ss; ss << rand();
 
 	b.source = dtn::data::EID("dtn://node" + ss.str() + "/application");
 	return b;

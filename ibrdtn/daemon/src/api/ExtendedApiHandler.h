@@ -75,7 +75,7 @@ namespace dtn
 				ExtendedApiHandler &_handler;
 			} *_sender;
 
-			static void sayBundleID(ostream &stream, const dtn::data::BundleID &id);
+			static void sayBundleID(std::ostream &stream, const dtn::data::BundleID &id);
 			static dtn::data::BundleID readBundleID(const std::vector<std::string>&, const size_t start);
 
 			/**

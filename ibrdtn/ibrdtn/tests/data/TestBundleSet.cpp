@@ -66,7 +66,7 @@ void TestBundleSet::genbundles(dtn::data::BundleSet &l, int number, int offset, 
 		b.timestamp = 1;
 		b.sequencenumber = random_integer;
 
-		stringstream ss; ss << rand();
+		std::stringstream ss; ss << rand();
 
 		b.source = dtn::data::EID("dtn://node" + ss.str() + "/application");
 

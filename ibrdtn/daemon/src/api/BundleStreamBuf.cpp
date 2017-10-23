@@ -130,7 +130,7 @@ namespace dtn
 		void BundleStreamBuf::append(ibrcommon::BLOB::Reference &ref, const char* data, const dtn::data::Length &length)
 		{
 			ibrcommon::BLOB::iostream stream = ref.iostream();
-			(*stream).seekp(0, ios::end);
+			(*stream).seekp(0, std::ios::end);
 			(*stream).write(data, length);
 		}
 
@@ -221,7 +221,7 @@ namespace dtn
 				ibrcommon::BLOB::iostream stream = r.iostream();
 
 				// jump to the offset position
-				(*stream).seekg(_chunk_offset, ios::beg);
+				(*stream).seekg(_chunk_offset, std::ios::beg);
 
 				// copy the data of the last received bundle into the buffer
 				(*stream).read(&_out_buf[0], BUFF_SIZE);

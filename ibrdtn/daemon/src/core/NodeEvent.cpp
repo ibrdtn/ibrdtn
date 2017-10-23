@@ -23,7 +23,7 @@
 #include "core/EventDispatcher.h"
 
 using namespace dtn::core;
-using namespace std;
+
 
 namespace dtn
 {
@@ -62,12 +62,12 @@ namespace dtn
 			return m_action;
 		}
 
-		const string NodeEvent::getName() const
+		const std::string NodeEvent::getName() const
 		{
 			return "NodeEvent";
 		}
 
-		string NodeEvent::getMessage() const
+		std::string NodeEvent::getMessage() const
 		{
 			switch (getAction())
 			{

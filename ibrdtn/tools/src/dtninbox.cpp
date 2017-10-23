@@ -41,11 +41,11 @@
 #include "io/TarUtils.h"
 
 //global conf values
-string _conf_name;
-string _conf_inbox;
+std::string _conf_name;
+std::string _conf_inbox;
 
 //optional parameters
-string _conf_workdir;
+std::string _conf_workdir;
 int _conf_quiet = false;
 
 struct option long_options[] =

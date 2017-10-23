@@ -33,18 +33,18 @@
 
 void print_help()
 {
-	cout << "-- dtnrecv (IBR-DTN) --" << endl;
-	cout << "Syntax: dtnrecv [options]"  << endl << endl;
-	cout << "* optional parameters *" << endl;
-	cout << " -h|--help        Display this text" << endl;
-	cout << " --file <path>    Write the incoming data to the a file instead of the" << endl;
-	cout << "                  standard output" << endl;
-	cout << " --name <name>    Set the application name (e.g. filetransfer)" << endl;
-	cout << " --timeout <seconds>" << endl;
-	cout << "                  Receive timeout in seconds" << endl;
-	cout << " --count <n>      Receive that many bundles" << endl;
-	cout << " --group <group>  Join a group" << endl;
-	cout << " -U <socket>      Connect to UNIX domain socket API" << endl;
+	std::cout << "-- dtnrecv (IBR-DTN) --" << std::endl
+			<< "Syntax: dtnrecv [options]"  << std::endl << std::endl
+			<< "* optional parameters *" << std::endl
+			<< " -h|--help        Display this text" << std::endl
+			<< " --file <path>    Write the incoming data to the a file instead of the" << std::endl
+			<< "                  standard output" << std::endl
+			<< " --name <name>    Set the application name (e.g. filetransfer)" << std::endl
+			<< " --timeout <seconds>" << std::endl
+			<< "                  Receive timeout in seconds" << std::endl
+			<< " --count <n>      Receive that many bundles" << std::endl
+			<< " --group <group>  Join a group" << std::endl
+			<< " -U <socket>      Connect to UNIX domain socket API" << std::endl;
 }
 
 dtn::api::Client *_client = NULL;
@@ -85,8 +85,8 @@ int main(int argc, char *argv[])
 	sighandler.initialize();
 
 	int ret = EXIT_SUCCESS;
-	string filename = "";
-	string name = "filetransfer";
+	std::string filename = "";
+	std::string name = "filetransfer";
 	dtn::data::EID group;
 	int timeout = 0;
 	int count   = 1;
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 
 	for (int i = 0; i < argc; ++i)
 	{
-		string arg = argv[i];
+		std::string arg = argv[i];
 
 		// print help if requested
 		if (arg == "-h" || arg == "--help")
@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
 		if (!_stdout)
 		{
 			std::cout << "Wait for incoming bundle... " << std::endl;
-			file.open(filename.c_str(), ios::in|ios::out|ios::binary|ios::trunc);
+			file.open(filename.c_str(), std::ios::in|std::ios::out|std::ios::binary|std::ios::trunc);
 			file.exceptions(std::ios::badbit | std::ios::eofbit);
 		}
 
@@ -213,10 +213,10 @@ int main(int argc, char *argv[])
 			{
 				// write data to temporary file
 				try {
-					std::cout << "Bundle received (" << (h + 1) << ")." << endl;
+					std::cout << "Bundle received (" << (h + 1) << ")." << std::endl;
 
 					file << ref.iostream()->rdbuf();
-				} catch (const ios_base::failure&) {
+				} catch (const std::ios_base::failure&) {
 
 				}
 			}

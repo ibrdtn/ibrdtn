@@ -43,7 +43,7 @@ namespace dtn
 			dtn::core::EventDispatcher<ConnectionEvent>::queue( new ConnectionEvent(s, n) );
 		}
 
-		const string ConnectionEvent::getName() const
+		const std::string ConnectionEvent::getName() const
 		{
 			return "ConnectionEvent";
 		}

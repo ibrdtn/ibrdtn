@@ -52,78 +52,77 @@
 #include <fstream>
 #include <sstream>
 
-using std::string;
 
 namespace ibrcommon
 {
 	class ConfigFile {
 	// Data
 	protected:
-		string myDelimiter;  // separator between key and value
-		string myComment;    // separator between value and comments
-		string mySentry;     // optional string to signal end of file
-		std::map<string,string> myContents;  // extracted keys and values
+		std::string myDelimiter;  // separator between key and value
+		std::string myComment;    // separator between value and comments
+		std::string mySentry;     // optional string to signal end of file
+		std::map<std::string,std::string> myContents;  // extracted keys and values
 
-		typedef std::map<string,string>::iterator mapi;
-		typedef std::map<string,string>::const_iterator mapci;
+		typedef std::map<std::string,std::string>::iterator mapi;
+		typedef std::map<std::string,std::string>::const_iterator mapci;
 
 	// Methods
 	public:
-		ConfigFile( string filename,
-					string delimiter = "=",
-					string comment = "#",
-					string sentry = "EndConfigFile" );
+		ConfigFile( std::string filename,
+					std::string delimiter = "=",
+					std::string comment = "#",
+					std::string sentry = "EndConfigFile" );
 		ConfigFile();
 
 		// Search for key and read value or optional default value
-		template<class T> T read( const string& key ) const;  // call as read<T>
-		template<class T> T read( const string& key, const T& value ) const;
-		template<class T> bool readInto( T& var, const string& key ) const;
+		template<class T> T read( const std::string& key ) const;  // call as read<T>
+		template<class T> T read( const std::string& key, const T& value ) const;
+		template<class T> bool readInto( T& var, const std::string& key ) const;
 		template<class T>
-		bool readInto( T& var, const string& key, const T& value ) const;
+		bool readInto( T& var, const std::string& key, const T& value ) const;
 
 		// Modify keys and values
-		template<class T> void add( string key, const T& value );
-		void remove( const string& key );
+		template<class T> void add( std::string key, const T& value );
+		void remove( const std::string& key );
 
 		// Check whether key exists in configuration
-		bool keyExists( const string& key ) const;
+		bool keyExists( const std::string& key ) const;
 
 		// Check or change configuration syntax
-		string getDelimiter() const { return myDelimiter; }
-		string getComment() const { return myComment; }
-		string getSentry() const { return mySentry; }
-		string setDelimiter( const string& s )
-			{ string old = myDelimiter;  myDelimiter = s;  return old; }
-		string setComment( const string& s )
-			{ string old = myComment;  myComment = s;  return old; }
+		std::string getDelimiter() const { return myDelimiter; }
+		std::string getComment() const { return myComment; }
+		std::string getSentry() const { return mySentry; }
+		std::string setDelimiter( const std::string& s )
+			{ std::string old = myDelimiter;  myDelimiter = s;  return old; }
+		std::string setComment( const std::string& s )
+			{ std::string old = myComment;  myComment = s;  return old; }
 
 		// Write or read configuration
 		friend std::ostream& operator<<( std::ostream& os, const ConfigFile& cf );
 		friend std::istream& operator>>( std::istream& is, ConfigFile& cf );
 
 	protected:
-		template<class T> static string T_as_string( const T& t );
-		template<class T> static T string_as_T( const string& s );
-		static void trim( string& s );
+		template<class T> static std::string T_as_string( const T& t );
+		template<class T> static T string_as_T( const std::string& s );
+		static void trim( std::string& s );
 
 
 	// Exception types
 	public:
 		struct file_not_found {
-			string filename;
-			file_not_found( const string& filename_ = string() )
+			std::string filename;
+			file_not_found( const std::string& filename_ = std::string() )
 				: filename(filename_) {} };
 		struct key_not_found {  // thrown only by T read(key) variant of read()
-			string key;
-			key_not_found( const string& key_ = string() )
+			std::string key;
+			key_not_found( const std::string& key_ = std::string() )
 				: key(key_) {} };
 	};
 
 
 	/* static */
 	template<class T>
-	string ConfigFile::T_as_string( const T& t )
+	std::string ConfigFile::T_as_string( const T& t )
 	{
 		// Convert from a T to a string
 		// Type T must support << operator
@@ -135,7 +134,7 @@ namespace ibrcommon
 
 	/* static */
 	template<class T>
-	T ConfigFile::string_as_T( const string& s )
+	T ConfigFile::string_as_T( const std::string& s )
 	{
 		// Convert from a string to a T
 		// Type T must support >> operator
@@ -148,7 +147,7 @@ namespace ibrcommon
 
 	/* static */
 	template<>
-	inline string ConfigFile::string_as_T<string>( const string& s )
+	inline std::string ConfigFile::string_as_T<std::string>( const std::string& s )
 	{
 		// Convert from a string to a string
 		// In other words, do nothing
@@ -158,25 +157,25 @@ namespace ibrcommon
 
 	/* static */
 	template<>
-	inline bool ConfigFile::string_as_T<bool>( const string& s )
+	inline bool ConfigFile::string_as_T<bool>( const std::string& s )
 	{
 		// Convert from a string to a bool
 		// Interpret "false", "F", "no", "n", "0" as false
 		// Interpret "true", "T", "yes", "y", "1", "-1", or anything else as true
 		bool b = true;
-		string sup = s;
-		for( string::iterator p = sup.begin(); p != sup.end(); ++p )
+		std::string sup = s;
+		for (std::string::iterator p = sup.begin(); p != sup.end(); ++p)
 			*p = static_cast<char>(toupper(*p));  // make string all caps
-		if( sup==string("FALSE") || sup==string("F") ||
-			sup==string("NO") || sup==string("N") ||
-			sup==string("0") || sup==string("NONE") )
+		if( sup==std::string("FALSE") || sup==std::string("F") ||
+			sup==std::string("NO") || sup==std::string("N") ||
+			sup==std::string("0") || sup==std::string("NONE") )
 			b = false;
 		return b;
 	}
 
 
 	template<class T>
-	T ConfigFile::read( const string& key ) const
+	T ConfigFile::read( const std::string& key ) const
 	{
 		// Read the value corresponding to key
 		mapci p = myContents.find(key);
@@ -186,7 +185,7 @@ namespace ibrcommon
 
 
 	template<class T>
-	T ConfigFile::read( const string& key, const T& value ) const
+	T ConfigFile::read( const std::string& key, const T& value ) const
 	{
 		// Return the value corresponding to key or given default value
 		// if key is not found
@@ -197,7 +196,7 @@ namespace ibrcommon
 
 
 	template<class T>
-	bool ConfigFile::readInto( T& var, const string& key ) const
+	bool ConfigFile::readInto( T& var, const std::string& key ) const
 	{
 		// Get the value corresponding to key and store in var
 		// Return true if key is found
@@ -210,7 +209,7 @@ namespace ibrcommon
 
 
 	template<class T>
-	bool ConfigFile::readInto( T& var, const string& key, const T& value ) const
+	bool ConfigFile::readInto( T& var, const std::string& key, const T& value ) const
 	{
 		// Get the value corresponding to key and store in var
 		// Return true if key is found
@@ -226,10 +225,10 @@ namespace ibrcommon
 
 
 	template<class T>
-	void ConfigFile::add( string key, const T& value )
+	void ConfigFile::add( std::string key, const T& value )
 	{
 		// Add a key with given value
-		string v = T_as_string( value );
+		std::string v = T_as_string( value );
 		trim(key);
 		trim(v);
 		myContents[key] = v;

@@ -23,7 +23,6 @@
 #include "ibrdtn/data/Bundle.h"
 #include <iostream>
 
-using namespace std;
 
 namespace dtn
 {

@@ -22,8 +22,8 @@
 #ifndef IBRCOMMON_refcnt_ptr_h
 #define IBRCOMMON_refcnt_ptr_h 1
 
-#include "ibrcommon/thread/Mutex.h"
-#include "ibrcommon/thread/MutexLock.h"
+#include <ibrcommon/thread/Mutex.h>
+#include <ibrcommon/thread/MutexLock.h>
 
 template <class T> class refcnt_ptr
 {

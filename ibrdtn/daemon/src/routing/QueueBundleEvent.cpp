@@ -44,12 +44,12 @@ namespace dtn
 			dtn::core::EventDispatcher<QueueBundleEvent>::queue( new QueueBundleEvent(bundle, origin) );
 		}
 
-		const string QueueBundleEvent::getName() const
+		const std::string QueueBundleEvent::getName() const
 		{
 			return "QueueBundleEvent";
 		}
 
-		string QueueBundleEvent::getMessage() const
+		std::string QueueBundleEvent::getMessage() const
 		{
 			return "New bundle queued " + bundle.toString();
 		}

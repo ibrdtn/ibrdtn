@@ -35,7 +35,7 @@
 class EchoClient : public dtn::api::Client
 {
 	public:
-		EchoClient(dtn::api::Client::COMMUNICATION_MODE mode, string app, ibrcommon::socketstream &stream)
+		EchoClient(dtn::api::Client::COMMUNICATION_MODE mode, std::string app, ibrcommon::socketstream &stream)
 		 : dtn::api::Client(app, stream, mode), _stream(stream)
 		{
 			seq=0;
@@ -144,30 +144,30 @@ class EchoClient : public dtn::api::Client
 	private:
 		ibrcommon::socketstream &_stream;
 		uint32_t seq;
-		string lastdestination;
+		std::string lastdestination;
 };
 
 
 	
 void print_help()
 {
-	cout << "-- dtnping (IBR-DTN) --" << endl;
-	cout << "Syntax: dtnping [options] <dst>"  << endl;
-	cout << " <dst>            Set the destination eid (e.g. dtn://node/echo)" << endl << endl;
-	cout << "* optional parameters *" << endl;
-	cout << " -h|--help        Display this text" << endl;
-	cout << " --src <name>     Set the source application name (e.g. echo-client)" << endl;
-	cout << " --nowait         Do not wait for a reply" << endl;
-	cout << " --abortfail      Abort after first packetloss" << endl;
-	cout << " --size           The size of the payload" << endl;
-	cout << " --count <n>      Send X echo in a row" << endl;
-	cout << " --delay <seconds>" << endl;
-	cout << "                  Delay between a received response and the next request" << endl;
-	cout << " --lifetime <seconds>" << endl;
-	cout << "                  Set the lifetime of outgoing bundles; default: 30" << endl;
-	cout << " --encrypt        Request encryption on the bundle layer" << endl;
-	cout << " --sign           Request signature on the bundle layer" << endl;
-	cout << " -U <socket>      Connect to UNIX domain socket API" << endl;
+	std::cout << "-- dtnping (IBR-DTN) --" << std::endl
+			<< "Syntax: dtnping [options] <dst>"  << std::endl
+			<< " <dst>            Set the destination eid (e.g. dtn://node/echo)" << std::endl << std::endl
+			<< "* optional parameters *" << std::endl
+			<< " -h|--help        Display this text" << std::endl
+			<< " --src <name>     Set the source application name (e.g. echo-client)" << std::endl
+			<< " --nowait         Do not wait for a reply" << std::endl
+			<< " --abortfail      Abort after first packetloss" << std::endl
+			<< " --size           The size of the payload" << std::endl
+			<< " --count <n>      Send X echo in a row" << std::endl
+			<< " --delay <seconds>" << std::endl
+			<< "                  Delay between a received response and the next request" << std::endl
+			<< " --lifetime <seconds>" << std::endl
+			<< "                  Set the lifetime of outgoing bundles; default: 30" << std::endl
+			<< " --encrypt        Request encryption on the bundle layer" << std::endl
+			<< " --sign           Request signature on the bundle layer" << std::endl
+			<< " -U <socket>      Connect to UNIX domain socket API" << std::endl;
 }
 
 size_t _received = 0, _transmitted = 0;
@@ -219,8 +219,8 @@ int main(int argc, char *argv[])
 	sighandler.handle(SIGTERM);
 	sighandler.initialize();
 
-	string ping_destination = "dtn://local/echo";
-	string ping_source = "";
+	std::string ping_destination = "dtn://local/echo";
+	std::string ping_source = "";
 	int ping_size = 64;
 	unsigned int lifetime = 30;
 	bool wait_for_reply = true;
@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
 
 	for (int i = 1; i < argc; ++i)
 	{
-		string arg = argv[i];
+		std::string arg = argv[i];
 
 		// print help if requested
 		if ((arg == "-h") || (arg == "--help"))
@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
 
 		else if (arg == "--size" && argc > i)
 		{
-			stringstream str_size;
+			std::stringstream str_size;
 			str_size.str( argv[i + 1] );
 			str_size >> ping_size;
 			i++;
@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
 
 		else if (arg == "--count" && argc > i)
 		{
-			stringstream str_count;
+			std::stringstream str_count;
 			str_count.str( argv[i + 1] );
 			str_count >> count;
 			i++;
@@ -295,7 +295,7 @@ int main(int argc, char *argv[])
 
 		else if (arg == "--delay" && argc > i)
 		{
-			stringstream str_delay;
+			std::stringstream str_delay;
 			str_delay.str( argv[i + 1] );
 			str_delay >> interval_pause;
 			i++;
@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 
 		else if (arg == "--lifetime" && argc > i)
 		{
-			stringstream data; data << argv[i + 1];
+			std::stringstream data; data << argv[i + 1];
 			data >> lifetime;
 			i++;
 		}

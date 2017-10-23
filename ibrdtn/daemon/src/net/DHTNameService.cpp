@@ -117,7 +117,7 @@ void dtn::dht::DHTNameService::componentUp() throw () {
 	} else {
 		_context.type = BINDNONE;
 	}
-	string myid = _config.getID();
+	std::string myid = _config.getID();
 	if (!_config.randomID()) {
 		dtn_dht_build_id_from_str(_context.id, myid.c_str(), myid.size());
 	}
@@ -512,12 +512,12 @@ bool dtn::dht::DHTNameService::isNeighbourAnnouncable(
 			for (std::list<dtn::core::Node::Attribute>::const_iterator service =
 					services.begin(); service != services.end(); ++service) {
 				bool proxy = true;
-				std::vector < string > parameters = dtn::utils::Utils::tokenize(
+				std::vector<std::string> parameters = dtn::utils::Utils::tokenize(
 						";", (*service).value);
-				std::vector<string>::const_iterator param_iter = parameters.begin();
+				std::vector<std::string>::const_iterator param_iter = parameters.begin();
 
 				while (param_iter != parameters.end()) {
-					std::vector < string > p = dtn::utils::Utils::tokenize("=",
+					std::vector<std::string> p = dtn::utils::Utils::tokenize("=",
 							(*param_iter));
 					if (p[0].compare("proxy") == 0) {
 						std::stringstream proxy_stream;
@@ -601,12 +601,12 @@ void dtn::dht::DHTNameService::pingNode(const dtn::core::Node &n) {
 	if (!services.empty()) {
 		for (std::list<dtn::core::Node::Attribute>::const_iterator service =
 				services.begin(); service != services.end(); ++service) {
-			std::vector < string > parameters = dtn::utils::Utils::tokenize(
+			std::vector<std::string> parameters = dtn::utils::Utils::tokenize(
 					";", (*service).value);
 			std::vector<string>::const_iterator param_iter = parameters.begin();
 			bool portFound = false;
 			while (param_iter != parameters.end()) {
-				std::vector < string > p = dtn::utils::Utils::tokenize("=",
+				std::vector<std::string> p = dtn::utils::Utils::tokenize("=",
 						(*param_iter));
 				if (p[0].compare("port") == 0) {
 					std::stringstream port_stream;
@@ -714,11 +714,11 @@ void dtn::dht::DHTNameService::bootstrappingFile() {
 
 void dtn::dht::DHTNameService::bootstrappingDNS() {
 	int rc;
-	std::vector < string > dns = _config.getDNSBootstrappingNames();
+	std::vector<std::string> dns = _config.getDNSBootstrappingNames();
 	if (!dns.empty()) {
-		std::vector<string>::const_iterator dns_iter = dns.begin();
+		std::vector<std::string>::const_iterator dns_iter = dns.begin();
 		while (dns_iter != dns.end()) {
-			const string &dn = (*dns_iter);
+			const std::string &dn = (*dns_iter);
 			{
 				ibrcommon::MutexLock l(this->_libmutex);
 				rc = dtn_dht_dns_bootstrap(&_context, dn.c_str(), NULL);
@@ -754,10 +754,10 @@ void dtn::dht::DHTNameService::bootstrappingDNS() {
 
 void dtn::dht::DHTNameService::bootstrappingIPs() {
 	int rc;
-	std::vector < string > ips = _config.getIPBootstrappingIPs();
-	std::vector<string>::const_iterator ip_iter = ips.begin();
+	std::vector<std::string> ips = _config.getIPBootstrappingIPs();
+	std::vector<std::string>::const_iterator ip_iter = ips.begin();
 	while (ip_iter != ips.end()) {
-		std::vector < string > ip
+		std::vector<std::string> ip
 				= dtn::utils::Utils::tokenize(" ", (*ip_iter));
 		int size, ipversion = AF_INET;
 		struct sockaddr *wellknown_node;
@@ -806,7 +806,7 @@ void dtn::dht::DHTNameService::bootstrappingIPs() {
 void dtn::dht::DHTNameService::onUpdateBeacon(const ibrcommon::vinterface&, DiscoveryBeacon &beacon)
 		throw (dtn::net::DiscoveryBeaconHandler::NoServiceHereException) {
 	if (this->_initialized) {
-		stringstream service;
+		std::stringstream service;
 		service << "port=" << this->_context.port << ";";
 		if (!this->_config.isNeighbourAllowedToAnnounceMe()) {
 			service << "proxy=false;";
@@ -836,7 +836,7 @@ void dtn_dht_handle_lookup_result(const struct dtn_dht_lookup_result *result) {
 	}
 
 	// Extracting the convergence layer of the node
-	stringstream ss;
+	std::stringstream ss;
 	struct dtn_convergence_layer * cl = result->clayer;
 	if (cl == NULL)
 		return;
@@ -846,7 +846,7 @@ void dtn_dht_handle_lookup_result(const struct dtn_dht_lookup_result *result) {
 	bool hasCL = false;
 	while (cl != NULL) {
 		enum Node::Protocol proto__;
-		stringstream service;
+		std::stringstream service;
 		clname__ = "";
 		for (i = 0; i < cl->clnamelen; ++i) {
 			clname__ += cl->clname[i];

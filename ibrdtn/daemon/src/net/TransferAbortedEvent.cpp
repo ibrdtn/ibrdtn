@@ -82,7 +82,7 @@ namespace dtn
 			return "undefined";
 		}
 
-		string TransferAbortedEvent::getMessage() const
+		std::string TransferAbortedEvent::getMessage() const
 		{
 			return "transfer of bundle " + _bundle.toString() + " to " + _peer.getString() + " aborted. (" + getReason(reason) + ")";
 		}

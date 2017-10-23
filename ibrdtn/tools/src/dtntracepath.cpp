@@ -238,9 +238,9 @@ class Tracer : public dtn::api::Client
 
 				std::cout << std::endl;
 			} catch (const dtn::api::ConnectionException&) {
-				cout << "Disconnected." << endl;
+				std::cout << "Disconnected." << std::endl;
 			} catch (const ibrcommon::IOException&) {
-				cout << "Error while receiving a bundle." << endl;
+				std::cout << "Error while receiving a bundle." << std::endl;
 			}
 		}
 
@@ -250,17 +250,17 @@ class Tracer : public dtn::api::Client
 
 void print_help()
 {
-	cout << "-- dtntracepath (IBR-DTN) --" << endl;
-	cout << "Syntax: dtntracepath [options] <dst>"  << endl;
-	cout << " <dst>    set the destination eid (e.g. dtn://node/null)" << endl << endl;
-	cout << "* optional parameters *" << endl;
-	cout << " -h               Display this text" << endl;
-	cout << " -t <seconds>     Time to wait for reports (default: 10)" << endl;
-	cout << " -d               Request deletion report" << endl;
-	cout << " -f               Request forward report" << endl;
-	cout << " -r               Request reception report" << endl;
-	cout << " -p               Add tracking block to record the bundle path" << endl;
-	cout << " -g               Destination is a group endpoint" << endl;
+	std::cout << "-- dtntracepath (IBR-DTN) --" << std::endl
+			<< "Syntax: dtntracepath [options] <dst>"  << std::endl
+			<< " <dst>    set the destination eid (e.g. dtn://node/null)" << std::endl << std::endl
+			<< "* optional parameters *" << std::endl
+			<< " -h               Display this text" << std::endl
+			<< " -t <seconds>     Time to wait for reports (default: 10)" << std::endl
+			<< " -d               Request deletion report" << std::endl
+			<< " -f               Request forward report" << std::endl
+			<< " -r               Request reception report" << std::endl
+			<< " -p               Add tracking block to record the bundle path" << std::endl
+			<< " -g               Destination is a group endpoint" << std::endl;
 }
 
 int main(int argc, char *argv[])

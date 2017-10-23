@@ -70,7 +70,7 @@ void DatagramClTest::setUp() {
 	try {
 		dtn::daemon::Component &c = dynamic_cast<dtn::daemon::Component&>(*_storage);
 		c.initialize();
-	} catch (const bad_cast&) {
+	} catch (const std::bad_cast&) {
 	}
 
 	// startup BundleCore
@@ -81,7 +81,7 @@ void DatagramClTest::setUp() {
 	try {
 		dtn::daemon::Component &c = dynamic_cast<dtn::daemon::Component&>(*_storage);
 		c.startup();
-	} catch (const bad_cast&) {
+	} catch (const std::bad_cast&) {
 	}
 }
 
@@ -93,7 +93,7 @@ void DatagramClTest::tearDown() {
 	try {
 		dtn::daemon::Component &c = dynamic_cast<dtn::daemon::Component&>(*_storage);
 		c.terminate();
-	} catch (const bad_cast&) {
+	} catch (const std::bad_cast&) {
 	}
 
 	// shutdown BundleCore

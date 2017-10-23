@@ -126,7 +126,7 @@ void BundleStorageTest::setUp()
 		dtn::daemon::Component &c = dynamic_cast<dtn::daemon::Component&>(*_storage);
 		c.initialize();
 		c.startup();
-	} catch (const bad_cast&) {
+	} catch (const std::bad_cast&) {
 	}
 }
 
@@ -140,7 +140,7 @@ void BundleStorageTest::tearDown()
 	try {
 		dtn::daemon::Component &c = dynamic_cast<dtn::daemon::Component&>(*_storage);
 		c.terminate();
-	} catch (const bad_cast&) {
+	} catch (const std::bad_cast&) {
 	}
 
 	esl->join();

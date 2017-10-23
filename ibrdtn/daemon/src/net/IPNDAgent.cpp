@@ -205,7 +205,7 @@ namespace dtn
 		void IPNDAgent::onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) throw ()
 		{
 			// serialize announcement
-			stringstream ss; ss << beacon;
+			std::stringstream ss; ss << beacon;
 			const std::string data = ss.str();
 
 			// get all sockets for the given interface
@@ -458,7 +458,7 @@ namespace dtn
 
 							if (len < 0) return;
 
-							stringstream ss;
+							std::stringstream ss;
 							ss.write(data, len);
 
 							try {

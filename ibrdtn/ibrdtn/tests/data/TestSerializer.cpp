@@ -52,11 +52,11 @@ void TestSerializer::serializer_separate01(void)
 	dtn::data::Bundle b;
 	ibrcommon::BLOB::Reference ref = ibrcommon::BLOB::create();
 
-	stringstream ss1;
+	std::stringstream ss1;
 	dtn::data::PayloadBlock &p1 = b.push_back(ref);
 	p1.addEID(dtn::data::EID("dtn://test1234/app1234"));
 
-	stringstream ss2;
+	std::stringstream ss2;
 	dtn::data::PayloadBlock &p2 = b.push_back(ref);
 	p2.addEID(dtn::data::EID("dtn://test1234/app1234"));
 

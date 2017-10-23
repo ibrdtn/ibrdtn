@@ -38,7 +38,7 @@ namespace ibrcommon
 		class interface_not_set : public Exception
 		{
 		public:
-			interface_not_set(string error = "interface is not specified") : Exception(error)
+			interface_not_set(std::string error = "interface is not specified") : Exception(error)
 			{};
 		};
 

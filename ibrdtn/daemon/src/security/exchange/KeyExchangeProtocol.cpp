@@ -72,7 +72,7 @@ namespace dtn
 		{
 			std::stringstream stream;
 
-			for (string::size_type i = 0; i < data.size(); ++i)
+			for (std::string::size_type i = 0; i < data.size(); ++i)
 			{
 				unsigned char c = data[i];
 				stream << std::hex << std::setw(2) << std::setfill('0') << (int)c;

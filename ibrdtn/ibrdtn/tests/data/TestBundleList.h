@@ -26,7 +26,6 @@
 #ifndef TESTBUNDLELIST_H_
 #define TESTBUNDLELIST_H_
 
-using namespace std;
 
 class TestBundleList: public CPPUNIT_NS :: TestFixture
 {

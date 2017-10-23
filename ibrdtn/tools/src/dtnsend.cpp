@@ -31,31 +31,31 @@
 
 void print_help()
 {
-	cout << "-- dtnsend (IBR-DTN) --" << endl;
-	cout << "Syntax: dtnsend [options] <dst> <filename>"  << endl;
-	cout << " <dst>            Set the destination eid (e.g. dtn://node/filetransfer)" << endl;
-	cout << " <filename>       The file to transfer" << endl << endl;
-	cout << "* optional parameters *" << endl;
-	cout << " -h|--help        Display this text" << endl;
-	cout << " --src <name>     Set the source application name (e.g. filetransfer)" << endl;
-	cout << " -p <0..2>        Set the bundle priority (0 = low, 1 = normal, 2 = high)" << endl;
-	cout << " -g               Receiver is a destination group" << endl;
-	cout << " --lifetime <seconds>" << endl;
-	cout << "                  Set the lifetime of outgoing bundles; default: 3600" << endl;
-	cout << " -U <socket>      Connect to UNIX domain socket API" << endl;
-	cout << " -n <copies>      Create <copies> bundle copies" << endl;
-	cout << " --encrypt        Request encryption on the bundle layer" << endl;
-	cout << " --sign           Request signature on the bundle layer" << endl;
-	cout << " --custody        Request custody transfer of the bundle" << endl;
-	cout << " --compression    Request compression of the payload" << endl;
+	std::cout << "-- dtnsend (IBR-DTN) --" << std::endl
+			<< "Syntax: dtnsend [options] <dst> <filename>"  << std::endl
+			<< " <dst>            Set the destination eid (e.g. dtn://node/filetransfer)" << std::endl
+			<< " <filename>       The file to transfer" << std::endl << std::endl
+			<< "* optional parameters *" << std::endl
+			<< " -h|--help        Display this text" << std::endl
+			<< " --src <name>     Set the source application name (e.g. filetransfer)" << std::endl
+			<< " -p <0..2>        Set the bundle priority (0 = low, 1 = normal, 2 = high)" << std::endl
+			<< " -g               Receiver is a destination group" << std::endl
+			<< " --lifetime <seconds>" << std::endl
+			<< "                  Set the lifetime of outgoing bundles; default: 3600" << std::endl
+			<< " -U <socket>      Connect to UNIX domain socket API" << std::endl
+			<< " -n <copies>      Create <copies> bundle copies" << std::endl
+			<< " --encrypt        Request encryption on the bundle layer" << std::endl
+			<< " --sign           Request signature on the bundle layer" << std::endl
+			<< " --custody        Request custody transfer of the bundle" << std::endl
+			<< " --compression    Request compression of the payload" << std::endl;
 
 }
 
 int main(int argc, char *argv[])
 {
 	bool error = false;
-	string file_destination = "dtn://local/filetransfer";
-	string file_source = "";
+	std::string file_destination = "dtn://local/filetransfer";
+	std::string file_source = "";
 	unsigned int lifetime = 3600;
 	bool use_stdin = false;
 	std::string filename;
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 					return -1;
 				}
 
-				stringstream data; data << argv[i];
+				std::stringstream data; data << argv[i];
 				data >> lifetime;
 			}
 			else if (arg == "-p" && argc > i)
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 					std::cout << "argument missing!" << std::endl;
 					return -1;
 				}
-				stringstream data; data << argv[i];
+				std::stringstream data; data << argv[i];
 				data >> priority;
 			}
 			else if (arg == "-U" && argc > i)
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 					return -1;
 				}
 
-				stringstream data; data << argv[i];
+				std::stringstream data; data << argv[i];
 				data >> copies;
 
 				if( copies < 1 ) {
@@ -232,13 +232,13 @@ int main(int argc, char *argv[])
 			try {
 				if (use_stdin)
 				{
-					cout << "Transfer stdin to " << addr.getString() << endl;
+					std::cout << "Transfer stdin to " << addr.getString() << std::endl;
 
 					// create an empty BLOB
 					ibrcommon::BLOB::Reference ref = ibrcommon::BLOB::create();
 
 					// copy cin to a BLOB
-					(*ref.iostream()) << cin.rdbuf();
+					(*ref.iostream()) << std::cin.rdbuf();
 
 					for(int u=0; u<copies; ++u){
 						dtn::data::Bundle b;
@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
 				}
 				else
 				{
-					cout << "Transfer file \"" << filename << "\" to " << addr.getString() << endl;
+					std::cout << "Transfer file \"" << filename << "\" to " << addr.getString() << std::endl;
 					
 					// open file as read-only BLOB
 					ibrcommon::BLOB::Reference ref = ibrcommon::BLOB::open(filename);
@@ -345,7 +345,7 @@ int main(int argc, char *argv[])
 			client.close();
 
 		} catch (const ibrcommon::IOException &ex) {
-			cout << "Error: " << ex.what() << endl;
+			std::cout << "Error: " << ex.what() << std::endl;
 			error = true;
 		} catch (const dtn::api::ConnectionException&) {
 			// connection already closed, the daemon was faster
@@ -354,7 +354,7 @@ int main(int argc, char *argv[])
 		// close the tcpstream
 		conn.close();
 	} catch (const std::exception &ex) {
-		cout << "Error: " << ex.what() << endl;
+		std::cout << "Error: " << ex.what() << std::endl;
 		error = true;
 	}
 

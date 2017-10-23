@@ -37,7 +37,7 @@
 void print_help()
 {
 	std::cout << "-- dtnconvert (IBR-DTN) --" << std::endl;
-	std::cout << "Syntax: dtnconvert [options]"  << std::endl << endl;
+	std::cout << "Syntax: dtnconvert [options]"  << std::endl << std::endl;
 	std::cout << "* optional parameters *" << std::endl;
 	std::cout << " -h               Display this text" << std::endl;
 	std::cout << " -r               Read bundle data and print out some information" << std::endl;

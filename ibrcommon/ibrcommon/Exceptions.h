@@ -26,8 +26,6 @@
 #include <string>
 
 
-using namespace std;
-
 /**
  * @file Exceptions.h
  *
@@ -64,13 +62,13 @@ namespace ibrcommon
 			 * constructor with attached string value as reason.
 			 * @param what The detailed reason for this exception.
 			 */
-			Exception(string what) throw()
+			Exception(std::string what) throw()
 			{
 				_what = what;
 			};
 
 		protected:
-			string _what;
+			std::string _what;
 	};
 
 	/**
@@ -79,7 +77,7 @@ namespace ibrcommon
 	class NotImplementedException : public Exception
 	{
 	public:
-		NotImplementedException(string what = "This method isn't implemented.") throw() : Exception(what)
+		NotImplementedException(std::string what = "This method isn't implemented.") throw() : Exception(what)
 		{
 		};
 	};
@@ -90,7 +88,7 @@ namespace ibrcommon
 	class IOException : public Exception
 	{
 	public:
-		IOException(string what = "Input/Output error.") throw() : Exception(what)
+		IOException(std::string what = "Input/Output error.") throw() : Exception(what)
 		{
 		};
 	};

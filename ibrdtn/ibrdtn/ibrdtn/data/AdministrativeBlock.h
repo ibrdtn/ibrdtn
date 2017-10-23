@@ -19,7 +19,7 @@ namespace dtn
 			class WrongRecordException : public ibrcommon::Exception
 			{
 			public:
-				WrongRecordException(string what = "This administrative block is not of the expected type.") throw() : ibrcommon::Exception(what)
+				WrongRecordException(std::string what = "This administrative block is not of the expected type.") throw() : ibrcommon::Exception(what)
 				{
 				};
 			};

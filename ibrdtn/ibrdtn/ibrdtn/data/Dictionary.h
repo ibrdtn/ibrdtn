@@ -43,7 +43,7 @@ namespace dtn
 			class EntryNotFoundException : public dtn::InvalidDataException
 			{
 			public:
-				EntryNotFoundException(string what = "The requested dictionary entry is not available.") throw() : dtn::InvalidDataException(what)
+				EntryNotFoundException(std::string what = "The requested dictionary entry is not available.") throw() : dtn::InvalidDataException(what)
 				{
 				};
 			};

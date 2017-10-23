@@ -55,14 +55,14 @@ namespace ibrcommon {
 		socket_exception() : Exception()
 		{};
 
-		socket_exception(string error) : Exception(error)
+		socket_exception(std::string error) : Exception(error)
 		{};
 	};
 
 	class socket_error : public socket_exception
 	{
 	public:
-		socket_error(socket_error_code code, string error) : socket_exception(error), _code(code)
+		socket_error(socket_error_code code, std::string error) : socket_exception(error), _code(code)
 		{};
 
 		socket_error_code code() const { return _code; }
@@ -74,7 +74,7 @@ namespace ibrcommon {
 	class socket_raw_error : public socket_exception
 	{
 	public:
-		socket_raw_error(int error, string description) : socket_exception(description), _errno(error)
+		socket_raw_error(int error, std::string description) : socket_exception(description), _errno(error)
 		{
 			std::stringstream ss;
 			ss << error << ": " << socket_exception::what();

@@ -33,7 +33,7 @@ namespace ibrcommon
 	class stream_exception : public Exception
 	{
 	public:
-		stream_exception(string error) : Exception(error)
+		stream_exception(std::string error) : Exception(error)
 		{};
 	};
 

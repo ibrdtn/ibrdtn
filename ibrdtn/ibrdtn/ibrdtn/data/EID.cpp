@@ -612,10 +612,10 @@ namespace dtn
 		{
 			if (isCompressable())
 			{
-				return make_pair(_cbhe_node, _cbhe_application);
+				return std::make_pair(_cbhe_node, _cbhe_application);
 			}
 
-			return make_pair(0, 0);
+			return std::make_pair(0, 0);
 		}
 
 		void EID::prepare() throw (ibrcommon::Exception)

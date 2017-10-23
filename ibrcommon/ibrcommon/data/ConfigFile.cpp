@@ -31,8 +31,8 @@
 
 namespace ibrcommon
 {
-	ConfigFile::ConfigFile( string filename, string delimiter,
-							string comment, string sentry )
+	ConfigFile::ConfigFile( std::string filename, std::string delimiter,
+							std::string comment, std::string sentry )
 		: myDelimiter(delimiter), myComment(comment), mySentry(sentry)
 	{
 		// Construct a ConfigFile, getting keys and values from given file
@@ -46,13 +46,13 @@ namespace ibrcommon
 
 
 	ConfigFile::ConfigFile()
-		: myDelimiter( string(1,'=') ), myComment( string(1,'#') )
+		: myDelimiter( std::string(1,'=') ), myComment( std::string(1,'#') )
 	{
 		// Construct a ConfigFile without a file; empty
 	}
 
 
-	void ConfigFile::remove( const string& key )
+	void ConfigFile::remove( const std::string& key )
 	{
 		// Remove key and its value
 		myContents.erase( myContents.find( key ) );
@@ -60,7 +60,7 @@ namespace ibrcommon
 	}
 
 
-	bool ConfigFile::keyExists( const string& key ) const
+	bool ConfigFile::keyExists( const std::string& key ) const
 	{
 		// Indicate whether key is found
 		mapci p = myContents.find( key );
@@ -69,7 +69,7 @@ namespace ibrcommon
 
 
 	/* static */
-	void ConfigFile::trim( string& s )
+	void ConfigFile::trim( std::string& s )
 	{
 		// Remove leading and trailing whitespace
 		static const char whitespace[] = " \n\t\v\r\f";
@@ -96,18 +96,18 @@ namespace ibrcommon
 	{
 		// Load a ConfigFile from is
 		// Read in keys and values, keeping internal whitespace
-		typedef string::size_type pos;
-		const string& delim  = cf.myDelimiter;  // separator
-		const string& comm   = cf.myComment;    // comment
-		const string& sentry = cf.mySentry;     // end of file sentry
+		typedef std::string::size_type pos;
+		const std::string& delim  = cf.myDelimiter;  // separator
+		const std::string& comm   = cf.myComment;    // comment
+		const std::string& sentry = cf.mySentry;     // end of file sentry
 		const pos skip = delim.length();        // length of separator
 
-		string nextline = "";  // might need to read ahead to see where value ends
+		std::string nextline = "";  // might need to read ahead to see where value ends
 
 		while( is || nextline.length() > 0 )
 		{
 			// Read an entire line at a time
-			string line;
+			std::string line;
 			if( nextline.length() > 0 )
 			{
 				line = nextline;  // we read ahead; use it now
@@ -122,14 +122,14 @@ namespace ibrcommon
 			line = line.substr( 0, line.find(comm) );
 
 			// Check for end of file sentry
-			if( sentry != "" && line.find(sentry) != string::npos ) return is;
+			if( sentry != "" && line.find(sentry) != std::string::npos ) return is;
 
 			// Parse the line if it contains a delimiter
 			pos delimPos = line.find( delim );
-			if( delimPos < string::npos )
+			if( delimPos < std::string::npos )
 			{
 				// Extract the key
-				string key = line.substr( 0, delimPos );
+				std::string key = line.substr( 0, delimPos );
 				line.replace( 0, delimPos+skip, "" );
 
 				// See if value continues on the next line
@@ -141,14 +141,14 @@ namespace ibrcommon
 					std::getline( is, nextline );
 					terminate = true;
 
-					string nlcopy = nextline;
+					std::string nlcopy = nextline;
 					ConfigFile::trim(nlcopy);
 					if( nlcopy == "" ) continue;
 
 					nextline = nextline.substr( 0, nextline.find(comm) );
-					if( nextline.find(delim) != string::npos )
+					if( nextline.find(delim) != std::string::npos )
 						continue;
-					if( sentry != "" && nextline.find(sentry) != string::npos )
+					if( sentry != "" && nextline.find(sentry) != std::string::npos )
 						continue;
 
 					nlcopy = nextline;

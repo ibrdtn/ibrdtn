@@ -56,8 +56,8 @@ void FakeDatagramService::fakeDiscovery() {
 	msg.seqno = 0;
 	msg.address = "fakeaddr";
 
-	istream_iterator<char> eos;
-	istream_iterator<char> iit(ss);
+	std::istream_iterator<char> eos;
+	std::istream_iterator<char> iit(ss);
 	std::copy(iit, eos, std::back_inserter(msg.data));
 
 	_recv_queue.push(msg);

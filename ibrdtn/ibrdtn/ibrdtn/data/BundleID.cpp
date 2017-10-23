@@ -23,7 +23,7 @@
 #include "ibrdtn/data/BundleID.h"
 #include "ibrdtn/data/Number.h"
 #include "ibrdtn/data/BundleString.h"
-#include <string.h>
+#include <string>
 
 // include code for platform-independent endianess conversion
 #include "ibrdtn/data/Endianess.h"
@@ -189,7 +189,7 @@ namespace dtn
 
 		std::string BundleID::toString() const
 		{
-			stringstream ss;
+			std::stringstream ss;
 			ss << "[" << timestamp.toString() << "." << sequencenumber.toString();
 
 			if (isFragment())

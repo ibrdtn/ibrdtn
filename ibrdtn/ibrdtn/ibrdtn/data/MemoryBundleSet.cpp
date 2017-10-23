@@ -109,7 +109,7 @@ namespace dtn
 		void MemoryBundleSet::add(const dtn::data::MetaBundle &bundle) throw ()
 		{
 			// insert bundle id to the private list
-			pair<bundle_set::iterator,bool> ret = _bundles.insert(bundle);
+			std::pair<bundle_set::iterator,bool> ret = _bundles.insert(bundle);
 
 			BundleSetImpl::ExpiringBundle exb(*ret.first);
 			_expire.insert(exb);
@@ -302,7 +302,7 @@ namespace dtn
 			path_bundles.remove();
 
 			// open file
-			ofstream output_file;
+			std::ofstream output_file;
 			output_file.open(path_bundles.getPath().c_str());
 
 			// write number of bundles
@@ -328,7 +328,7 @@ namespace dtn
 			// abort if storage files does not exist
 			if (!path_bundles.exists()) return;
 
-			ifstream input_file;
+			std::ifstream input_file;
 			input_file.open(ss.str().c_str());
 
 			// read number of bundles

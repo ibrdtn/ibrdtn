@@ -45,7 +45,7 @@ namespace dtn
 
 		void RoutingResult::put(const dtn::data::MetaBundle &bundle, const dtn::core::Node::Protocol p) throw ()
 		{
-			push_back(make_pair(bundle, p));
+			push_back(std::make_pair(bundle, p));
 		}
 
 		/**

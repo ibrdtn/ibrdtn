@@ -123,9 +123,9 @@ namespace dtn
 			add(eid.getSSP());
 		}
 
-		void Dictionary::add(const list<EID> &eids)
+		void Dictionary::add(const std::list<EID> &eids)
 		{
-			list<EID>::const_iterator iter = eids.begin();
+			std::list<EID>::const_iterator iter = eids.begin();
 
 			while (iter != eids.end())
 			{
@@ -179,7 +179,7 @@ namespace dtn
 		{
 			const std::string scheme = eid.getScheme();
 			const std::string ssp = eid.getSSP();
-			return make_pair(get(scheme), get(ssp));
+			return std::make_pair(get(scheme), get(ssp));
 		}
 
 		std::ostream &operator<<(std::ostream &stream, const dtn::data::Dictionary &obj)

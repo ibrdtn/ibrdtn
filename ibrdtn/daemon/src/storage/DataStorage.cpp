@@ -71,7 +71,7 @@ namespace dtn
 		 : ibrcommon::File(file), _stream(NULL), _lock(mutex)
 		{
 			_lock.enter();
-			_stream = new std::ifstream(getPath().c_str(), ios_base::in | ios_base::binary);
+			_stream = new std::ifstream(getPath().c_str(), std::ios_base::in | std::ios_base::binary);
 		}
 
 		DataStorage::istream::~istream()
@@ -216,7 +216,7 @@ namespace dtn
 
 							{
 								ibrcommon::MutexLock l(_global_mutex);
-								std::ofstream stream(destination.getPath().c_str(), ios::out | ios::binary | ios::trunc);
+								std::ofstream stream(destination.getPath().c_str(), std::ios::out | std::ios::binary | std::ios::trunc);
 
 								// check the streams health
 								if (!stream.good() || _faulty)

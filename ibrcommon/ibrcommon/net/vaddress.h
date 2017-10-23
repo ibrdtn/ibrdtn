@@ -40,28 +40,28 @@ namespace ibrcommon
 			class address_exception : public Exception
 			{
 			public:
-				address_exception(string error = "unspecific address error") : Exception(error)
+				address_exception(std::string error = "unspecific address error") : Exception(error)
 				{};
 			};
 
 			class address_not_set : public address_exception
 			{
 			public:
-				address_not_set(string error = "address is not specified") : address_exception(error)
+				address_not_set(std::string error = "address is not specified") : address_exception(error)
 				{};
 			};
 
 			class service_not_set : public address_exception
 			{
 			public:
-				service_not_set(string error = "service is not specified") : address_exception(error)
+				service_not_set(std::string error = "service is not specified") : address_exception(error)
 				{};
 			};
 
 			class scope_not_set : public address_exception
 			{
 			public:
-				scope_not_set(string error = "scope is not specified") : address_exception(error)
+				scope_not_set(std::string error = "scope is not specified") : address_exception(error)
 				{};
 			};
 

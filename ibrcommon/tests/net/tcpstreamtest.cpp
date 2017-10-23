@@ -138,7 +138,7 @@ void tcpstreamtest::StreamChecker::run() throw ()
 
 						if ((value != values[byte % _chars]) && stream.good())
 						{
-							cout << "error in byte " << byte << ", " << value << " != " << values[byte % _chars] << endl;
+							std::cout << "error in byte " << byte << ", " << value << " != " << values[byte % _chars] << std::endl;
 							break;
 						}
 

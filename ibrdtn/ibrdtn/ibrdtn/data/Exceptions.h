@@ -28,8 +28,6 @@
 #include <string>
 
 
-using namespace std;
-
 namespace dtn
 {
 		/**
@@ -38,7 +36,7 @@ namespace dtn
 		class InvalidDataException : public ibrcommon::Exception
 		{
 			public:
-				InvalidDataException(string what = "Invalid input data.") throw() : Exception(what)
+				InvalidDataException(std::string what = "Invalid input data.") throw() : Exception(what)
 				{
 				};
 		};
@@ -46,7 +44,7 @@ namespace dtn
 		class InvalidProtocolException : public dtn::InvalidDataException
 		{
 		public:
-			InvalidProtocolException(string what = "The received data does not match the protocol.") throw() : dtn::InvalidDataException(what)
+			InvalidProtocolException(std::string what = "The received data does not match the protocol.") throw() : dtn::InvalidDataException(what)
 			{
 			};
 		};
@@ -54,7 +52,7 @@ namespace dtn
 		class SerializationFailedException : public dtn::InvalidDataException
 		{
 		public:
-			SerializationFailedException(string what = "The serialization failed.") throw() : dtn::InvalidDataException(what)
+			SerializationFailedException(std::string what = "The serialization failed.") throw() : dtn::InvalidDataException(what)
 			{
 			};
 		};
@@ -63,7 +61,7 @@ namespace dtn
 		{
 		public:
 			const size_t length;
-			PayloadReceptionInterrupted(const size_t l, string what = "The payload reception has been interrupted.") throw() : dtn::SerializationFailedException(what), length(l)
+			PayloadReceptionInterrupted(const size_t l, std::string what = "The payload reception has been interrupted.") throw() : dtn::SerializationFailedException(what), length(l)
 			{
 			};
 		};
@@ -71,7 +69,7 @@ namespace dtn
 		class MissingObjectException : public ibrcommon::Exception
 		{
 		public:
-			MissingObjectException(string what = "Object not available.") throw() : Exception(what)
+			MissingObjectException(std::string what = "Object not available.") throw() : Exception(what)
 			{
 			};
 		};

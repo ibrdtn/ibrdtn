@@ -43,7 +43,7 @@ StreamBundle::~StreamBundle()
 void StreamBundle::append(const char* data, size_t length)
 {
 	ibrcommon::BLOB::iostream stream = _ref.iostream();
-	(*stream).seekp(0, ios::end);
+	(*stream).seekp(0, std::ios::end);
 	(*stream).write(data, length);
 }
 

@@ -29,7 +29,6 @@
 #include <ibrcommon/thread/Conditional.h>
 #include <ibrcommon/net/vsocket.h>
 
-using namespace std;
 
 class tcpstreamtest : public CPPUNIT_NS :: TestFixture
 {
