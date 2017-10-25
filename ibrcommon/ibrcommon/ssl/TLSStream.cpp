@@ -45,7 +45,7 @@ namespace ibrcommon
 	ibrcommon::Mutex TLSStream::_initialization_lock;
 
 	TLSStream::TLSStream(std::iostream *stream)
-	  : iostream(this), _activated(false), in_buf_(BUFF_SIZE), out_buf_(BUFF_SIZE),
+	  : std::iostream(this), _activated(false), in_buf_(BUFF_SIZE), out_buf_(BUFF_SIZE),
 	    _stream(stream), _server(false), _ssl(NULL), _peer_cert(NULL), _iostreamBIO(NULL)
 	{
 		/* basic_streambuf related initialization */

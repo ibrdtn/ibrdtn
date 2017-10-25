@@ -57,7 +57,7 @@ static BIO_METHOD iostream_method =
 		NULL//callback_ctrl
 };
 
-iostreamBIO::iostreamBIO(iostream *stream)
+iostreamBIO::iostreamBIO(std::iostream *stream)
 	:	_stream(stream)
 {
 	/* create BIO */
@@ -102,7 +102,7 @@ static int create(BIO *bio)
 static long ctrl(BIO *bio, int cmd, long  num, void *)
 {
 	long ret;
-	iostream *stream = reinterpret_cast<iostream*>(bio->ptr);
+	std::iostream *stream = reinterpret_cast<std::iostream*>(bio->ptr);
 
 	IBRCOMMON_LOGGER_DEBUG_TAG("iostreamBIO", 90) << "ctrl called, cmd: " << cmd << ", num: " << num << "." << IBRCOMMON_LOGGER_ENDL;
 
@@ -123,7 +123,7 @@ static long ctrl(BIO *bio, int cmd, long  num, void *)
 		ret = 1;
 		try{
 			stream->flush();
-		} catch(ios_base::failure &ex){
+		} catch(std::ios_base::failure &ex){
 			/* ignore, the badbit is checked instead */
 		}
 //		catch(ConnectionClosedException &ex){
@@ -147,13 +147,13 @@ static long ctrl(BIO *bio, int cmd, long  num, void *)
 
 static int bread(BIO *bio, char *buf, int len)
 {
-	iostream *stream = reinterpret_cast<iostream*>(bio->ptr);
+	std::iostream *stream = reinterpret_cast<std::iostream*>(bio->ptr);
 	int num_bytes = bio->num;
 
 	try{
 		/* make sure to read at least 1 byte and then read as much as we can */
 		num_bytes = static_cast<int>( stream->read(buf, 1).readsome(buf+1, len-1) + 1 );
-	} catch(ios_base::failure &ex){
+	} catch(std::ios_base::failure &ex){
 		/* ignore, bio->num will be returned and indicate the error */
 	}
 //	catch(ConnectionClosedException &ex){
@@ -170,12 +170,12 @@ static int bwrite(BIO *bio, const char *buf, int len)
 	if(len == 0){
 		return 0;
 	}
-	iostream *stream = reinterpret_cast<iostream*>(bio->ptr);
+	std::iostream *stream = reinterpret_cast<std::iostream*>(bio->ptr);
 
 	/* write the data */
 	try{
 		stream->write(buf, len);
-	} catch(ios_base::failure &ex){
+	} catch(std::ios_base::failure &ex){
 		/* ignore, the badbit is checked instead */
 	}
 //	catch(ConnectionClosedException &ex){
@@ -189,7 +189,7 @@ static int bwrite(BIO *bio, const char *buf, int len)
 	/* flush the underlying stream */
 	try{
 		stream->flush();
-	} catch(ios_base::failure &ex){
+	} catch(std::ios_base::failure &ex){
 		/* ignore, the badbit is checked instead */
 	}
 //	catch(ConnectionClosedException &ex){

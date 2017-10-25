@@ -50,7 +50,7 @@ public:
 	 * \param stream the iostream to use
 	 * \warning The iostream is not freed on destruction of this object.
 	 */
-	explicit iostreamBIO(iostream *stream);
+	explicit iostreamBIO(std::iostream *stream);
 
 	/*!
 	 * \brief get the internal BIO pointer
@@ -67,7 +67,7 @@ public:
 
 private:
 	BIO *_bio;
-	iostream *_stream;
+	std::iostream *_stream;
 };
 
 }
