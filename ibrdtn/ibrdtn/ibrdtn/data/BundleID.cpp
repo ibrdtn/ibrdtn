@@ -23,7 +23,7 @@
 #include "ibrdtn/data/BundleID.h"
 #include "ibrdtn/data/Number.h"
 #include "ibrdtn/data/BundleString.h"
-#include <string>
+#include <string.h>
 
 // include code for platform-independent endianess conversion
 #include "ibrdtn/data/Endianess.h"
