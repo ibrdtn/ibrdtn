@@ -72,7 +72,7 @@ namespace dtn
 			class RoutingException : public ibrcommon::Exception
 			{
 				public:
-					RoutingException(string what = "An error occured during routing.") throw() : Exception(what)
+					RoutingException(std::string what = "An error occured during routing.") throw() : Exception(what)
 					{
 					};
 			};
@@ -83,7 +83,7 @@ namespace dtn
 			class NoNeighbourFoundException : public RoutingException
 			{
 				public:
-					NoNeighbourFoundException(string what = "No neighbour was found.") throw() : RoutingException(what)
+					NoNeighbourFoundException(std::string what = "No neighbour was found.") throw() : RoutingException(what)
 					{
 					};
 			};
@@ -94,7 +94,7 @@ namespace dtn
 			class NoRouteFoundException : public RoutingException
 			{
 				public:
-					NoRouteFoundException(string what = "No route found.") throw() : RoutingException(what)
+					NoRouteFoundException(std::string what = "No route found.") throw() : RoutingException(what)
 					{
 					};
 			};

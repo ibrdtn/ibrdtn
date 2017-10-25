@@ -207,7 +207,7 @@ namespace dtn
 		{
 			std::stringstream ss;
 			{
-				ifstream stream(key.file.getPath().c_str(), std::iostream::in);
+				std::ifstream stream(key.file.getPath().c_str(), std::iostream::in);
 				ss << stream.rdbuf();
 			}
 			store(key, ss.str());

@@ -372,7 +372,7 @@ namespace dtn
 			// execute the query and check for error
 			if ((st.step() != SQLITE_ROW) || _faulty)
 			{
-				stringstream error;
+				std::stringstream error;
 				error << "No Bundle found with BundleID: " << id.toString();
 				IBRCOMMON_LOGGER_DEBUG_TAG(SQLiteDatabase::TAG, 15) << error.str() << IBRCOMMON_LOGGER_ENDL;
 				throw SQLiteQueryException(error.str());
@@ -587,7 +587,7 @@ namespace dtn
 			try {
 
 				int err = 0;
-				string file;
+				std::string file;
 
 				Statement st(_database, _sql_queries[BLOCK_GET_ID]);
 
@@ -677,13 +677,13 @@ namespace dtn
 			{
 				IBRCOMMON_LOGGER_TAG(SQLiteDatabase::TAG, warning) << "Bundle is already in the storage" << IBRCOMMON_LOGGER_ENDL;
 
-				stringstream error;
+				std::stringstream error;
 				error << "store() failure: " << err << " " <<  sqlite3_errmsg(_database);
 				throw SQLiteQueryException(error.str());
 			}
 			else if ((err != SQLITE_DONE) || _faulty)
 			{
-				stringstream error;
+				std::stringstream error;
 				error << "store() failure: " << err << " " <<  sqlite3_errmsg(_database);
 				IBRCOMMON_LOGGER_TAG(SQLiteDatabase::TAG, error) << error.str() << IBRCOMMON_LOGGER_ENDL;
 
@@ -879,7 +879,7 @@ namespace dtn
 			}
 			else
 			{
-				stringstream error;
+				std::stringstream error;
 				error << "count: failure " << err << " " << sqlite3_errmsg(_database);
 				throw SQLiteQueryException(error.str());
 			}
@@ -1019,7 +1019,7 @@ namespace dtn
 
 				if (err != SQLITE_DONE)
 				{
-					stringstream error;
+					std::stringstream error;
 					error << "update_custodian() failure: " << err << " " <<  sqlite3_errmsg(_database);
 					throw SQLiteDatabase::SQLiteQueryException(error.str());
 				}

@@ -162,7 +162,7 @@ namespace dtn
 			class SQLiteQueryException : public ibrcommon::Exception
 			{
 			public:
-				SQLiteQueryException(string what = "Unable to execute Querry.") throw() : Exception(what)
+				SQLiteQueryException(std::string what = "Unable to execute Querry.") throw() : Exception(what)
 				{
 				}
 			};
