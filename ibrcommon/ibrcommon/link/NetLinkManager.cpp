@@ -429,7 +429,7 @@ namespace ibrcommon
 					try {
 						netlinkcache &cache = dynamic_cast<netlinkcache&>(**iter);
 						cache.receive();
-					} catch (const bad_cast&) { };
+					} catch (const std::bad_cast&) { };
 				}
 			}
 		} catch (const socket_exception&) {

@@ -51,7 +51,7 @@ namespace ibrcommon
 		class parse_exception : public Exception
 		{
 		public:
-			parse_exception(string error) : Exception(error)
+			parse_exception(std::string error) : Exception(error)
 			{};
 		};
 
