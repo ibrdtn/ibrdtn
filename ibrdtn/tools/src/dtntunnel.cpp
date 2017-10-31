@@ -182,7 +182,7 @@ class TUN2BundleGateway : public dtn::api::Client
 			if (_fd == -1) throw ibrcommon::Exception("Tunnel closed.");
 
 			std::vector<char> buffer(65536);
-			ssize_t ret = ::read(_fd, buffer.data(), buffer.size());
+			ssize_t ret = ::read(_fd, &buffer[0], buffer.size());
 
 			if (ret == -1) {
 				throw ibrcommon::Exception("Error: failed to read from tun device");
@@ -194,7 +194,7 @@ class TUN2BundleGateway : public dtn::api::Client
 			ibrcommon::BLOB::Reference blob = ibrcommon::BLOB::create();
 
 			// add the data
-			blob.iostream()->write(buffer.data(), ret);
+			blob.iostream()->write(&buffer[0], ret);
 
 			// create a new bundle
 			dtn::data::Bundle b;
@@ -231,10 +231,10 @@ class TUN2BundleGateway : public dtn::api::Client
 			ibrcommon::BLOB::Reference ref = b.find<dtn::data::PayloadBlock>().getBLOB();
 			ibrcommon::BLOB::iostream stream = ref.iostream();
 			std::vector<char> buffer(65536);
-			stream->read(buffer.data(), buffer.size());
+			stream->read(&buffer[0], buffer.size());
 			size_t ret = stream->gcount();
 
-			if (::write(_fd, buffer.data(), ret) < 0)
+			if (::write(_fd, &buffer[0], ret) < 0)
 			{
 				IBRCOMMON_LOGGER_TAG("Core", error) << "Error while writing" << IBRCOMMON_LOGGER_ENDL;
 			}
