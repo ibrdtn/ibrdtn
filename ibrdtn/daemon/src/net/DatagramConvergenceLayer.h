@@ -223,7 +223,7 @@ namespace dtn
 			 * @param identifier The identifier of the connection.
 			 * @param create If this parameter is set to true a new connection is created if it does not exists.
 			 */
-			DatagramConnection& getConnection(const std::string &identifier, bool create) throw (ConnectionNotAvailableException);
+			DatagramConnection* getConnection(const std::string &identifier, bool create) throw (ConnectionNotAvailableException);
 
 			// associated datagram service
 			DatagramService *_service;

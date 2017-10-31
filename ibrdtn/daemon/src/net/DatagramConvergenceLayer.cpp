@@ -165,7 +165,7 @@ namespace dtn
 			_action_queue.push( queue );
 		}
 
-		DatagramConnection& DatagramConvergenceLayer::getConnection(const std::string &identifier, bool create) throw (ConnectionNotAvailableException)
+		DatagramConnection* DatagramConvergenceLayer::getConnection(const std::string &identifier, bool create) throw (ConnectionNotAvailableException)
 		{
 			DatagramConnection *connection = NULL;
 
@@ -173,7 +173,7 @@ namespace dtn
 			for(connection_list::const_iterator i = _connections.begin(); i != _connections.end(); ++i)
 			{
 				if ((*i)->getIdentifier() == identifier)
-					return *(*i);
+					return *i;
 			}
 
 			// throw exception if we should not create new connections
@@ -195,7 +195,7 @@ namespace dtn
 
 			IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConvergenceLayer::TAG, 10) << "Selected identifier: " << connection->getIdentifier() << IBRCOMMON_LOGGER_ENDL;
 			connection->start();
-			return *connection;
+			return connection;
 		}
 
 		void DatagramConvergenceLayer::reportSuccess(size_t retries, double rtt)
@@ -389,12 +389,12 @@ namespace dtn
 
 						try {
 							// Connection instance for this address
-							DatagramConnection& connection = getConnection(ack.address, false);
+							DatagramConnection* connection = getConnection(ack.address, false);
 
 							IBRCOMMON_LOGGER_DEBUG_TAG(TAG, 20) << "ack received for seqno " << ack.seqno << IBRCOMMON_LOGGER_ENDL;
 
 							// Decide in which queue to write based on the src address
-							connection.ack(ack.seqno);
+							connection->ack(ack.seqno);
 						} catch (const ConnectionNotAvailableException &ex) {
 							// connection does not exists - ignore the ACK
 						}
@@ -406,12 +406,12 @@ namespace dtn
 						// the peer refused the current bundle
 						try {
 							// Connection instance for this address
-							DatagramConnection& connection = getConnection(nack.address, false);
+							DatagramConnection* connection = getConnection(nack.address, false);
 
 							IBRCOMMON_LOGGER_DEBUG_TAG(TAG, 20) << "nack received for seqno " << nack.seqno << IBRCOMMON_LOGGER_ENDL;
 
 							// Decide in which queue to write based on the src address
-							connection.nack(nack.seqno, nack.temporary);
+							connection->nack(nack.seqno, nack.temporary);
 						} catch (const ConnectionNotAvailableException &ex) {
 							// connection does not exists - ignore the NACK
 						}
@@ -421,14 +421,14 @@ namespace dtn
 						SegmentReceived &segment = dynamic_cast<SegmentReceived&>(*action);
 
 						// Connection instance for this address
-						DatagramConnection& connection = getConnection(segment.address, true);
+						DatagramConnection* connection = getConnection(segment.address, true);
 
 						try {
 							// Decide in which queue to write based on the src address
-							connection.queue(segment.flags, segment.seqno, &segment.data[0], segment.len);
+							connection->queue(segment.flags, segment.seqno, &segment.data[0], segment.len);
 						} catch (const ibrcommon::Exception &ex) {
 							IBRCOMMON_LOGGER_TAG(DatagramConvergenceLayer::TAG, error) << ex.what() << IBRCOMMON_LOGGER_ENDL;
-							connection.shutdown();
+							connection->shutdown();
 						};
 					} catch (const std::bad_cast&) { };
 
@@ -436,8 +436,8 @@ namespace dtn
 						BeaconReceived &beacon = dynamic_cast<BeaconReceived&>(*action);
 
 						// Connection instance for this address
-						DatagramConnection& connection = getConnection(beacon.address, true);
-						connection.setPeerEID(beacon.data.getEID());
+						DatagramConnection* connection = getConnection(beacon.address, true);
+						connection->setPeerEID(beacon.data.getEID());
 
 						// announce the received beacon
 						agent.onBeaconReceived(beacon.data);
@@ -449,13 +449,15 @@ namespace dtn
 						ibrcommon::MutexLock l(_cond_connections);
 						for (connection_list::iterator i = _connections.begin(); i != _connections.end(); ++i)
 						{
-							if ((*i)->getIdentifier() == cd.id)
+							DatagramConnection* conn = *i;
+							if (conn->getIdentifier() == cd.id)
 							{
 								IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConvergenceLayer::TAG, 10) << "Down: " << cd.id << IBRCOMMON_LOGGER_ENDL;
+
 								_connections.erase(i);
 
 								// delete the connection
-								delete (*i);
+								delete conn;
 
 								// signal the modified connection list
 								_cond_connections.signal(true);
@@ -482,10 +484,10 @@ namespace dtn
 						QueueBundle &queue = dynamic_cast<QueueBundle&>(*action);
 
 						// get a new or the existing connection for this address
-						DatagramConnection &conn = getConnection( queue.uri, true );
+						DatagramConnection* conn = getConnection( queue.uri, true );
 
 						// queue the job to the connection
-						conn.queue(queue.job);
+						conn->queue(queue.job);
 					} catch (const std::bad_cast&) { };
 
 					try {
