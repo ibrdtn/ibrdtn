@@ -105,7 +105,7 @@ size_t FakeDatagramService::recvfrom(char *buf, size_t length, char &type, char 
 		seqno = msg.seqno;
 		address = msg.address;
 		ret = msg.data.size();
-		::memcpy(buf, &msg.data[0], (ret > length) ? length : ret);
+		if (ret > 0) ::memcpy(buf, msg.data.data(), std::min(ret, length));
 		lq.pop();
 	} catch (const ibrcommon::QueueUnblockedException&) {
 		throw dtn::net::DatagramException("unblocked");
