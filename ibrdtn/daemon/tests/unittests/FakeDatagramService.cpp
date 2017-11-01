@@ -21,6 +21,8 @@
 
 #include "FakeDatagramService.h"
 #include "net/DiscoveryBeacon.h"
+
+#include <algorithm>
 #include <string.h>
 #include <unistd.h>
 
