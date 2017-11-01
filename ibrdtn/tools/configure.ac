@@ -16,6 +16,10 @@ AM_MAINTAINER_MODE
 # Test for new silent rules and enable only if they are available
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
+dnl Drops autotools defaults but keeps user-specific options.
+: ${CFLAGS=""}
+: ${CXXFLAGS=""}
+
 dnl -----------------------------------------------
 dnl Checks for programs.
 dnl -----------------------------------------------
@@ -91,8 +95,13 @@ AC_HELP_STRING([--enable-gcov], [Turn on gcov coverage testing.]),
 AC_ARG_ENABLE(debug,
 AC_HELP_STRING([--enable-debug], [Turn on debugging symbols.]),
 [
-	CPPFLAGS="${CPPFLAGS} -ggdb -g3 -Wall -Wextra -pedantic -Wconversion -D__DEVELOPMENT_ASSERTIONS__"
-	CFLAGS="${CFLAGS} -ggdb -g3 -Wall -Wextra -pedantic -Wconversion -D__DEVELOPMENT_ASSERTIONS__"
+	CPPFLAGS="${CPPFLAGS} -ggdb -g3 -O0 -Wall -Wextra -pedantic -Wconversion -D__DEVELOPMENT_ASSERTIONS__"
+	CFLAGS="${CFLAGS} -ggdb -g3 -O0 -Wall -Wextra -pedantic -Wconversion -D__DEVELOPMENT_ASSERTIONS__"
+	AC_MSG_NOTICE([Debug symbols enabled, optimizations off])
+], [
+	CPPFLAGS="${CPPFLAGS} -O2"
+	CFLAGS="${CFLAGS} -O2"
+	AC_MSG_NOTICE([Building with optimizations])
 ])
 
 AC_ARG_WITH([libdaemon],
