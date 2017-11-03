@@ -86,8 +86,7 @@ namespace dtn
 			typedef std::pair<ibrcommon::vinterface, handler_list> handler_map_entry;
 
 			handler_map _providers;
-
-			const ibrcommon::vinterface _any_iface;
+			handler_list _default_providers;
 		};
 	}
 }

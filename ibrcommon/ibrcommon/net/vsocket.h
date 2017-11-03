@@ -44,14 +44,14 @@ namespace ibrcommon
 	class vsocket_timeout : public socket_exception
 	{
 	public:
-		vsocket_timeout(string error) : socket_exception(error)
+		vsocket_timeout(std::string error) : socket_exception(error)
 		{};
 	};
 
 	class vsocket_interrupt : public socket_exception
 	{
 	public:
-		vsocket_interrupt(string error) : socket_exception(error)
+		vsocket_interrupt(std::string error) : socket_exception(error)
 		{};
 	};
 
@@ -158,7 +158,7 @@ namespace ibrcommon
 			class state_exception : public Exception
 			{
 			public:
-				state_exception(string error) : Exception(error)
+				state_exception(std::string error) : Exception(error)
 				{};
 			};
 

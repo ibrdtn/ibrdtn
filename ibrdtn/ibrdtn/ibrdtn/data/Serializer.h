@@ -67,7 +67,7 @@ namespace dtn
 			class RejectedException : public dtn::SerializationFailedException
 			{
 			public:
-				RejectedException(string what = "A validate method has the bundle rejected.") throw() : dtn::SerializationFailedException(what)
+				RejectedException(std::string what = "A validate method has the bundle rejected.") throw() : dtn::SerializationFailedException(what)
 				{
 				};
 			};

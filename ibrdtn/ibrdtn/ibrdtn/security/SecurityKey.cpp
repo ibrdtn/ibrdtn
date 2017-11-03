@@ -63,7 +63,7 @@ namespace dtn
 
 		const std::string SecurityKey::getData() const
 		{
-			std::ifstream stream(file.getPath().c_str(), ios::in);
+			std::ifstream stream(file.getPath().c_str(), std::ios::in);
 			std::stringstream ss;
 
 			ss << stream.rdbuf();
@@ -181,7 +181,7 @@ namespace dtn
 			ibrcommon::SHA256Stream sha;
 
 			// open the file
-			ifstream stream(file.getPath().c_str());
+			std::ifstream stream(file.getPath().c_str());
 
 			// hash the contents of the file
 			if (!stream.good()) {

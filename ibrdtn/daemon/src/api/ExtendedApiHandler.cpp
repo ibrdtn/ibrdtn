@@ -597,7 +597,7 @@ namespace dtn
 								if (cmd.size() > 3)
 								{
 									int offset;
-									istringstream ss(cmd[3]);
+									std::istringstream ss(cmd[3]);
 
 									ss >> offset;
 									if (ss.fail()) throw ibrcommon::Exception("malformed command");
@@ -644,7 +644,7 @@ namespace dtn
 								if (cmd.size() < 4) throw ibrcommon::Exception("not enough parameters");
 
 								int offset;
-								istringstream ss(cmd[3]);
+								std::istringstream ss(cmd[3]);
 
 								ss >> offset;
 								if (ss.fail()) throw ibrcommon::Exception("malformed command");
@@ -797,10 +797,10 @@ namespace dtn
 								// if the offset is valid
 								if (static_cast<std::streamsize>(payload_offset) < stream.size()) {
 									// move the streams put pointer to the given offset
-									(*stream).seekp(payload_offset, ios_base::beg);
+									(*stream).seekp(payload_offset, std::ios_base::beg);
 								} else if (payload_offset > 0) {
 									// move put-pointer to the end
-									(*stream).seekp(0, ios_base::end);
+									(*stream).seekp(0, std::ios_base::end);
 								}
 
 								/* write the new data into the blob */
@@ -829,7 +829,7 @@ namespace dtn
 								ibrcommon::BLOB::iostream stream = ref.iostream();
 
 								// move put-pointer to the end
-								(*stream).seekp(0, ios_base::end);
+								(*stream).seekp(0, std::ios_base::end);
 
 								/* write the new data into the blob */
 								PlainDeserializer(_stream).readData(*stream);
@@ -1074,7 +1074,7 @@ namespace dtn
 			}
 		}
 
-		void ExtendedApiHandler::sayBundleID(ostream &stream, const dtn::data::BundleID &id)
+		void ExtendedApiHandler::sayBundleID(std::ostream &stream, const dtn::data::BundleID &id)
 		{
 			stream << id.timestamp.toString() << " " << id.sequencenumber.toString() << " ";
 

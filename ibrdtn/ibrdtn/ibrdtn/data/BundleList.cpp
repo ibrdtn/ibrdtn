@@ -38,7 +38,7 @@ namespace dtn
 		void BundleList::add(const dtn::data::MetaBundle &bundle) throw ()
 		{
 			// insert the bundle to the public list
-			pair<iterator,bool> ret = _meta_bundles.insert(bundle);
+			std::pair<iterator,bool> ret = _meta_bundles.insert(bundle);
 
 			if (ret.second) {
 				ExpiringBundle exb(*ret.first);

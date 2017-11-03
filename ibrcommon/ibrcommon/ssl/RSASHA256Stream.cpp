@@ -26,7 +26,7 @@
 namespace ibrcommon
 {
 	RSASHA256Stream::RSASHA256Stream(EVP_PKEY * const pkey, bool verify)
-	 : ostream(this), out_buf_(BUFF_SIZE), _pkey(pkey), _verify(verify), _sign_valid(false), _return_code(0)
+	 : std::ostream(this), out_buf_(BUFF_SIZE), _pkey(pkey), _verify(verify), _sign_valid(false), _return_code(0)
 	{
 		// Initialize get pointer.  This should be zero so that underflow is called upon first read.
 		setp(&out_buf_[0], &out_buf_[BUFF_SIZE - 1]);

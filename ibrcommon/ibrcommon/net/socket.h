@@ -55,14 +55,14 @@ namespace ibrcommon {
 		socket_exception() : Exception()
 		{};
 
-		socket_exception(string error) : Exception(error)
+		socket_exception(std::string error) : Exception(error)
 		{};
 	};
 
 	class socket_error : public socket_exception
 	{
 	public:
-		socket_error(socket_error_code code, string error) : socket_exception(error), _code(code)
+		socket_error(socket_error_code code, std::string error) : socket_exception(error), _code(code)
 		{};
 
 		socket_error_code code() const { return _code; }
@@ -74,7 +74,7 @@ namespace ibrcommon {
 	class socket_raw_error : public socket_exception
 	{
 	public:
-		socket_raw_error(int error, string description) : socket_exception(description), _errno(error)
+		socket_raw_error(int error, std::string description) : socket_exception(description), _errno(error)
 		{
 			std::stringstream ss;
 			ss << error << ": " << socket_exception::what();
@@ -203,6 +203,7 @@ namespace ibrcommon {
 		void set_linger(bool val, int l = 1, int fd = -1) const throw (socket_exception);
 		void set_reuseaddr(bool val, int fd = -1) const throw (socket_exception);
 		void set_nodelay(bool val, int fd = -1) const throw (socket_exception);
+		void set_interface(const vinterface &iface, int fd = -1) const throw (socket_exception);
 
 		void init_socket(const vaddress &addr, int type, int protocol) throw (socket_exception);
 		void init_socket(int domain, int type, int protocol) throw (socket_exception);
@@ -365,21 +366,25 @@ namespace ibrcommon {
 	public:
 		udpsocket();
 		udpsocket(const vaddress &address);
+		udpsocket(const vinterface &iface, const vaddress &address);
 		virtual ~udpsocket();
 		virtual void up() throw (socket_exception);
 		virtual void down() throw (socket_exception);
 
+		const vinterface& get_interface() const;
 		const vaddress& get_address() const;
 
 	protected:
 		void bind(const vaddress &addr) throw (socket_exception);
 
+		const vinterface _iface;
 		const vaddress _address;
 	};
 
 	class multicastsocket : public udpsocket {
 	public:
 		multicastsocket(const vaddress &address);
+		multicastsocket(const vinterface &iface, const vaddress &address);
 		virtual ~multicastsocket();
 		virtual void up() throw (socket_exception);
 		virtual void down() throw (socket_exception);

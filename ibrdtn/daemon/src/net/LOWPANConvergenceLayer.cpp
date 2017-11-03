@@ -76,7 +76,7 @@ namespace dtn
 		{
 			if (iface == _net)
 			{
-				stringstream service;
+				std::stringstream service;
 
 				struct sockaddr_ieee802154 address;
 				address.addr.addr_type = IEEE802154_ADDR_SHORT;
@@ -220,7 +220,7 @@ namespace dtn
 			ipnd_buf[1] = (char)0x80;
 
 			// serialize announcement
-			stringstream ss;
+			std::stringstream ss;
 			ss << beacon;
 
 			dtn::data::Length len = ss.str().size();
@@ -268,7 +268,7 @@ namespace dtn
 						// Check for extended header and retrieve if available
 						if ((header & EXTENDED_MASK) && (data[1] & 0x80)) {
 							DiscoveryBeacon beacon = agent.obtainBeacon();
-							stringstream ss;
+							std::stringstream ss;
 							ss.write(&data[2], len-2);
 							ss >> beacon;
 

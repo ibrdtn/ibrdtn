@@ -37,6 +37,7 @@
 #include <sys/un.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <net/if.h>
 #endif
 
 #include <string.h>
@@ -227,6 +228,19 @@ namespace ibrcommon
 		if (__compat_setsockopt((fd == -1) ? _fd : fd, IPPROTO_TCP, TCP_NODELAY, &set, sizeof(set)) < 0) {
 			throw socket_exception("set no delay option failed");
 		}
+	}
+
+	void basesocket::set_interface(const vinterface &iface, int fd) const throw (socket_exception)
+	{
+#ifndef __WIN32__
+		char devname[IF_NAMESIZE];
+		const std::string s_devname = iface.toString();
+		::strncpy(devname, s_devname.c_str(), IF_NAMESIZE);
+
+		if (__compat_setsockopt((fd == -1) ? _fd : fd, SOL_SOCKET, SO_BINDTODEVICE, &devname, IF_NAMESIZE) < 0) {
+			check_socket_error(errno);
+		}
+#endif
 	}
 
 	sa_family_t basesocket::get_family() const throw (socket_exception)
@@ -508,20 +522,20 @@ namespace ibrcommon
 		hints.ai_socktype = SOCK_DGRAM;
 		hints.ai_flags = AI_ADDRCONFIG;
 
-		const char *address = NULL;
-		const char *service = NULL;
+		std::string address;
+		std::string service;
 
 		try {
-			address = addr.address().c_str();
+			address = addr.address();
 		} catch (const vaddress::address_not_set&) {
 			throw socket_exception("need at least an address to send to");
 		};
 
 		try {
-			service = addr.service().c_str();
+			service = addr.service();
 		} catch (const vaddress::address_not_set&) { };
 
-		if ((ret = ::getaddrinfo(address, service, &hints, &res)) != 0)
+		if ((ret = ::getaddrinfo(address.c_str(), service.c_str(), &hints, &res)) != 0)
 		{
 			throw socket_exception("getaddrinfo(): " + std::string(gai_strerror(ret)));
 		}
@@ -697,7 +711,7 @@ namespace ibrcommon
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
 
-		init_socket(_address, SOCK_STREAM, 0);
+		init_socket(_address, SOCK_STREAM, IPPROTO_TCP);
 
 		// enable reuse to avoid delay on process restart
 		this->set_reuseaddr(true);
@@ -834,20 +848,20 @@ namespace ibrcommon
 		struct addrinfo *res = NULL;
 		int ret = 0;
 
-		const char *address = NULL;
-		const char *service = NULL;
+		std::string address;
+		std::string service;
 
 		try {
-			address = _address.address().c_str();
+			address = _address.address();
 		} catch (const vaddress::address_not_set&) {
 			throw socket_exception("need at least an address to connect to");
 		};
 
 		try {
-			service = _address.service().c_str();
+			service = _address.service();
 		} catch (const vaddress::service_not_set&) { };
 
-		if ((ret = ::getaddrinfo(address, service, &hints, &res)) != 0)
+		if ((ret = ::getaddrinfo(address.c_str(), service.c_str(), &hints, &res)) != 0)
 		{
 			throw socket_exception("getaddrinfo(): " + std::string(gai_strerror(ret)));
 		}
@@ -1011,6 +1025,11 @@ namespace ibrcommon
 	{
 	}
 
+	udpsocket::udpsocket(const vinterface &iface, const vaddress &address)
+	 : _iface(iface), _address(address)
+	{
+	}
+
 	udpsocket::~udpsocket()
 	{
 		try {
@@ -1023,12 +1042,17 @@ namespace ibrcommon
 		return _address;
 	}
 
+	const vinterface& udpsocket::get_interface() const
+	{
+		return _iface;
+	}
+
 	void udpsocket::up() throw (socket_exception)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
 
-		init_socket(_address, SOCK_DGRAM, 0);
+		init_socket(_address, SOCK_DGRAM, IPPROTO_UDP);
 
 		try {
 			// test if the service is defined
@@ -1041,6 +1065,10 @@ namespace ibrcommon
 		try {
 			// try to bind on port and/or address
 			this->bind(_address);
+
+			if (!_iface.isAny() && !_iface.isLoopback()) {
+				this->set_interface(_iface);
+			}
 		} catch (const socket_exception&) {
 			// clean-up socket
 			__close(_fd);
@@ -1099,6 +1127,11 @@ namespace ibrcommon
 
 	multicastsocket::multicastsocket(const vaddress &address)
 	 : udpsocket(address)
+	{
+	}
+
+	multicastsocket::multicastsocket(const vinterface &iface, const vaddress &address)
+	 : udpsocket(iface, address)
 	{
 	}
 
@@ -1295,7 +1328,8 @@ namespace ibrcommon
 			freeaddrinfo(res);
 
 			// set the right interface
-			__copy_device_address(&req.imr_interface, iface);
+			if (!iface.isAny())
+				__copy_device_address(&req.imr_interface, iface);
 
 			if ( __compat_setsockopt(this->fd(), level, optname, &req, sizeof(req)) == -1 )
 			{
@@ -1312,7 +1346,8 @@ namespace ibrcommon
 			freeaddrinfo(res);
 
 			// set the right interface
-			req.ipv6mr_interface = iface.getIndex();
+			if (!iface.isAny())
+				req.ipv6mr_interface = iface.getIndex();
 
 			if ( __compat_setsockopt(this->fd(), level, optname, &req, sizeof(req)) == -1 )
 			{
@@ -1330,7 +1365,8 @@ namespace ibrcommon
 		freeaddrinfo(res);
 
 		// set the right interface here
-		req.gr_interface = iface.getIndex();
+		if (!iface.isAny())
+			req.gr_interface = iface.getIndex();
 
 		if ( __compat_setsockopt(this->fd(), level, optname, &req, sizeof(req)) == -1 )
 		{
@@ -1367,6 +1403,18 @@ namespace ibrcommon
 
 		case EPROTONOSUPPORT:
 			throw socket_exception("The protocol type or the specified protocol is not supported within this domain.");
+
+		case EBADF:
+			throw socket_exception("The argument sockfd is not a valid file descriptor.");
+
+		case EFAULT:
+			throw socket_exception("The address pointed to by optval is not in a valid part of the process address space.");
+
+		case ENOPROTOOPT:
+			throw socket_exception("The option is unknown at the level indicated.");
+
+		case ENOTSOCK:
+			throw socket_exception("The file descriptor sockfd does not refer to a socket.");
 
 		default:
 			throw socket_exception("Cannot create a socket.");

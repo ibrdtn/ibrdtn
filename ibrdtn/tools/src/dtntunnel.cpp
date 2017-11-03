@@ -127,8 +127,8 @@ void timer_display_throughput(int) {
 		throughput_sum_down += static_cast<float>(throughput_data_down[i]);
 	}
 
-	std::cout << "  up: " << setiosflags(ios::right) << setw(12) << setiosflags(ios::fixed) << setprecision(2) << (throughput_sum_up/1024) << " kB/s ";
-	std::cout << "  down: " << setiosflags(ios::right) << setw(12) << setiosflags(ios::fixed) << setprecision(2) << (throughput_sum_down/1024) << " kB/s\r" << std::flush;
+	std::cout << "  up: " << setiosflags(std::ios::right) << std::setw(12) << setiosflags(std::ios::fixed) << std::setprecision(2) << (throughput_sum_up/1024) << " kB/s ";
+	std::cout << "  down: " << setiosflags(std::ios::right) << std::setw(12) << setiosflags(std::ios::fixed) << std::setprecision(2) << (throughput_sum_down/1024) << " kB/s\r" << std::flush;
 
 	throughput_pos++;
 	if (throughput_pos > 4) throughput_pos = 0;

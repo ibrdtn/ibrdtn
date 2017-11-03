@@ -63,7 +63,6 @@
 
 using namespace dtn::data;
 using namespace dtn::utils;
-using namespace std;
 
 namespace dtn
 {

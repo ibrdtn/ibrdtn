@@ -176,7 +176,7 @@ namespace dtn
 			allocSpace(size);
 
 			// insert Container
-			pair<set<dtn::data::Bundle>::iterator,bool> ret = _bundles.insert( bundle );
+			std::pair<std::set<dtn::data::Bundle>::iterator,bool> ret = _bundles.insert( bundle );
 
 			if (ret.second)
 			{

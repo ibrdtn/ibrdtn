@@ -279,7 +279,7 @@ namespace dtn
 			if (i == _map.end())
 			{
 				std::pair<stream_map::iterator, bool> p =
-						_map.insert(std::pair<dtn::data::Number, std::stringstream* >(identifier, new stringstream()));
+						_map.insert(std::pair<dtn::data::Number, std::stringstream* >(identifier, new std::stringstream()));
 				i = p.first;
 			}
 

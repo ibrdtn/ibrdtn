@@ -56,7 +56,7 @@ namespace dtn
 			dtn::core::EventDispatcher<BundleExpiredEvent>::queue( new BundleExpiredEvent(bundle) );
 		}
 
-		const string BundleExpiredEvent::getName() const
+		const std::string BundleExpiredEvent::getName() const
 		{
 			return "BundleExpiredEvent";
 		}

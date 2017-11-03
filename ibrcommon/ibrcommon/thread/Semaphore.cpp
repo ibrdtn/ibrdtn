@@ -23,7 +23,6 @@
 #include "ibrcommon/thread/Semaphore.h"
 #include <iostream>
 
-using namespace std;
 
 namespace ibrcommon
 {

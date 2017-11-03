@@ -108,6 +108,7 @@ namespace ibrcommon
 
 		if (_scope == SCOPE_LOCAL) return true;
 		if (_address == localhost) return true;
+		if (isAny()) return false;
 
 		struct addrinfo hints;
 		struct addrinfo *res, *lo_res;
@@ -179,18 +180,18 @@ namespace ibrcommon
 		struct addrinfo *res;
 		int ret = 0;
 
-		const char *address = NULL;
-		const char *service = NULL;
+		std::string address;
+		std::string service;
 
 		// throw exception if the address is not set.
 		// without an address we can not determine the address family
-		address = this->address().c_str();
+		address = this->address();
 
 		try {
-			service = this->service().c_str();
+			service = this->service();
 		} catch (const vaddress::service_not_set&) { };
 
-		if ((ret = ::getaddrinfo(address, service, &hints, &res)) != 0)
+		if ((ret = ::getaddrinfo(address.c_str(), service.c_str(), &hints, &res)) != 0)
 		{
 			throw address_exception("getaddrinfo(): " + std::string(gai_strerror(ret)));
 		}

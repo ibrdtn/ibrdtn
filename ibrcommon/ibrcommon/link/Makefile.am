@@ -13,21 +13,24 @@ if LOWPAN
 cc_sources += nl_policy.c
 endif
 
+h_sources += \
+	CompatLinkManager.h \
+	LinkMonitor.h
+
+cc_sources += \
+	CompatLinkManager.cpp \
+	LinkMonitor.cpp
+
+if WIN32
+h_sources += Win32LinkManager.h
+cc_sources += Win32LinkManager.cpp
+else
 if NETLINK
 h_sources += NetLinkManager.h
 cc_sources += NetLinkManager.cpp
-else
-if WIN32
-h_sources += Win32LinkManager.h \
-	     LinkMonitor.h
-cc_sources += Win32LinkManager.cpp \
-	      LinkMonitor.cpp
-else
-h_sources += PosixLinkManager.h \
-	     LinkMonitor.h
-cc_sources += PosixLinkManager.cpp \
-	      LinkMonitor.cpp
 endif
+h_sources += PosixLinkManager.h
+cc_sources += PosixLinkManager.cpp
 endif
 
 #Install the headers in a versioned directory

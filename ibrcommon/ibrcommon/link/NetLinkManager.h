@@ -37,9 +37,8 @@ namespace ibrcommon
 {
 	class NetLinkManager : public ibrcommon::LinkManager, public ibrcommon::JoinableThread
 	{
-		friend class LinkManager;
-
 	public:
+		NetLinkManager();
 		virtual ~NetLinkManager();
 
 		void up() throw ();
@@ -51,7 +50,7 @@ namespace ibrcommon
 		class parse_exception : public Exception
 		{
 		public:
-			parse_exception(string error) : Exception(error)
+			parse_exception(std::string error) : Exception(error)
 			{};
 		};
 
@@ -60,8 +59,6 @@ namespace ibrcommon
 		void __cancellation() throw ();
 
 	private:
-		NetLinkManager();
-
 		class netlinkcache : public basesocket
 		{
 		public:

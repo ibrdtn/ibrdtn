@@ -325,7 +325,7 @@ namespace dtn
 				if (len > 0)
 				{
 					// read all data into a stream
-					stringstream ss;
+					std::stringstream ss;
 					ss.write(&data[0], len);
 
 					// get the bundle

@@ -44,7 +44,7 @@ namespace dtn
 			class DataNotAvailableException : public ibrcommon::Exception
 			{
 			public:
-				DataNotAvailableException(string what = "Requested data is not available.") throw() : Exception(what)
+				DataNotAvailableException(std::string what = "Requested data is not available.") throw() : Exception(what)
 				{ };
 			};
 

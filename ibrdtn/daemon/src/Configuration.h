@@ -111,7 +111,7 @@ namespace dtn
 			 * @param name The prefix of the path to get.
 			 * @return The path as file object.
 			 */
-			ibrcommon::File getPath(string name) const;
+			ibrcommon::File getPath(std::string name) const;
 
 			/**
 			 * Enable/Disable the API interface.
@@ -593,13 +593,13 @@ namespace dtn
 			private:
 				bool _enabled;
 				int _port;
-				string _id;
-				string _ipv4bind;
-				string _ipv6bind;
-				std::vector<string> _bootstrappingdomains;
+				std::string _id;
+				std::string _ipv4bind;
+				std::string _ipv6bind;
+				std::vector<std::string> _bootstrappingdomains;
 				bool _dnsbootstrapping;
-				std::vector<string> _bootstrappingips;
-				string _nodesFilePath;
+				std::vector<std::string> _bootstrappingips;
+				std::string _nodesFilePath;
 				bool _ipv4;
 				bool _ipv6;
 				bool _blacklist;
@@ -629,7 +629,7 @@ namespace dtn
 				/**
 				 * @return a string, which should be used to generate a dht id
 				 */
-				string getID() const;
+				std::string getID() const;
 
 				/**
 				 * @return True, if no string was given to generate a dht id
@@ -644,7 +644,7 @@ namespace dtn
 				/**
 				 * @return List of domain names for bootstrapping
 				 */
-				std::vector<string> getDNSBootstrappingNames() const;
+				std::vector<std::string> getDNSBootstrappingNames() const;
 
 				/**
 				 * @return True, if a IP (and port) information was given
@@ -654,17 +654,17 @@ namespace dtn
 				/**
 				 * @return list of all IP(and port) informations
 				 */
-				std::vector<string> getIPBootstrappingIPs() const;
+				std::vector<std::string> getIPBootstrappingIPs() const;
 
 				/**
 				 * @return a exact IPv4 address, to be used to bind the dht IPv4 socket
 				 */
-				string getIPv4Binding() const;
+				std::string getIPv4Binding() const;
 
 				/**
 				 * @return a exact IPv6 address, to be used to bind the dht IPv6 socket
 				 */
-				string getIPv6Binding() const;
+				std::string getIPv6Binding() const;
 
 				/**
 				 * Gives a path to a file, where the dtndht lib could save good nodes on shutdown,
@@ -673,7 +673,7 @@ namespace dtn
 				 *
 				 * @return a string with the path to the file
 				 */
-				string getPathToNodeFiles() const;
+				std::string getPathToNodeFiles() const;
 
 				/**
 				 * @return True, if IPv4 should be used for the DHT

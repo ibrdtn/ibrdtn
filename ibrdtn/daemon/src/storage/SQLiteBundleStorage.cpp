@@ -66,7 +66,7 @@ namespace dtn
 			_filestream.close();
 
 			// open temporary file
-			_filestream.open(_file.getPath().c_str(), ios::in | ios::out | ios::trunc | ios::binary );
+			_filestream.open(_file.getPath().c_str(), std::ios::in | std::ios::out | std::ios::trunc | std::ios::binary );
 
 			if (!_filestream.is_open())
 			{
@@ -80,7 +80,7 @@ namespace dtn
 			ibrcommon::BLOB::_filelimit.wait();
 
 			// open temporary file
-			_filestream.open(_file.getPath().c_str(), ios::in | ios::out | ios::binary );
+			_filestream.open(_file.getPath().c_str(), std::ios::in | std::ios::out | std::ios::binary );
 
 			if (!_filestream.is_open())
 			{

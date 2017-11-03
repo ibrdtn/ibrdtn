@@ -52,7 +52,7 @@ namespace dtn
 			class RegistrationException : public ibrcommon::Exception
 			{
 			public:
-				RegistrationException(string what = "") throw() : Exception(what)
+				RegistrationException(std::string what = "") throw() : Exception(what)
 				{
 				}
 			};
@@ -60,7 +60,7 @@ namespace dtn
 			class AlreadyAttachedException : public RegistrationException
 			{
 			public:
-				AlreadyAttachedException(string what = "") throw() : RegistrationException(what)
+				AlreadyAttachedException(std::string what = "") throw() : RegistrationException(what)
 				{
 				}
 			};
@@ -68,7 +68,7 @@ namespace dtn
 			class NotFoundException : public RegistrationException
 			{
 			public:
-				NotFoundException(string what = "") throw() : RegistrationException(what)
+				NotFoundException(std::string what = "") throw() : RegistrationException(what)
 				{
 				}
 			};
@@ -76,7 +76,7 @@ namespace dtn
 			class NotPersistentException : public RegistrationException
 			{
 			public:
-				NotPersistentException(string what = "") throw() : RegistrationException(what)
+				NotPersistentException(std::string what = "") throw() : RegistrationException(what)
 				{
 				}
 			};

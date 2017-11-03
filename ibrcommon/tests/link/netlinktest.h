@@ -11,7 +11,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-using namespace std;
 
 class netlinktest : public CPPUNIT_NS :: TestFixture
 {

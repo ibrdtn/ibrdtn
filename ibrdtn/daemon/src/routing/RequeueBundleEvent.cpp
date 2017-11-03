@@ -44,12 +44,12 @@ namespace dtn
 			dtn::core::EventDispatcher<RequeueBundleEvent>::queue( new RequeueBundleEvent(peer, id, p) );
 		}
 
-		const string RequeueBundleEvent::getName() const
+		const std::string RequeueBundleEvent::getName() const
 		{
 			return "RequeueBundleEvent";
 		}
 
-		string RequeueBundleEvent::getMessage() const
+		std::string RequeueBundleEvent::getMessage() const
 		{
 			return "Bundle requeued " + _bundle.toString();
 		}

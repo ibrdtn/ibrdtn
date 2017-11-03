@@ -194,7 +194,7 @@ namespace dtn
 
 				predictmap::iterator dp_it;
 				if ((dp_it = _predictmap.find(host_c)) != _predictmap.end()) {
-					dp_it->second = max(dp_it->second, p_ab * p_bc * _beta);
+					dp_it->second = std::max(dp_it->second, p_ab * p_bc * _beta);
 				} else {
 					_predictmap[host_c] = p_ab * p_bc * _beta;
 				}

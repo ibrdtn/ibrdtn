@@ -85,10 +85,6 @@ namespace dtn
 
 			void send(const DiscoveryBeacon &a, const ibrcommon::vinterface &iface, const ibrcommon::vaddress &addr);
 
-#ifndef __WIN32__
-			ibrcommon::vinterface _virtual_mcast_iface;
-#endif
-
 			ibrcommon::vsocket _socket;
 			bool _state;
 			int _port;

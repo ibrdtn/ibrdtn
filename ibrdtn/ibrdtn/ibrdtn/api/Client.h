@@ -41,7 +41,7 @@ namespace dtn
 		class ConnectionException : public ibrcommon::Exception
 		{
 		public:
-			ConnectionException(string what = "A connection error occurred.") throw() : ibrcommon::Exception(what)
+			ConnectionException(std::string what = "A connection error occurred.") throw() : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -52,7 +52,7 @@ namespace dtn
 		class ConnectionTimeoutException : public ConnectionException
 		{
 		public:
-			ConnectionTimeoutException(string what = "Timeout.") throw() : ConnectionException(what)
+			ConnectionTimeoutException(std::string what = "Timeout.") throw() : ConnectionException(what)
 			{
 			};
 		};
@@ -63,7 +63,7 @@ namespace dtn
 		class ConnectionAbortedException : public ConnectionException
 		{
 		public:
-			ConnectionAbortedException(string what = "Aborted.") throw() : ConnectionException(what)
+			ConnectionAbortedException(std::string what = "Aborted.") throw() : ConnectionException(what)
 			{
 			};
 		};

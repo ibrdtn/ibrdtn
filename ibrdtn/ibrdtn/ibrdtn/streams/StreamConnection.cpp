@@ -33,7 +33,7 @@ namespace dtn
 {
 	namespace streams
 	{
-		StreamConnection::StreamConnection(StreamConnection::Callback &cb, iostream &stream, const dtn::data::Length buffer_size)
+		StreamConnection::StreamConnection(StreamConnection::Callback &cb, std::iostream &stream, const dtn::data::Length buffer_size)
 		 : std::iostream(&_buf), _callback(cb), _buf(*this, stream, buffer_size), _shutdown_reason(CONNECTION_SHUTDOWN_NOTSET)
 		{
 		}

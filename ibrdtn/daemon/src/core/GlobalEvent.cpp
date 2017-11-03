@@ -21,7 +21,7 @@
 
 #include "core/GlobalEvent.h"
 #include "core/EventDispatcher.h"
-using namespace std;
+
 
 namespace dtn
 {

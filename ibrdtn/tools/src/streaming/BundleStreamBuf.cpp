@@ -204,7 +204,7 @@ std::char_traits<char>::int_type BundleStreamBuf::__underflow()
 	ibrcommon::BLOB::iostream stream = r.iostream();
 
 	// jump to the offset position
-	(*stream).seekg(_chunk_offset, ios::beg);
+	(*stream).seekg(_chunk_offset, std::ios::beg);
 
 	// copy the data of the last received bundle into the buffer
 	(*stream).read(&_out_buf[0], _out_buf.size());

@@ -21,6 +21,7 @@
 
 #include "ibrcommon/config.h"
 #include "ibrcommon/link/LinkManager.h"
+#include "ibrcommon/link/CompatLinkManager.h"
 #include "ibrcommon/link/LinkEvent.h"
 #include "ibrcommon/thread/MutexLock.h"
 #include "ibrcommon/Logger.h"
@@ -29,14 +30,6 @@
 #include <typeinfo>
 #include <unistd.h>
 
-#if defined HAVE_LIBNL || HAVE_LIBNL2 || HAVE_LIBNL3
-#include "ibrcommon/link/NetLinkManager.h"
-#elif __WIN32__
-#include "ibrcommon/link/Win32LinkManager.h"
-#else
-#include "ibrcommon/link/PosixLinkManager.h"
-#endif
-
 namespace ibrcommon
 {
 	// default value for LinkMonitor checks
@@ -44,14 +37,7 @@ namespace ibrcommon
 
 	LinkManager& LinkManager::getInstance()
 	{
-#if defined HAVE_LIBNL || HAVE_LIBNL2 || HAVE_LIBNL3
-		static NetLinkManager lm;
-#elif __WIN32__
-		static Win32LinkManager lm;
-#else
-		static PosixLinkManager lm;
-#endif
-
+		static CompatLinkManager lm;
 		return lm;
 	}
 

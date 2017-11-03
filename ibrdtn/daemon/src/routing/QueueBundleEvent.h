@@ -36,7 +36,7 @@ namespace dtn
 		public:
 			virtual ~QueueBundleEvent();
 
-			const string getName() const;
+			const std::string getName() const;
 
 			std::string getMessage() const;
 

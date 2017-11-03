@@ -42,11 +42,11 @@ namespace ibrcommon
 			QUEUE_TIMEOUT = 2
 		};
 
-		QueueUnblockedException(const type_t r, string what = "Queue is unblocked.") throw() : ibrcommon::Exception(what), reason(r)
+		QueueUnblockedException(const type_t r, std::string what = "Queue is unblocked.") throw() : ibrcommon::Exception(what), reason(r)
 		{
 		};
 
-		QueueUnblockedException(const ibrcommon::Conditional::ConditionalAbortException &ex, string what = "Queue is unblocked.") throw() : ibrcommon::Exception(what)
+		QueueUnblockedException(const ibrcommon::Conditional::ConditionalAbortException &ex, std::string what = "Queue is unblocked.") throw() : ibrcommon::Exception(what)
 		{
 			switch (ex.reason)
 			{

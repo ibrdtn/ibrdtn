@@ -305,12 +305,12 @@ namespace dtn
 			std::string port;
 
 			// parse parameters
-			std::vector<string> parameters = dtn::utils::Utils::tokenize(";", identifier);
-			std::vector<string>::const_iterator param_iter = parameters.begin();
+			std::vector<std::string> parameters = dtn::utils::Utils::tokenize(";", identifier);
+			std::vector<std::string>::const_iterator param_iter = parameters.begin();
 
 			while (param_iter != parameters.end())
 			{
-				std::vector<string> p = dtn::utils::Utils::tokenize("=", (*param_iter));
+				std::vector<std::string> p = dtn::utils::Utils::tokenize("=", (*param_iter));
 
 				if (p[0].compare("ip") == 0)
 				{

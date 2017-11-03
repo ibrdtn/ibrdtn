@@ -384,7 +384,7 @@ int main(int argc, char** argv)
 					out.exceptions(std::ios::badbit | std::ios::eofbit);
 					out << ref.iostream()->rdbuf();
 					out.flush();
-				} catch (const ios_base::failure&) {
+				} catch (const std::ios_base::failure&) {
 
 				}
 			}

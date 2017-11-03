@@ -39,5 +39,7 @@ version.m4
 *.lo
 *.la
 *.gcov
+*.gcno
+*.gcda
 
 Android.mk

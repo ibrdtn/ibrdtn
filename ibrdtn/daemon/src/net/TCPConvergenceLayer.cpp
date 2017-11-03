@@ -78,24 +78,7 @@ namespace dtn
 			// do not allow any futher binding if we already bound to any interface
 			if (_any_port > 0) return;
 
-			// If the port number is 0, we must obtain a valid
-			// port number from the OS. To do so we create a
-			// temporary socket (dyn_sock) on local port 0. Once
-			// this socket is up we grab its actual port number,
-			// and use this number to create the other sockets.
-			ibrcommon::tcpserversocket *dyn_sock = NULL;
-			if (port == 0) {
-			  dyn_sock = new ibrcommon::tcpserversocket(port);
-			  dyn_sock->up();
-			  port = dyn_sock->get_port();
-			  IBRCOMMON_LOGGER_TAG(TCPConvergenceLayer::TAG, info) << "Assigned local port=" << port << " dynamically (was 0)" << IBRCOMMON_LOGGER_ENDL;
-			}
-
-			if (net.isAny()) {
-				// bind to any interface
-				_vsocket.add(new ibrcommon::tcpserversocket(port));
-				_any_port = port;
-			} else if (net.isLoopback()) {
+			if (net.isLoopback()) {
 				// bind to v6 loopback address if supported
 				if (ibrcommon::basesocket::hasSupport(AF_INET6)) {
 					ibrcommon::vaddress addr6(ibrcommon::vaddress::VADDR_LOCALHOST, port, AF_INET6);
@@ -107,15 +90,6 @@ namespace dtn
 				_vsocket.add(new ibrcommon::tcpserversocket(addr4));
 			} else {
 				listen(net, port);
-			}
-
-			// If the port number has been assigned
-			// dynamically, let us close and delete the
-			// socket we created temporarily in order to
-			// obtain that port
-			if (dyn_sock != NULL) {
-			  dyn_sock->down();
-			  delete dyn_sock;
 			}
 		}
 
@@ -143,6 +117,28 @@ namespace dtn
 				{
 					ibrcommon::MutexLock l(_portmap_lock);
 					_portmap[net] = port;
+				}
+
+				if (net.isAny())
+				{
+					// Bind once to ANY interface
+				        ibrcommon::tcpserversocket *sock = new ibrcommon::tcpserversocket(port);
+					// If dynamic port assignment is required, enable the
+					// socket temporarily so as to retrieve the port number
+					// assigned by the OS
+					if (port == 0) {
+					  sock->up();
+					  port = sock->get_port();
+					  sock->down();
+					  IBRCOMMON_LOGGER_TAG(TCPConvergenceLayer::TAG, info) << "Assigned local port=" << port << " dynamically (was 0)" << IBRCOMMON_LOGGER_ENDL;
+					}
+	    			        _vsocket.add(sock);
+					_any_port = port;
+
+					ibrcommon::MutexLock l(_portmap_lock);
+					_portmap[net] = port;
+
+					return;
 				}
 
 				// create sockets for all addresses on the interface

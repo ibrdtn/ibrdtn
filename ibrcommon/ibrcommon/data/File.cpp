@@ -215,7 +215,7 @@ namespace ibrcommon
 		return !_path.empty();
 	}
 
-	string File::getPath() const
+	std::string File::getPath() const
 	{
 		return _path;
 	}
@@ -227,7 +227,7 @@ namespace ibrcommon
 
 	File File::get(const std::string &filename) const
 	{
-		stringstream ss;
+		std::stringstream ss;
 		if (!isRoot()) ss << getPath();
 		ss << FILE_DELIMITER_CHAR << filename;
 
@@ -248,13 +248,13 @@ namespace ibrcommon
 				int ret = 0;
 
 				// container for all files
-				list<File> files;
+				std::list<File> files;
 
 				// get all files in this directory
 				if ((ret = getFiles(files)) < 0)
 					return ret;
 
-				for (list<File>::iterator iter = files.begin(); iter != files.end(); ++iter)
+				for (std::list<File>::iterator iter = files.begin(); iter != files.end(); ++iter)
 				{
 					ibrcommon::File &file = (*iter);
 					if (!file.isSystem())
@@ -280,7 +280,7 @@ namespace ibrcommon
 		if (isRoot()) return (*this);
 
 		size_t pos = _path.find_last_of(FILE_DELIMITER_CHAR);
-		if (pos == string::npos) return (*this);
+		if (pos == std::string::npos) return (*this);
 		if (pos == 0) return File(FILE_DELIMITER);
 		return File(_path.substr(0, pos));
 	}

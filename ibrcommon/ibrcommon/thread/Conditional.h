@@ -43,7 +43,7 @@ namespace ibrcommon
 					COND_ERROR = 2
 				};
 
-				ConditionalAbortException(abort_t abort, string what = "Conditional has been unblocked.") throw() : ibrcommon::Exception(what), reason(abort)
+				ConditionalAbortException(abort_t abort, std::string what = "Conditional has been unblocked.") throw() : ibrcommon::Exception(what), reason(abort)
 				{
 				};
 

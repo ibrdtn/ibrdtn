@@ -34,7 +34,6 @@
 #include <sys/stat.h>
 #include "ibrcommon/Exceptions.h"
 
-using namespace std;
 
 namespace ibrcommon
 {

@@ -189,7 +189,7 @@ namespace dtn
 
 		std::string BundleID::toString() const
 		{
-			stringstream ss;
+			std::stringstream ss;
 			ss << "[" << timestamp.toString() << "." << sequencenumber.toString();
 
 			if (isFragment())

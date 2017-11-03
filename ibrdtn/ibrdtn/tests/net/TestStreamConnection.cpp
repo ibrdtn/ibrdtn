@@ -181,7 +181,7 @@ void TestStreamConnection::connectionUpDown()
 					pattern[i] = '0';
 					pattern[i] += i % 10;
 				}
-				string chunk=string(pattern,2048);
+				std::string chunk = std::string(pattern,2048);
 
 				while (size > 2048) {
 					(*stream) << chunk;

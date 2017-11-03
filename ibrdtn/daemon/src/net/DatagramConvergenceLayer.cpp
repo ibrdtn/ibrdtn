@@ -257,7 +257,7 @@ namespace dtn
 			if (iface != _service->getInterface()) return;
 
 			// serialize announcement
-			stringstream ss;
+			std::stringstream ss;
 			ss << beacon;
 
 			std::streamsize len = ss.str().size();
@@ -312,7 +312,7 @@ namespace dtn
 
 						DiscoveryBeacon beacon = agent.obtainBeacon();
 
-						stringstream ss;
+						std::stringstream ss;
 						ss.write(&data[0], len);
 						ss >> beacon;
 

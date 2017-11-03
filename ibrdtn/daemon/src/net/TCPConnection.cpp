@@ -496,7 +496,7 @@ namespace dtn
 					(*getProtocolStream()).shutdown(dtn::streams::StreamConnection::CONNECTION_SHUTDOWN_ERROR);
 				} catch (const ibrcommon::Exception&) {};
 				throw;
-			} catch (const bad_cast&) { };
+			} catch (const std::bad_cast&) { };
 		}
 
 		void TCPConnection::run() throw ()

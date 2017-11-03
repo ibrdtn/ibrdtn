@@ -311,7 +311,7 @@ void ConfigurationTest::setUp()
 {
 	ibrcommon::File _tmp("/tmp/dtnd.config");
 
-	fstream stream(_tmp.getPath().c_str(), ios::out);
+	std::fstream stream(_tmp.getPath().c_str(), std::ios::out);
 	stream << "local_uri = dtn://node.dtn" << std::endl
 		<< "blob_path = /tmp" << std::endl
 		<< "storage_path = /var/spool/ibrdtn/bundles" << std::endl

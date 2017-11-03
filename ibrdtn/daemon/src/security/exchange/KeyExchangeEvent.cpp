@@ -99,6 +99,6 @@ namespace dtn
 			dtn::core::EventDispatcher<KeyExchangeEvent>::queue( new KeyExchangeEvent(eid.getNode(), data) );
 		}
 
-		const string KeyExchangeEvent::className = "KeyExchangeEvent";
+		const std::string KeyExchangeEvent::className = "KeyExchangeEvent";
 	} /* namespace security */
 } /* namespace dtn */

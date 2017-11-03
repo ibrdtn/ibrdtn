@@ -61,7 +61,7 @@ namespace dtn
 		class P2PDialupException : public ibrcommon::Exception
 		{
 			public:
-				P2PDialupException(string what = "No path known except of dial-up connections.") throw() : Exception(what)
+				P2PDialupException(std::string what = "No path known except of dial-up connections.") throw() : Exception(what)
 				{
 				};
 		};

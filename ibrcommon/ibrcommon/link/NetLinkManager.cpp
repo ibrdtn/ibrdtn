@@ -253,6 +253,12 @@ namespace ibrcommon
 
 	NetLinkManager::netlinkcache::~netlinkcache()
 	{
+		if (_nl_handle != NULL)
+		{
+			// delete the socket
+			nl_socket_free((struct nl_sock*)_nl_handle);
+			_nl_handle = NULL;
+		}
 	}
 
 	void NetLinkManager::netlinkcache::up() throw (socket_exception)
@@ -315,6 +321,7 @@ namespace ibrcommon
 #if defined HAVE_LIBNL2 || HAVE_LIBNL3
 		// delete the socket
 		nl_socket_free((struct nl_sock*)_nl_handle);
+		_nl_handle = NULL;
 #endif
 
 		// mark this socket as down
@@ -376,8 +383,16 @@ namespace ibrcommon
 		_route_cache.add("route/link");
 		_route_cache.add("route/addr");
 
-		// initialize the netlink cache
-		_route_cache.up();
+		try {
+			// initialize the netlink cache
+			_route_cache.up();
+		} catch (const ibrcommon::socket_exception &e) {
+			// join on errors
+			join();
+
+			// re-throw the original exception
+			throw;
+		}
 	}
 
 	NetLinkManager::~NetLinkManager()
@@ -429,7 +444,7 @@ namespace ibrcommon
 					try {
 						netlinkcache &cache = dynamic_cast<netlinkcache&>(**iter);
 						cache.receive();
-					} catch (const bad_cast&) { };
+					} catch (const std::bad_cast&) { };
 				}
 			}
 		} catch (const socket_exception&) {

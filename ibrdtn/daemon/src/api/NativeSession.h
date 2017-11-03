@@ -42,7 +42,7 @@ namespace dtn
 		class NativeSessionException : public ibrcommon::Exception
 		{
 		public:
-			NativeSessionException(string what = "An error happened.") throw() : ibrcommon::Exception(what)
+			NativeSessionException(std::string what = "An error happened.") throw() : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -50,7 +50,7 @@ namespace dtn
 		class BundleNotFoundException : public ibrcommon::Exception
 		{
 		public:
-			BundleNotFoundException(string what = "Bundle not found.") throw() : ibrcommon::Exception(what)
+			BundleNotFoundException(std::string what = "Bundle not found.") throw() : ibrcommon::Exception(what)
 			{
 			};
 		};

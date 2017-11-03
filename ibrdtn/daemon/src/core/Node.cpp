@@ -29,7 +29,6 @@
 #include <iostream>
 #include <sstream>
 
-using namespace std;
 
 namespace dtn
 {
@@ -47,12 +46,12 @@ namespace dtn
 		void Node::URI::decode(std::string &address, unsigned int &port) const
 		{
 			// parse parameters
-			std::vector<string> parameters = dtn::utils::Utils::tokenize(";", value);
-			std::vector<string>::const_iterator param_iter = parameters.begin();
+			std::vector<std::string> parameters = dtn::utils::Utils::tokenize(";", value);
+			std::vector<std::string>::const_iterator param_iter = parameters.begin();
 
 			while (param_iter != parameters.end())
 			{
-				std::vector<string> p = dtn::utils::Utils::tokenize("=", (*param_iter));
+				std::vector<std::string> p = dtn::utils::Utils::tokenize("=", (*param_iter));
 
 				if (p[0].compare("ip") == 0 || p[0].compare("email") == 0)
 				{

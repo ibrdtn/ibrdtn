@@ -68,8 +68,8 @@ namespace dtn
 			/**
 			 * statistic methods
 			 */
-			typedef std::pair<string, string> stats_pair;
-			typedef std::map<string, string> stats_data;
+			typedef std::pair<std::string, std::string> stats_pair;
+			typedef std::map<std::string, std::string> stats_data;
 
 			virtual void resetStats();
 

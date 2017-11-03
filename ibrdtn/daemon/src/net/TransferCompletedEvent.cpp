@@ -44,7 +44,7 @@ namespace dtn
 			dtn::core::EventDispatcher<TransferCompletedEvent>::queue( new TransferCompletedEvent(peer, bundle) );
 		}
 
-		const string TransferCompletedEvent::getName() const
+		const std::string TransferCompletedEvent::getName() const
 		{
 			return "TransferCompletedEvent";
 		}
@@ -59,7 +59,7 @@ namespace dtn
 			return _bundle;
 		}
 
-		string TransferCompletedEvent::getMessage() const
+		std::string TransferCompletedEvent::getMessage() const
 		{
 			return "transfer of bundle " + _bundle.toString() + " to " + _peer.getString() + " completed";
 		}

@@ -70,7 +70,7 @@ public:
   void run() throw ()
   {
     sleep(delay_);
-    cout << "Terminating daemon as planned\n";
+    std::cout << "Terminating daemon as planned\n";
     (*f_)(SIGINT);
   }
   void __cancellation() throw () {}
@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
 	// generator with this value
 	long seed = conf.getDaemon().seed();
 	if (seed != -1) {
-	  cout << "Setting random seed: " << seed << "\n";
+	  std::cout << "Setting random seed: " << seed << "\n";
 	  srandom(seed);
 	}
 	
@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
 	  ::gettimeofday(&now, NULL);
 	  long delay = start_time - (now.tv_sec * 1000);
 	  if (delay > 0) {
-	    cout << "Start deferred by " << delay << " ms\n";
+	    std::cout << "Start deferred by " << delay << " ms\n";
 	    ibrcommon::Thread::sleep(delay);
 	  }
 	}
@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
 	  ::gettimeofday(&now, NULL);
 	  long delay = stop_time - (now.tv_sec * 1000);
 	  if (delay > 0) {
-	    cout << "Will terminate in " << delay << " ms\n";
+	    std::cout << "Will terminate in " << delay << " ms\n";
 	    TerminationThread *t_thread = new TerminationThread(delay, func_sighandler);
 	    t_thread->start();
 	  }

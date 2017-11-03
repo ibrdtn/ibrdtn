@@ -35,7 +35,7 @@ namespace dtn
 		{
 			// trim trailing spaces
 			std::string::size_type endpos = str.find_last_not_of(" \t");
-			if( string::npos != endpos )
+			if( std::string::npos != endpos )
 			{
 				str = str.substr( 0, endpos+1 );
 			}
@@ -45,7 +45,7 @@ namespace dtn
 		{
 			// trim leading spaces
 			std::string::size_type startpos = str.find_first_not_of(" \t");
-			if( string::npos != startpos )
+			if( std::string::npos != startpos )
 			{
 				str = str.substr( startpos );
 			}
@@ -67,7 +67,7 @@ namespace dtn
 
 			std::string::size_type tokenPos = 0;
 
-			while (pos != string::npos)
+			while (pos != std::string::npos)
 			{
 				if (l.size() >= max)
 				{

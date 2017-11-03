@@ -375,7 +375,7 @@ namespace dtn
 							ibrcommon::MutexLock l(_expire_lock);
 							next_expire = 1;
 						}
-					} catch (const bad_cast&) { };
+					} catch (const std::bad_cast&) { };
 
 					try {
 						dynamic_cast<ClearRoutesTask&>(*t);
@@ -391,7 +391,7 @@ namespace dtn
 
 						ibrcommon::MutexLock l(_expire_lock);
 						next_expire = 0;
-					} catch (const bad_cast&) { };
+					} catch (const std::bad_cast&) { };
 
 					try {
 						const ExpireTask &task = dynamic_cast<ExpireTask&>(*t);
@@ -421,7 +421,7 @@ namespace dtn
 								++iter;
 							}
 						}
-					} catch (const bad_cast&) { };
+					} catch (const std::bad_cast&) { };
 
 				} catch (const std::exception &ex) {
 					IBRCOMMON_LOGGER_DEBUG_TAG(StaticRoutingExtension::TAG, 15) << "terminated due to " << ex.what() << IBRCOMMON_LOGGER_ENDL;

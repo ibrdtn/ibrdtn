@@ -46,7 +46,7 @@ void print_help()
 	std::cout << " -G               Destination is a group" << std::endl;
 	std::cout << " -C <bytes>       Set the max. chunk size (max. size of each bundle)" << std::endl;
 	std::cout << " -c <bytes>       Set the min. chunk size (min. size of each bundle)" << std::endl;
-	std::cout << " -p <0..2>        Set the bundle priority (0 = low, 1 = normal, 2 = high)" << endl;
+	std::cout << " -p <0..2>        Set the bundle priority (0 = low, 1 = normal, 2 = high)" << std::endl;
 	std::cout << " -l <seconds>     Set the lifetime of stream chunks default: 30" << std::endl;
 	std::cout << " -E               Request encryption on the bundle layer" << std::endl;
 	std::cout << " -S               Request signature on the bundle layer" << std::endl;

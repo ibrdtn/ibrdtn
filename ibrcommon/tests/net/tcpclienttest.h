@@ -25,7 +25,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-using namespace std;
 
 class tcpclienttest : public CPPUNIT_NS :: TestFixture
 {

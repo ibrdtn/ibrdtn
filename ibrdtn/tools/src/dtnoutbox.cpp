@@ -68,9 +68,9 @@ public:
 	{}
 
 	//global conf values
-	string name;
-	string outbox;
-	string destination;
+	std::string name;
+	std::string outbox;
+	std::string destination;
 
 	//optional paramters
 	std::string workdir;

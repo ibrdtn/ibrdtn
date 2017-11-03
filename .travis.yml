@@ -9,6 +9,7 @@ matrix:
 
 before_install:
   - sudo apt-get update -qq
+  - pip install --user cpp-coveralls
 
 install:
   - sudo apt-get install build-essential libssl-dev libz-dev libsqlite3-dev libcurl4-gnutls-dev libdaemon-dev automake autoconf pkg-config libtool libcppunit-dev libnl-3-dev libnl-cli-3-dev libnl-genl-3-dev libnl-nf-3-dev libnl-route-3-dev libarchive-dev
@@ -20,12 +21,12 @@ before_script:
   - cd ibrdtn
 
 script:
-  - CONFIGURE_OPTS="--with-cppunit --with-openssl --with-curl --with-lowpan --with-sqlite --with-compression --with-xml --with-tls --with-dht --enable-debug --disable-netlink"
+  - CONFIGURE_OPTS="--with-openssl --with-curl --with-lowpan --with-sqlite --with-compression --with-xml --with-tls --with-dht --enable-debug"
   - ./autogen.sh
   - if [ "${DO_COVERAGE}" == "yes" ]; then
-      ./configure-dev ${CONFIGURE_OPTS} --enable-gcov;
+      ./configure ${CONFIGURE_OPTS} --enable-gcov;
     else
-      ./configure-dev ${CONFIGURE_OPTS};
+      ./configure ${CONFIGURE_OPTS};
     fi
   - make
   - make check

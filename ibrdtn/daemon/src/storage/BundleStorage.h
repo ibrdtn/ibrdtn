@@ -47,7 +47,7 @@ namespace dtn
 			class BundleLoadException : public NoBundleFoundException
 			{
 			public:
-				BundleLoadException(string what = "Error while loading bundle data.") throw() : NoBundleFoundException(what)
+				BundleLoadException(std::string what = "Error while loading bundle data.") throw() : NoBundleFoundException(what)
 				{
 				};
 			};
@@ -55,7 +55,7 @@ namespace dtn
 			class StorageSizeExeededException : public ibrcommon::Exception
 			{
 			public:
-				StorageSizeExeededException(string what = "No space left in the storage.") throw() : ibrcommon::Exception(what)
+				StorageSizeExeededException(std::string what = "No space left in the storage.") throw() : ibrcommon::Exception(what)
 				{
 				};
 			};

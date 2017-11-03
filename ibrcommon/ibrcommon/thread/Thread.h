@@ -36,7 +36,7 @@ namespace ibrcommon
 	class ThreadException : public ibrcommon::Exception
 	{
 	public:
-		ThreadException(int err = 0, string what = "An error occured during a thread operation.") throw() : ibrcommon::Exception(what), error(err)
+		ThreadException(int err = 0, std::string what = "An error occured during a thread operation.") throw() : ibrcommon::Exception(what), error(err)
 		{
 		};
 

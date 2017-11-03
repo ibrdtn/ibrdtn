@@ -39,7 +39,7 @@ namespace dtn
 		class FragmentationAbortedException : public ibrcommon::Exception
 		{
 		public:
-			FragmentationAbortedException(string what = "Fragmentation aborted.") throw() : ibrcommon::Exception(what)
+			FragmentationAbortedException(std::string what = "Fragmentation aborted.") throw() : ibrcommon::Exception(what)
 			{
 			}
 		};
@@ -47,7 +47,7 @@ namespace dtn
 		class FragmentationProhibitedException : public FragmentationAbortedException
 		{
 		public:
-			FragmentationProhibitedException(string what = "Fragmentation is prohibited.") throw() : FragmentationAbortedException(what)
+			FragmentationProhibitedException(std::string what = "Fragmentation is prohibited.") throw() : FragmentationAbortedException(what)
 			{
 			}
 		};
@@ -55,7 +55,7 @@ namespace dtn
 		class FragmentationNotNecessaryException : public FragmentationAbortedException
 		{
 		public:
-			FragmentationNotNecessaryException(string what = "Fragmentation is not necessary.") throw() : FragmentationAbortedException(what)
+			FragmentationNotNecessaryException(std::string what = "Fragmentation is not necessary.") throw() : FragmentationAbortedException(what)
 			{
 			}
 		};

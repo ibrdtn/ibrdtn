@@ -46,7 +46,7 @@ namespace dtn
 		class NodeNotAvailableException : public ibrcommon::Exception
 		{
 		public:
-			NodeNotAvailableException(string what = "The requested node is not a neighbor.") throw() : ibrcommon::Exception(what)
+			NodeNotAvailableException(std::string what = "The requested node is not a neighbor.") throw() : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -54,7 +54,7 @@ namespace dtn
 		class ConnectionNotAvailableException : public ibrcommon::Exception
 		{
 		public:
-			ConnectionNotAvailableException(string what = "The requested connection is not available.") throw() : ibrcommon::Exception(what)
+			ConnectionNotAvailableException(std::string what = "The requested connection is not available.") throw() : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -106,7 +106,7 @@ namespace dtn
 			class ShutdownException : public ibrcommon::Exception
 			{
 			public:
-				ShutdownException(string what = "System shutdown") throw() : ibrcommon::Exception(what)
+				ShutdownException(std::string what = "System shutdown") throw() : ibrcommon::Exception(what)
 				{
 				};
 			};

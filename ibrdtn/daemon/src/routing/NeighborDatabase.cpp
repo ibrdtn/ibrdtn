@@ -181,7 +181,7 @@ namespace dtn
 
 		void NeighborDatabase::NeighborEntry::putDataset(NeighborDataset &dset)
 		{
-			pair<data_set::iterator, bool> ret = _datasets.insert( dset );
+			std::pair<data_set::iterator, bool> ret = _datasets.insert( dset );
 
 			if (!ret.second) {
 				_datasets.erase(ret.first);
@@ -210,7 +210,7 @@ namespace dtn
 			if (iter == _entries.end())
 			{
 				NeighborEntry *entry = new NeighborEntry(eid);
-				pair<neighbor_map::iterator,bool> itm = _entries.insert( pair<dtn::data::EID, NeighborDatabase::NeighborEntry*>(eid, entry) );
+				std::pair<neighbor_map::iterator,bool> itm = _entries.insert( std::pair<dtn::data::EID, NeighborDatabase::NeighborEntry*>(eid, entry) );
 				iter = itm.first;
 			}
 

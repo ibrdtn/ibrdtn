@@ -84,7 +84,7 @@ namespace dtn
 
 			// wait for magic
 			stream.read(magic, 4); magic[4] = '\0';
-			string str_magic(magic);
+			std::string str_magic(magic);
 
 			if (str_magic != "dtn!")
 			{

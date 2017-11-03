@@ -227,7 +227,7 @@ namespace dtn
 			// check Scope Control Block - do not forward bundles with hop limit == 0
 			if (meta.hopcount == 0)
 			{
-				return make_pair(false, dtn::core::Node::CONN_UNDEFINED);
+				return std::make_pair(false, dtn::core::Node::CONN_UNDEFINED);
 			}
 
 			if (meta.get(dtn::data::PrimaryBlock::DESTINATION_IS_SINGLETON))
@@ -235,13 +235,13 @@ namespace dtn
 				// do not forward local bundles
 				if (meta.destination.sameHost(dtn::core::BundleCore::local))
 				{
-					return make_pair(false, dtn::core::Node::CONN_UNDEFINED);
+					return std::make_pair(false, dtn::core::Node::CONN_UNDEFINED);
 				}
 
 				// do not forward bundles for other nodes
 				if (!meta.destination.sameHost(n.eid))
 				{
-					return make_pair(false, dtn::core::Node::CONN_UNDEFINED);
+					return std::make_pair(false, dtn::core::Node::CONN_UNDEFINED);
 				}
 
 				// request limits from neighbor database
@@ -252,20 +252,20 @@ namespace dtn
 					if ((limits.getLimit(RoutingLimitations::LIMIT_BLOCKSIZE) > 0) &&
 						((size_t)limits.getLimit(RoutingLimitations::LIMIT_BLOCKSIZE) < meta.getPayloadLength()))
 					{
-						return make_pair(false, dtn::core::Node::CONN_UNDEFINED);
+						return std::make_pair(false, dtn::core::Node::CONN_UNDEFINED);
 					}
 				} catch (const NeighborDatabase::DatasetNotAvailableException&) { }
 			}
 			else
 			{
 				// do not forward non-singleton bundles
-				return make_pair(false, dtn::core::Node::CONN_UNDEFINED);
+				return std::make_pair(false, dtn::core::Node::CONN_UNDEFINED);
 			}
 
 			// do not forward bundles already known by the destination
 			if (n.has(meta))
 			{
-				return make_pair(false, dtn::core::Node::CONN_UNDEFINED);
+				return std::make_pair(false, dtn::core::Node::CONN_UNDEFINED);
 			}
 
 			// update filter context
@@ -288,11 +288,11 @@ namespace dtn
 				if (ret == dtn::core::BundleFilter::ACCEPT)
 				{
 					// put the selected bundle with targeted interface into the result-set
-					return make_pair(true, p);
+					return std::make_pair(true, p);
 				}
 			}
 
-			return make_pair(false, dtn::core::Node::CONN_UNDEFINED);
+			return std::make_pair(false, dtn::core::Node::CONN_UNDEFINED);
 		}
 
 		void NeighborRoutingExtension::eventDataChanged(const dtn::data::EID &peer) throw ()

@@ -40,7 +40,7 @@ namespace dtn
 {
 	namespace streams
 	{
-		class StreamConnection : public iostream
+		class StreamConnection : public std::iostream
 		{
 		public:
 			enum ConnectionShutdownCases
@@ -72,7 +72,7 @@ namespace dtn
 			class StreamClosedException : public ibrcommon::IOException
 			{
 			public:
-				StreamClosedException(string what = "The stream has been closed.") throw() : IOException(what)
+				StreamClosedException(std::string what = "The stream has been closed.") throw() : IOException(what)
 				{
 				};
 			};
@@ -80,7 +80,7 @@ namespace dtn
 			class StreamErrorException : public ibrcommon::IOException
 			{
 			public:
-				StreamErrorException(string what = "StreamError") throw() : IOException(what)
+				StreamErrorException(std::string what = "StreamError") throw() : IOException(what)
 				{
 				};
 			};
@@ -88,7 +88,7 @@ namespace dtn
 			class StreamShutdownException : public ibrcommon::IOException
 			{
 			public:
-				StreamShutdownException(string what = "Shutdown message received.") throw() : IOException(what)
+				StreamShutdownException(std::string what = "Shutdown message received.") throw() : IOException(what)
 				{
 				};
 			};
@@ -96,6 +96,11 @@ namespace dtn
 			class Callback
 			{
 			public:
+			/**
+			 * Destructor of the Callback class.
+			 * @return
+			 */
+				virtual ~Callback() {};
 				/**
 				 * This method is called if a SHUTDOWN message is
 				 * received.
@@ -153,7 +158,7 @@ namespace dtn
 			 * @param cb Callback object for events of this stream
 			 * @param stream The underlying stream object
 			 */
-			StreamConnection(StreamConnection::Callback &cb, iostream &stream, const dtn::data::Length buffer_size = 4096);
+			StreamConnection(StreamConnection::Callback &cb, std::iostream &stream, const dtn::data::Length buffer_size = 4096);
 
 			/**
 			 * Destructor of the StreamConnection class
@@ -227,7 +232,7 @@ namespace dtn
 				/**
 				 * constructor
 				 */
-				StreamBuffer(StreamConnection &conn, iostream &stream, const dtn::data::Length buffer_size = 1024);
+				StreamBuffer(StreamConnection &conn, std::iostream &stream, const dtn::data::Length buffer_size = 1024);
 				virtual ~StreamBuffer();
 
 				/**

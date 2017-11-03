@@ -340,7 +340,7 @@ namespace dtn
 
 				stream.get((char&)announcement._flags);
 
-				IBRCOMMON_LOGGER_DEBUG_TAG("DiscoveryBeacon", 85) << "beacon flags: " << hex << (int)announcement._flags << IBRCOMMON_LOGGER_ENDL;
+				IBRCOMMON_LOGGER_DEBUG_TAG("DiscoveryBeacon", 85) << "beacon flags: " << std::hex << (int)announcement._flags << IBRCOMMON_LOGGER_ENDL;
 
 				uint16_t sn = 0;
 				stream.read((char*)&sn, 2);
@@ -442,7 +442,7 @@ namespace dtn
 
 		std::string DiscoveryBeacon::toString() const
 		{
-			stringstream ss;
+			std::stringstream ss;
 			ss << "ANNOUNCE: " << _canonical_eid.getString();
 			return ss.str();
 		}
