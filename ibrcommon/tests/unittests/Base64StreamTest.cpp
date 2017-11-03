@@ -67,7 +67,7 @@ void Base64StreamTest::testFileReference()
 
 	// open reference file
 	std::string filename("../base64-enc.dat");
-	std::ifstream f(filename);
+	std::ifstream f(filename.c_str());
 	CPPUNIT_ASSERT_MESSAGE("Error reading file: " + filename, f.good());
 
 	// decode the data
