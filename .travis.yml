@@ -1,27 +1,59 @@
 language: cpp
 
+env:
+  global:
+    - MAKEFLAGS="-j 2"
+
 matrix:
   include:
     - compiler: gcc
       env: DO_COVERAGE=yes
+    - compiler: gcc
+      env: DO_COVERAGE=no CONFIGURE_OPTS_EXTRA="--disable-netlink"
     - compiler: clang
-      env: DO_COVERAGE=no
+      env: DO_COVERAGE=no CONFIGURE_OPTS_EXTRA="--without-vmime --disable-dtndht"
+    - compiler: clang
+      env: DO_COVERAGE=no CONFIGURE_OPTS_EXTRA="--disable-netlink --without-vmime --disable-dtndht"
+
+addons:
+  apt:
+    sources:
+    - sourceline: 'deb https://dl.bintray.com/ibrdtn/deb xenial main'
+      key_url: 'https://bintray.com/user/downloadSubjectPublicKey?username=ibrdtn'
+    packages:
+    - build-essential
+    - libssl-dev
+    - libz-dev
+    - libsqlite3-dev
+    - libcurl4-gnutls-dev
+    - libdaemon-dev
+    - automake
+    - autoconf
+    - pkg-config
+    - libtool
+    - libcppunit-dev
+    - libnl-3-dev
+    - libnl-cli-3-dev
+    - libnl-genl-3-dev
+    - libnl-nf-3-dev
+    - libnl-route-3-dev
+    - libarchive-dev
+    - libvmime-dev
+    - libxml2-dev
+    - dtndht-dev
+    - dtndht1
+    - git
 
 before_install:
-  - sudo apt-get update -qq
   - pip install --user cpp-coveralls
 
-install:
-  - sudo apt-get install build-essential libssl-dev libz-dev libsqlite3-dev libcurl4-gnutls-dev libdaemon-dev automake autoconf pkg-config libtool libcppunit-dev libnl-3-dev libnl-cli-3-dev libnl-genl-3-dev libnl-nf-3-dev libnl-route-3-dev libarchive-dev
-  - if [ "${DO_COVERAGE}" == "yes" ]; then
-      sudo pip install cpp-coveralls;
-    fi
-
 before_script:
+  - git clone https://github.com/madscientist42/tffs-lib
+  - make -C tffs-lib
   - cd ibrdtn
 
 script:
-  - CONFIGURE_OPTS="--with-openssl --with-curl --with-lowpan --with-sqlite --with-compression --with-xml --with-tls --with-dht --enable-debug"
+  - CONFIGURE_OPTS="${CONFIGURE_OPTS_EXTRA} --with-tffs=$(pwd)/../tffs-lib --with-openssl --with-curl --with-lowpan --with-sqlite --with-compression --with-xml --with-tls --with-dht"
   - ./autogen.sh
   - if [ "${DO_COVERAGE}" == "yes" ]; then
       ./configure ${CONFIGURE_OPTS} --enable-gcov;
@@ -37,4 +69,3 @@ after_success:
       rm $(find -name '*.gcno' | grep -v '.libs');
       coveralls -r $(pwd)/ibrdtn --exclude ibrcommon/tests --exclude ibrdtn/tests --exclude daemon/tests --exclude tools --gcov-options '\-lp';
     fi
-

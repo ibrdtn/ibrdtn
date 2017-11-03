@@ -51,6 +51,7 @@ namespace dtn
 		public:
 			class OnChangeListener {
 			public:
+				virtual ~OnChangeListener() { };
 				virtual void onConfigurationChanged(const dtn::daemon::Configuration &conf) throw () = 0;
 			};
 
@@ -158,6 +159,8 @@ namespace dtn
 
 			class Extension
 			{
+			public:
+				virtual ~Extension() { }
 			protected:
 				virtual void load(const ibrcommon::ConfigFile &conf) = 0;
 			};

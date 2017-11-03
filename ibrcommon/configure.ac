@@ -51,6 +51,10 @@ AC_SUBST(GENERIC_LIBRARY_VERSION)
 AC_SUBST(GENERIC_LIBRARY_NAME)
 AC_SUBST(GENERIC_VERSION)
 
+dnl Drops autotools defaults but keeps user-specific options.
+: ${CFLAGS=""}
+: ${CXXFLAGS=""}
+
 dnl -----------------------------------------------
 dnl Checks for programs.
 dnl -----------------------------------------------
@@ -207,8 +211,13 @@ ANDROID_AC_BUILD([
 	AC_ARG_ENABLE(debug,
 	AC_HELP_STRING([--enable-debug], [Turn on debugging symbols.]),
 	[
-		CPPFLAGS="${CPPFLAGS} -ggdb -g3 -Wall -Wextra -pedantic -Wconversion -D__DEVELOPMENT_ASSERTIONS__"
-		CFLAGS="${CFLAGS} -ggdb -g3 -Wall -Wextra -pedantic -Wconversion -D__DEVELOPMENT_ASSERTIONS__"
+		CPPFLAGS="${CPPFLAGS} -ggdb -g3 -O0 -Wall -Wextra -pedantic -Wconversion -D__DEVELOPMENT_ASSERTIONS__ -pipe"
+		CFLAGS="${CFLAGS} -ggdb -g3 -O0 -Wall -Wextra -pedantic -Wconversion -D__DEVELOPMENT_ASSERTIONS__ -pipe"
+		AC_MSG_NOTICE([Debug symbols enabled, optimizations off])
+	], [
+		CPPFLAGS="${CPPFLAGS} -O3 -g -pipe"
+		CFLAGS="${CFLAGS} -O3 -g -pipe"
+		AC_MSG_NOTICE([Building with optimizations])
 	])
 
 	dnl -----------------------------------------------

@@ -3,11 +3,8 @@
 
 set -e
 
-# by default cppunit framework is included for unit testing
-CONF_PARAMS="--with-cppunit"
-
 # include openssl library
-CONF_PARAMS="${CONF_PARAMS} --with-openssl"
+CONF_PARAMS="--with-openssl"
 
 # include curl library
 CONF_PARAMS="${CONF_PARAMS} --with-curl"
@@ -29,9 +26,6 @@ CONF_PARAMS="${CONF_PARAMS} --with-tls"
 
 # include dtndht library
 CONF_PARAMS="${CONF_PARAMS} --with-dht"
-
-# include libtffs
-CONF_PARAMS="${CONF_PARAMS} --with-tffs=/usr"
 
 # enable debugging options
 CONF_PARAMS="${CONF_PARAMS} --enable-debug"

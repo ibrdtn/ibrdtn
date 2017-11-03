@@ -452,10 +452,10 @@ namespace dtn
 							if ((*i)->getIdentifier() == cd.id)
 							{
 								IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConvergenceLayer::TAG, 10) << "Down: " << cd.id << IBRCOMMON_LOGGER_ENDL;
-								_connections.erase(i);
 
 								// delete the connection
 								delete (*i);
+								_connections.erase(i);
 
 								// signal the modified connection list
 								_cond_connections.signal(true);

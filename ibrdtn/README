@@ -9,12 +9,16 @@ sudo apt-get install build-essential libssl-dev libz-dev libsqlite3-dev \
   libarchive-dev
 
 optional:
-  libttfs (not a package, sources at http://code.google.com/p/tffs-lib/)
+  libvmime-dev
+  libxml2-dev
+  dtndht-dev (available at https://bintray.com/ibrdtn/deb)
+  libttfs (available at http://code.google.com/p/tffs-lib/ or
+          https://github.com/madscientist42/tffs-lib)
 
 ### Compilation with debugging symbols ###
 
-The old "--enable-debug" option has been removed. To compile the whole
-code with debugging symbols use the additional CXXFLAGS with configure.
+Simply configure the sources with "--enable-debug" to compile the whole
+code with debugging symbols.
 
-./configure CXXFLAGS="-ggdb"
+./configure --enable-debug
 make

@@ -24,6 +24,7 @@
 #include <iostream>
 #include <iomanip>
 #include <stdlib.h>
+#include <vector>
 
 #ifdef HAVE_LIBDAEMON
 #include <libdaemon/daemon.h>
@@ -180,8 +181,8 @@ class TUN2BundleGateway : public dtn::api::Client
 		void process(const dtn::data::EID &endpoint, unsigned int lifetime = 60) {
 			if (_fd == -1) throw ibrcommon::Exception("Tunnel closed.");
 
-			char data[65536];
-			ssize_t ret = ::read(_fd, data, sizeof(data));
+			std::vector<char> buffer(65536);
+			ssize_t ret = ::read(_fd, &buffer[0], buffer.size());
 
 			if (ret == -1) {
 				throw ibrcommon::Exception("Error: failed to read from tun device");
@@ -193,7 +194,7 @@ class TUN2BundleGateway : public dtn::api::Client
 			ibrcommon::BLOB::Reference blob = ibrcommon::BLOB::create();
 
 			// add the data
-			blob.iostream()->write(data, ret);
+			blob.iostream()->write(&buffer[0], ret);
 
 			// create a new bundle
 			dtn::data::Bundle b;
@@ -229,11 +230,11 @@ class TUN2BundleGateway : public dtn::api::Client
 		{
 			ibrcommon::BLOB::Reference ref = b.find<dtn::data::PayloadBlock>().getBLOB();
 			ibrcommon::BLOB::iostream stream = ref.iostream();
-			char data[65536];
-			stream->read(data, sizeof(data));
+			std::vector<char> buffer(65536);
+			stream->read(&buffer[0], buffer.size());
 			size_t ret = stream->gcount();
 
-			if (::write(_fd, data, ret) < 0)
+			if (::write(_fd, &buffer[0], ret) < 0)
 			{
 				IBRCOMMON_LOGGER_TAG("Core", error) << "Error while writing" << IBRCOMMON_LOGGER_ENDL;
 			}

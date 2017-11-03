@@ -87,6 +87,7 @@ namespace dtn
 			class Callback
 			{
 			public:
+				virtual ~Callback() { };
 				virtual void eventDataStorageStored(const Hash &hash) = 0;
 				virtual void eventDataStorageStoreFailed(const Hash &hash, const ibrcommon::Exception&) = 0;
 				virtual void eventDataStorageRemoved(const Hash &hash) = 0;

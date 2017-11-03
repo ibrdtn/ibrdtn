@@ -340,8 +340,8 @@ namespace ibrcommon {
 	 */
 	class tcpserversocket : public serversocket {
 	public:
-		tcpserversocket(const int port, int listen = 0);
-		tcpserversocket(const vaddress &address, int listen = 0);
+		tcpserversocket(const int port, int listen = 2);
+		tcpserversocket(const vaddress &address, int listen = 2);
 		virtual ~tcpserversocket();
 		virtual void up() throw (socket_exception);
 		virtual void down() throw (socket_exception);

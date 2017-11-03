@@ -23,6 +23,7 @@
 #define TCPCONNECTION_H_
 
 #include "core/NodeEvent.h"
+#include "net/BundleTransfer.h"
 
 #include <ibrdtn/data/Bundle.h>
 #include <ibrdtn/data/EID.h>
