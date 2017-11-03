@@ -1,5 +1,5 @@
 /*
- * NetLinkManager.h
+ * CompatLinkManager.h
  *
  * Copyright (C) 2017 IBR, TU Braunschweig
  *

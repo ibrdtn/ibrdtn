@@ -60,7 +60,7 @@ class tcpstreamtest : public CPPUNIT_NS :: TestFixture
 
 	protected:
 		void baseTest (void);
-		void runTest (void);
+		bool runTest (const int port);
 };
 
 #endif /* TCPSTREAMTEST_H_ */

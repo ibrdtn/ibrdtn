@@ -23,6 +23,7 @@
 #include <errno.h>
 #include <string.h>
 #include <netdb.h>
+#include <iostream>
 
 namespace ibrcommon
 {
@@ -83,8 +84,8 @@ namespace ibrcommon
 
 		if ((status != 0) || (ifap == NULL))
 		{
-			// error, return with default address
-			throw ibrcommon::Exception("can not iterate through interfaces");
+			// Note: getifaddrs fails for IPv6-only systems, enable netlink instead.
+			throw ibrcommon::Exception("can not obtain interface addresses");
 		}
 
 		for (struct ifaddrs *iter = ifap; iter != NULL; iter = iter->ifa_next, i++)

@@ -23,10 +23,12 @@
 #include "ibrdtn/data/CompressedPayloadBlock.h"
 #include "ibrdtn/data/PayloadBlock.h"
 #include <ibrcommon/data/BLOB.h>
+
 #include <cassert>
+#include <vector>
 
 #ifdef HAVE_ZLIB
-#include "zlib.h"
+#include <zlib.h>
 #endif
 
 namespace dtn
@@ -165,8 +167,8 @@ namespace dtn
 
 					int ret, flush;
 					uInt have;
-					unsigned char in[CHUNK_SIZE];
-					unsigned char out[CHUNK_SIZE];
+					std::vector<unsigned char> in(CHUNK_SIZE);
+					std::vector<unsigned char> out(CHUNK_SIZE);
 					z_stream strm;
 
 					/* allocate deflate state */
@@ -179,15 +181,15 @@ namespace dtn
 					if (ret != Z_OK) throw ibrcommon::Exception("initialization of zlib failed");
 
 					do {
-						is.read((char*)&in, CHUNK_SIZE);
+						is.read((char*)&in[0], CHUNK_SIZE);
 						strm.avail_in = static_cast<uInt>(is.gcount());
 
 						flush = is.eof() ? Z_FINISH : Z_NO_FLUSH;
-						strm.next_in = in;
+						strm.next_in = &in[0];
 
 						do {
 							strm.avail_out = CHUNK_SIZE;
-							strm.next_out = out;
+							strm.next_out = &out[0];
 
 							ret = deflate(&strm, flush);    /* no bad return value */
 							assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
@@ -196,7 +198,7 @@ namespace dtn
 							have = CHUNK_SIZE - strm.avail_out;
 
 							// write the buffer to the output stream
-							os.write((char*)&out, have);
+							os.write((char*)&out[0], have);
 
 							if (!os.good())
 							{
@@ -232,8 +234,8 @@ namespace dtn
 
 					int ret;
 					uInt have;
-					unsigned char in[CHUNK_SIZE];
-					unsigned char out[CHUNK_SIZE];
+					std::vector<unsigned char> in(CHUNK_SIZE);
+					std::vector<unsigned char> out(CHUNK_SIZE);
 					z_stream strm;
 
 					strm.zalloc = Z_NULL;
@@ -247,7 +249,7 @@ namespace dtn
 					if (ret != Z_OK) throw ibrcommon::Exception("initialization of zlib failed");
 
 					do {
-						is.read((char*)&in, CHUNK_SIZE);
+						is.read((char*)&in[0], CHUNK_SIZE);
 						strm.avail_in = static_cast<uInt>(is.gcount());
 
 						// we're done if there is no more input
@@ -256,11 +258,11 @@ namespace dtn
 							(void)inflateEnd(&strm);
 							throw ibrcommon::Exception("decompression failed. no enough data available.");
 						}
-						strm.next_in = in;
+						strm.next_in = &in[0];
 
 						do {
 							strm.avail_out = CHUNK_SIZE;
-							strm.next_out = out;
+							strm.next_out = &out[0];
 
 							ret = inflate(&strm, Z_NO_FLUSH);
 							assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
@@ -279,7 +281,7 @@ namespace dtn
 							have = CHUNK_SIZE - strm.avail_out;
 
 							// write the buffer to the output stream
-							os.write((char*)&out, have);
+							os.write((char*)&out[0], have);
 
 
 							if (!os.good())
