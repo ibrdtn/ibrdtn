@@ -260,7 +260,8 @@ void print_help()
 			<< " -f               Request forward report" << std::endl
 			<< " -r               Request reception report" << std::endl
 			<< " -p               Add tracking block to record the bundle path" << std::endl
-			<< " -g               Destination is a group endpoint" << std::endl;
+			<< " -g               Destination is a group endpoint" << std::endl
+			<< " -U <socket>      Connect to UNIX domain socket API" << std::endl;
 }
 
 int main(int argc, char *argv[])
@@ -276,6 +277,7 @@ int main(int argc, char *argv[])
 
 	size_t timeout = 10;
 	int opt = 0;
+	ibrcommon::File unixdomain;
 
 	dtn::api::Client::COMMUNICATION_MODE mode = dtn::api::Client::MODE_BIDIRECTIONAL;
 
@@ -285,7 +287,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	while ((opt = getopt(argc, argv, "ht:fdrpg")) != -1)
+	while ((opt = getopt(argc, argv, "htU:fdrpg")) != -1)
 	{
 		switch (opt)
 		{
@@ -295,6 +297,10 @@ int main(int argc, char *argv[])
 
 		case 't':
 			timeout = atoi(optarg);
+			break;
+
+		case 'U':
+			unixdomain = ibrcommon::File(optarg);
 			break;
 
 		case 'f':
@@ -323,9 +329,19 @@ int main(int argc, char *argv[])
 	trace_destination = argv[argc - 1];
 
 	try {
-		// Create a stream to the server using TCP.
-		ibrcommon::vaddress addr("localhost", 4550);
-		ibrcommon::socketstream conn(new ibrcommon::tcpsocket(addr));
+		ibrcommon::clientsocket *sock = NULL;
+		if (unixdomain.exists())
+		{
+			// connect to the unix domain socket
+			sock = new ibrcommon::filesocket(unixdomain);
+		}
+		else
+		{
+			// connect to the standard local api port
+			ibrcommon::vaddress addr("localhost", 4550);
+			sock = new ibrcommon::tcpsocket(addr);
+		}
+		ibrcommon::socketstream conn(sock);
 
 		// Initiate a derivated client
 		Tracer tracer(mode, conn);
