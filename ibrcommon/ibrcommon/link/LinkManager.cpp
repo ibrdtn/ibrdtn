@@ -21,7 +21,6 @@
 
 #include "ibrcommon/config.h"
 #include "ibrcommon/link/LinkManager.h"
-#include "ibrcommon/link/CompatLinkManager.h"
 #include "ibrcommon/link/LinkEvent.h"
 #include "ibrcommon/thread/MutexLock.h"
 #include "ibrcommon/Logger.h"
@@ -30,14 +29,31 @@
 #include <typeinfo>
 #include <unistd.h>
 
+#if __WIN32__
+#include "ibrcommon/link/Win32LinkManager.h"
+#else
+#if defined HAVE_LIBNL || HAVE_LIBNL2 || HAVE_LIBNL3
+#include "ibrcommon/link/NetLinkManager.h"
+#endif
+#include "ibrcommon/link/PosixLinkManager.h"
+#endif
+
 namespace ibrcommon
 {
 	// default value for LinkMonitor checks
 	size_t LinkManager::_link_request_interval = 5000;
 
-	LinkManager& LinkManager::getInstance()
-	{
-		static CompatLinkManager lm;
+	LinkManager& LinkManager::getInstance() try {
+#if defined HAVE_LIBNL || HAVE_LIBNL2 || HAVE_LIBNL3
+		static NetLinkManager lm;
+#elif __WIN32__
+		static Win32LinkManager lm;
+#else
+		static PosixLinkManager lm;
+#endif
+		return lm;
+	} catch (const ibrcommon::Exception&) {
+		static PosixLinkManager lm;
 		return lm;
 	}
 

@@ -3,23 +3,17 @@
 h_sources = \
 	nl802154.h \
 	LinkManager.h \
-	LinkEvent.h
+	LinkEvent.h \
+	LinkMonitor.h
 
 cc_sources = \
 	LinkManager.cpp \
-	LinkEvent.cpp
+	LinkEvent.cpp \
+	LinkMonitor.cpp
 
 if LOWPAN
 cc_sources += nl_policy.c
 endif
-
-h_sources += \
-	CompatLinkManager.h \
-	LinkMonitor.h
-
-cc_sources += \
-	CompatLinkManager.cpp \
-	LinkMonitor.cpp
 
 if WIN32
 h_sources += Win32LinkManager.h
