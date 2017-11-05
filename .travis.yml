@@ -14,6 +14,8 @@ matrix:
       env: DO_COVERAGE=no CONFIGURE_OPTS_EXTRA="--without-vmime --disable-dtndht"
     - compiler: clang
       env: DO_COVERAGE=no CONFIGURE_OPTS_EXTRA="--disable-netlink --without-vmime --disable-dtndht"
+    - compiler: gcc
+      env: DO_COVERAGE=no WITH_CMAKE=yes
 
 addons:
   apt:
@@ -53,12 +55,19 @@ before_script:
   - cd ibrdtn
 
 script:
-  - CONFIGURE_OPTS="${CONFIGURE_OPTS_EXTRA} --with-tffs=$(pwd)/../tffs-lib --with-openssl --with-curl --with-lowpan --with-sqlite --with-compression --with-xml --with-tls --with-dht"
-  - ./autogen.sh
-  - if [ "${DO_COVERAGE}" == "yes" ]; then
-      ./configure ${CONFIGURE_OPTS} --enable-gcov;
+  - if [ "$WITH_CMAKE" == "yes" ]; then
+      CMAKE_OPTS="-DNetlink=ON -DLowpan=ON -DOpenssl=ON -DXml=ON"
+      mkdir .compile && pushd .compile
+      cmake ${CMAKE_OPTS} ..
+      popd
     else
-      ./configure ${CONFIGURE_OPTS};
+      CONFIGURE_OPTS="${CONFIGURE_OPTS_EXTRA} --with-tffs=$(pwd)/../tffs-lib --with-openssl --with-curl --with-lowpan --with-sqlite --with-compression --with-xml --with-tls --with-dht"
+      ./autogen.sh
+      if [ "${DO_COVERAGE}" == "yes" ]; then
+        ./configure ${CONFIGURE_OPTS} --enable-gcov;
+      else
+        ./configure ${CONFIGURE_OPTS};
+      fi
     fi
   - make
   - make check
