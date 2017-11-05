@@ -55,14 +55,15 @@ before_script:
   - cd ibrdtn
 
 script:
+  - set -e
   - if [ "$WITH_CMAKE" == "yes" ]; then
-      CMAKE_OPTS="-DNetlink=ON -DLowpan=ON -DOpenssl=ON -DXml=ON"
-      mkdir .compile && pushd .compile
-      cmake ${CMAKE_OPTS} ..
-      popd
+      CMAKE_OPTS="-DNetlink=ON -DLowpan=ON -DOpenssl=ON -DXml=ON";
+      mkdir .compile && pushd .compile;
+      cmake ${CMAKE_OPTS} ..;
+      popd;
     else
-      CONFIGURE_OPTS="${CONFIGURE_OPTS_EXTRA} --with-tffs=$(pwd)/../tffs-lib --with-openssl --with-curl --with-lowpan --with-sqlite --with-compression --with-xml --with-tls --with-dht"
-      ./autogen.sh
+      CONFIGURE_OPTS="${CONFIGURE_OPTS_EXTRA} --with-tffs=$(pwd)/../tffs-lib --with-openssl --with-curl --with-lowpan --with-sqlite --with-compression --with-xml --with-tls --with-dht";
+      ./autogen.sh;
       if [ "${DO_COVERAGE}" == "yes" ]; then
         ./configure ${CONFIGURE_OPTS} --enable-gcov;
       else
