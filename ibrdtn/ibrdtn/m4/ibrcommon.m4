@@ -76,7 +76,7 @@ AC_DEFUN([AC_CHECK_IBRCOMMON_SSL],
 
 AC_DEFUN([AC_CHECK_IBRCOMMON_LOWPAN],
 [
-	AC_MSG_CHECKING([checking whether ibrcommon has 6lowpan extensions])
+	AC_MSG_CHECKING([checking whether ibrcommon has lowpan extensions])
 	old_CPPFLAGS="$CPPFLAGS"
 	CPPFLAGS="$ibrcommon_CFLAGS"
 	AC_COMPILE_IFELSE([
