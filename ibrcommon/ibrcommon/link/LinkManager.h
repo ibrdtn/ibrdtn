@@ -89,6 +89,12 @@ namespace ibrcommon
 		listener_map _listener;
 
 		static size_t _link_request_interval;
+
+	private:
+		/*
+		 * Create a singleton instance of the LinkManager
+		 */
+		static LinkManager& createInstance();
 	};
 }
 

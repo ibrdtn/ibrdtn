@@ -43,7 +43,12 @@ namespace ibrcommon
 	// default value for LinkMonitor checks
 	size_t LinkManager::_link_request_interval = 5000;
 
-	LinkManager& LinkManager::getInstance() try {
+	LinkManager& LinkManager::getInstance() {
+		static LinkManager &lm = createInstance();
+		return lm;
+	}
+
+	LinkManager& LinkManager::createInstance() try {
 #if defined HAVE_LIBNL || HAVE_LIBNL2 || HAVE_LIBNL3
 		static NetLinkManager lm;
 #elif __WIN32__
