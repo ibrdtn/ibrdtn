@@ -37,8 +37,9 @@ namespace ibrcommon
 {
 	class NetLinkManager : public ibrcommon::LinkManager, public ibrcommon::JoinableThread
 	{
+		friend class LinkManager;
+
 	public:
-		NetLinkManager();
 		virtual ~NetLinkManager();
 
 		void up() throw ();
@@ -59,6 +60,8 @@ namespace ibrcommon
 		void __cancellation() throw ();
 
 	private:
+		NetLinkManager();
+
 		class netlinkcache : public basesocket
 		{
 		public:
