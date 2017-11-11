@@ -35,20 +35,23 @@ void tcpstreamtest :: tearDown (void)
 
 void tcpstreamtest :: baseTest (void)
 {
-	StreamChecker _checker(4343, 10);
+	const int _testPort = 4343;
+	std::cout << "Using TCP port " << _testPort << " for the connection test." << std::endl;
 
-	// start the streamchecker
+	StreamChecker _checker(_testPort, 10);
 	_checker.start();
 
+	bool result = true;
 	for (int i = 0; i < 10; ++i)
 	{
-		runTest();
+		result = result && runTest(_testPort);
 	}
 
 	_checker.stop();
 	_checker.join();
 
-	CPPUNIT_ASSERT(!_checker._error);
+	CPPUNIT_ASSERT_MESSAGE("baseTest failed on the client side", result);
+	CPPUNIT_ASSERT_MESSAGE("baseTest failed on the server side", !_checker._error);
 }
 
 tcpstreamtest::StreamChecker::StreamChecker(int port, int chars)
@@ -64,18 +67,17 @@ tcpstreamtest::StreamChecker::~StreamChecker()
 	_sock.destroy();
 }
 
-void tcpstreamtest::runTest()
+bool tcpstreamtest::runTest(const int port)
 {
 	char values[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
 	try {
-		ibrcommon::vaddress addr("127.0.0.1", 4343);
+		ibrcommon::vaddress addr("localhost", port);
 		ibrcommon::socketstream client(new ibrcommon::tcpsocket(addr));
-
 		// send some data
-		for (size_t j = 0; j < 20; ++j)
+		for (int j = 0; j < 20; ++j)
 		{
-			for (size_t i = 0; i < 100000; ++i)
+			for (int i = 0; i < 100000; ++i)
 			{
 				for (int k = 0; k < 10; ++k)
 				{
@@ -89,8 +91,10 @@ void tcpstreamtest::runTest()
 	} catch (const ibrcommon::vsocket_interrupt &e) {
 		// select interrupted
 	} catch (const ibrcommon::socket_exception &e) {
-		CPPUNIT_FAIL(std::string("client error: ") + e.what());
+		std::cerr << "client error: " << + e.what() << std::endl;
+		return false;
 	};
+	return true;
 }
 
 void tcpstreamtest::StreamChecker::__cancellation() throw ()
@@ -120,7 +124,7 @@ void tcpstreamtest::StreamChecker::run() throw ()
 					ibrcommon::vaddress source;
 					socket = srv.accept(source);
 
-//					std::cout << "connection accepted from " << source.toString() << std::endl;
+					std::cout << "connection accepted from " << source.toString() << std::endl;
 
 					CPPUNIT_ASSERT(socket != NULL);
 

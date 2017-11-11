@@ -19,11 +19,13 @@
  *
  */
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-
 #ifndef BASE64STREAMTEST_H_
 #define BASE64STREAMTEST_H_
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <istream>
+#include <string>
 
 class Base64StreamTest : public CppUnit::TestFixture {
 	private:

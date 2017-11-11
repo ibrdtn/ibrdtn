@@ -26,20 +26,21 @@ void netlinktest :: baseTest (void)
 	ibrcommon::LinkManager::initialize();
 
 	ibrcommon::vinterface iface("eth0");
-//	std::list<ibrcommon::vaddress> ret = ibrcommon::LinkManager::getInstance().getAddressList(iface, ibrcommon::vaddress::SCOPE_LINKLOCAL);
-	std::list<ibrcommon::vaddress> ret = ibrcommon::LinkManager::getInstance().getAddressList(iface);
-
-	std::cout << "Addresses:" << std::endl;
-	for (std::list<ibrcommon::vaddress>::iterator iter = ret.begin(); iter != ret.end(); ++iter)
-	{
-		std::cout << " " << (*iter).toString() << std::endl;
+	try {
+		std::list<ibrcommon::vaddress> ret = ibrcommon::LinkManager::getInstance().getAddressList(iface);
+		std::cout << "Addresses:" << std::endl;
+		for (std::list<ibrcommon::vaddress>::iterator iter = ret.begin(); iter != ret.end(); ++iter)
+		{
+			std::cout << " " << (*iter).toString() << std::endl;
+		}
+	} catch(const ibrcommon::Exception &e) {
+		std::cout << "\tInterface enumeration is not allowed on this platform: "
+				<< std::endl << e.what() << std::endl;
+		throw;
 	}
-
-	//ibrcommon::Thread::sleep(560000);
 }
 void netlinktest::upUpTest (void)
 {
 	ibrcommon::LinkManager::initialize();
 	ibrcommon::LinkManager::initialize();
 }
-

@@ -22,7 +22,9 @@
 #include "Base64StreamTest.h"
 #include <ibrcommon/data/Base64Stream.h>
 #include <ibrcommon/data/Base64Reader.h>
+#include <cstdlib>
 #include <sstream>
+#include <string>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Base64StreamTest);
 
@@ -64,19 +66,15 @@ void Base64StreamTest::testFileReference()
 	std::stringstream ss_decoded;
 
 	// open reference file
-	std::fstream f("../base64-enc.dat");
-
-	CPPUNIT_ASSERT(f.good());
+	std::string filename("../base64-enc.dat");
+	std::ifstream f(filename.c_str());
+	CPPUNIT_ASSERT_MESSAGE("Error reading file: " + filename, f.good());
 
 	// decode the data
 	ss_decoded << ibrcommon::Base64Reader(f, 46207).rdbuf() << std::flush;
+	CPPUNIT_ASSERT_MESSAGE("Error in data decode", f.good());
 
-	CPPUNIT_ASSERT(f.good());
-
-//	std::cout << std::endl;
-//	std::cout << ss_decoded.rdbuf() << std::endl;
-
-	std::fstream fd("../base64-dec.dat");
+	std::ifstream fd("../base64-dec.dat");
 	compare(fd, ss_decoded);
 
 	// read the last two '\n'
@@ -153,4 +151,3 @@ void Base64StreamTest::setUp()
 void Base64StreamTest::tearDown()
 {
 }
-

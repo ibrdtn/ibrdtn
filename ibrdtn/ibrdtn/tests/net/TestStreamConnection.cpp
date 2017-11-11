@@ -217,16 +217,15 @@ void TestStreamConnection::connectionUpDown()
 		}
 	};
 
-	//ibrcommon::File socket("/tmp/testsuite.sock");
-	//testserver srv(new ibrcommon::fileserversocket(file));
+	const int _testPort = 4344;
 
-	// create a new server bound to tcp port 1234
-	testserver srv(new ibrcommon::tcpserversocket(1234));
+	// create a new server bound to a tcp port.
+	testserver srv(new ibrcommon::tcpserversocket(_testPort));
 
 	// start the server thread
 	srv.start();
 
-	ibrcommon::vaddress addr("127.0.0.1", 1234);
+	ibrcommon::vaddress addr("localhost", _testPort);
 	ibrcommon::socketstream conn(new ibrcommon::tcpsocket(addr));
 	testclient cl(conn);
 
