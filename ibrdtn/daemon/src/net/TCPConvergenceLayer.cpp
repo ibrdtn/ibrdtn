@@ -127,20 +127,28 @@ namespace dtn
 					return;
 				}
 
-				// create sockets for all addresses on the interface
-				// may throw "interface_not_set"
-				std::list<ibrcommon::vaddress> addrs = net.getAddresses();
+				bindSockets(net, port);
+			} catch (const ibrcommon::vinterface::interface_not_set &ex) {
+				IBRCOMMON_LOGGER_TAG(TCPConvergenceLayer::TAG, warning) << ex.what() << IBRCOMMON_LOGGER_ENDL;
+			}
+		}
 
-				// convert the port into a string
-				std::stringstream ss; ss << port;
+		void TCPConvergenceLayer::bindSockets(const ibrcommon::vinterface &net, const int port) throw ()
+		{
+			// create sockets for all addresses on the interface
+			// may throw "interface_not_set"
+			std::list<ibrcommon::vaddress> addrs = net.getAddresses();
 
-				for (std::list<ibrcommon::vaddress>::iterator iter = addrs.begin(); iter != addrs.end(); ++iter) {
-					ibrcommon::vaddress &addr = (*iter);
+			// convert the port into a string
+			std::stringstream ss; ss << port;
 
-					// handle the addresses according to their family
-					// may throw "address_exception"
-					try {
-						switch (addr.family()) {
+			for (std::list<ibrcommon::vaddress>::iterator iter = addrs.begin(); iter != addrs.end(); ++iter) {
+				ibrcommon::vaddress &addr = (*iter);
+
+				// handle the addresses according to their family
+				// may throw "address_exception"
+				try {
+					switch (addr.family()) {
 						case AF_INET:
 						case AF_INET6:
 						{
@@ -154,15 +162,12 @@ namespace dtn
 						}
 						default:
 							break;
-						}
-					} catch (const ibrcommon::vaddress::address_exception &ex) {
-						IBRCOMMON_LOGGER_TAG(TCPConvergenceLayer::TAG, warning) << ex.what() << IBRCOMMON_LOGGER_ENDL;
-					} catch (const ibrcommon::socket_exception &ex) {
-						IBRCOMMON_LOGGER_TAG(TCPConvergenceLayer::TAG, warning) << ex.what() << IBRCOMMON_LOGGER_ENDL;
 					}
+				} catch (const ibrcommon::vaddress::address_exception &ex) {
+					IBRCOMMON_LOGGER_TAG(TCPConvergenceLayer::TAG, warning) << ex.what() << IBRCOMMON_LOGGER_ENDL;
+				} catch (const ibrcommon::socket_exception &ex) {
+					IBRCOMMON_LOGGER_TAG(TCPConvergenceLayer::TAG, warning) << ex.what() << IBRCOMMON_LOGGER_ENDL;
 				}
-			} catch (const ibrcommon::vinterface::interface_not_set &ex) {
-				IBRCOMMON_LOGGER_TAG(TCPConvergenceLayer::TAG, warning) << ex.what() << IBRCOMMON_LOGGER_ENDL;
 			}
 		}
 
@@ -284,7 +289,7 @@ namespace dtn
 				case dtn::net::P2PDialupEvent::INTERFACE_UP:
 				{
 					// listen to the new interface
-					listen(dialup.iface, 4556);
+					listen(dialup.iface, TCPConvergenceLayer::DEFAULT_PORT);
 					break;
 				}
 
@@ -358,6 +363,25 @@ namespace dtn
 					break;
 				}
 
+				case ibrcommon::LinkEvent::ACTION_LINK_UP:
+				{
+					const ibrcommon::vinterface &iface = evt.getInterface();
+					{
+						// check if the interface is on the configuration list to listen to.
+						ibrcommon::MutexLock l(_interface_lock);
+						if (_interfaces.find(iface) == _interfaces.end()) {
+							break;
+						}
+					}
+					unsigned int port = TCPConvergenceLayer::DEFAULT_PORT;
+					{
+						ibrcommon::MutexLock l(_portmap_lock);
+						port = _portmap[iface];
+					}
+					bindSockets(iface, port);
+					break;
+				}
+
 				case ibrcommon::LinkEvent::ACTION_LINK_DOWN:
 				{
 					// remove all sockets on this interface
@@ -374,6 +398,7 @@ namespace dtn
 						}
 						delete sock;
 					}
+
 					break;
 				}
 

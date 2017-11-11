@@ -128,6 +128,11 @@ namespace dtn
 			void listen(const ibrcommon::vinterface &iface, int port) throw ();
 
 			/**
+			 * Binds or rebinds sockets for a given interface and port.
+			 */
+			void bindSockets(const ibrcommon::vinterface &net, const int port) throw ();
+
+			/**
 			 * Remove a specific interface
 			 */
 			void unlisten(const ibrcommon::vinterface &iface) throw ();
