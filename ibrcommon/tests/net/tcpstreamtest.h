@@ -35,19 +35,18 @@ class tcpstreamtest : public CPPUNIT_NS :: TestFixture
 	class StreamChecker : public ibrcommon::JoinableThread
 	{
 	public:
-		StreamChecker(int port, int chars = 10);
+		StreamChecker(const int port, const int chars = 10, const int conns = 10);
 		~StreamChecker();
 
-		virtual void setup() throw ();
 		virtual void run() throw ();
 		virtual void __cancellation() throw ();
 
 		bool _error;
 
 	private:
-		bool _running;
-		ibrcommon::vsocket _sock;
+		ibrcommon::vsocket _sockets;
 		int _chars;
+		int _conns;
 	};
 
 	CPPUNIT_TEST_SUITE (tcpstreamtest);
@@ -60,7 +59,7 @@ class tcpstreamtest : public CPPUNIT_NS :: TestFixture
 
 	protected:
 		void baseTest (void);
-		void runTest (void);
+		bool runTest (const int port, const int chars);
 };
 
 #endif /* TCPSTREAMTEST_H_ */
