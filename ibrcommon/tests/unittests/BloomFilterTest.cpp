@@ -32,11 +32,11 @@
 
 #include "BloomFilterTest.hh"
 #include "ibrcommon/data/BloomFilter.h"
+
+#include <cstring>
 #include <iostream>
 #include <vector>
 #include <string>
-#include <string.h>
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BloomFilterTest);
 
@@ -82,13 +82,11 @@ void BloomFilterTest::testHash()
 	std::list<ibrcommon::bloom_type> hashes1;
 	std::list<ibrcommon::bloom_type> hashes2;
 	std::list<ibrcommon::bloom_type> hashes3;
-	const unsigned char* cad1;
-	const unsigned char* cad2;
-	cad1 = (unsigned char*)"example";
-	cad2 = (unsigned char*)"sample";
-	hashes1 = ProviderA.hash(cad1,sizeof(cad1));
-	hashes2 = ProviderB.hash(cad1,sizeof(cad1));
-	hashes3 = ProviderC.hash(cad2,sizeof(cad2));
+	const unsigned char cad1[] = "example";
+	const unsigned char cad2[] = "sample";
+	hashes1 = ProviderA.hash(cad1, std::strlen((char*)cad1));
+	hashes2 = ProviderB.hash(cad1, std::strlen((char*)cad1));
+	hashes3 = ProviderC.hash(cad2, std::strlen((char*)cad2));
 	CPPUNIT_ASSERT_EQUAL(true, ProviderA.operator ==(ProviderB));
 
 	std::list<ibrcommon::bloom_type>::iterator iter1 = hashes1.begin();
@@ -159,10 +157,9 @@ void BloomFilterTest::testInsert()
 
 //	 test signature (const unsigned char* key_begin, const std::size_t length)
 
-	const unsigned char* cad1;
-	cad1 = (unsigned char*)"ejemplo";
-	Filter1.insert(cad1,sizeof(cad1));
-	CPPUNIT_ASSERT_EQUAL(true, Filter1.contains(cad1,sizeof(cad1)));
+	const char cad1[] = "ejemplo";
+	Filter1.insert(cad1, std::strlen(cad1));
+	CPPUNIT_ASSERT_EQUAL(true, Filter1.contains(cad1, std::strlen(cad1)));
 
 //	 test signature (const std::string& key)
 
@@ -173,9 +170,9 @@ void BloomFilterTest::testInsert()
 
 //	 test signature (const char* data, const std::size_t& length)
 
-	const char* names ="hola";
-	Filter1.insert(names,sizeof(names));
-	CPPUNIT_ASSERT_EQUAL(true, Filter1.contains(names,sizeof(names)));
+	const char* names = "hola";
+	Filter1.insert(names, std::strlen(names));
+	CPPUNIT_ASSERT_EQUAL(true, Filter1.contains(names, std::strlen(names)));
 
 }
 
