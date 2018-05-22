@@ -44,7 +44,7 @@ namespace ibrcommon
 		const unsigned char * const key_;
 		const int key_size_;
 
-		HMAC_CTX ctx_;
+		HMAC_CTX* ctx_;
 	};
 }
 

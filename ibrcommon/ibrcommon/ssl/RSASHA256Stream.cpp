@@ -21,6 +21,7 @@
 
 #include "ibrcommon/ssl/RSASHA256Stream.h"
 #include "ibrcommon/Logger.h"
+#include "openssl_compat.h"
 #include <openssl/err.h>
 
 namespace ibrcommon
@@ -30,11 +31,11 @@ namespace ibrcommon
 	{
 		// Initialize get pointer.  This should be zero so that underflow is called upon first read.
 		setp(&out_buf_[0], &out_buf_[BUFF_SIZE - 1]);
-		EVP_MD_CTX_init(&_ctx);
+		_ctx = EVP_MD_CTX_new();
 
 		if (!_verify)
 		{
-			if (!EVP_SignInit_ex(&_ctx, EVP_sha256(), NULL))
+			if (!EVP_SignInit_ex(_ctx, EVP_sha256(), NULL))
 			{
 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to initialize the signature function" << IBRCOMMON_LOGGER_ENDL;
 				ERR_print_errors_fp(stderr);
@@ -42,7 +43,7 @@ namespace ibrcommon
 		}
 		else
 		{
-			if (!EVP_VerifyInit_ex(&_ctx, EVP_sha256(), NULL))
+			if (!EVP_VerifyInit_ex(_ctx, EVP_sha256(), NULL))
 			{
 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to initialize the verification function" << IBRCOMMON_LOGGER_ENDL;
 				ERR_print_errors_fp(stderr);
@@ -52,18 +53,19 @@ namespace ibrcommon
 
 	RSASHA256Stream::~RSASHA256Stream()
 	{
-		EVP_MD_CTX_cleanup(&_ctx);
+		EVP_MD_CTX_free(_ctx);
 	}
 
 	void RSASHA256Stream::reset()
 	{
-		EVP_MD_CTX_cleanup(&_ctx);
-
-		EVP_MD_CTX_init(&_ctx);
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+		EVP_MD_CTX_cleanup(_ctx);
+#endif
+		EVP_MD_CTX_init(_ctx);
 
 		if (!_verify)
 		{
-			if (!EVP_SignInit_ex(&_ctx, EVP_sha256(), NULL))
+			if (!EVP_SignInit_ex(_ctx, EVP_sha256(), NULL))
 			{
 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to initialize the signature function" << IBRCOMMON_LOGGER_ENDL;
 				ERR_print_errors_fp(stderr);
@@ -71,7 +73,7 @@ namespace ibrcommon
 		}
 		else
 		{
-			if (!EVP_VerifyInit_ex(&_ctx, EVP_sha256(), NULL))
+			if (!EVP_VerifyInit_ex(_ctx, EVP_sha256(), NULL))
 			{
 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to initialize the verfication function" << IBRCOMMON_LOGGER_ENDL;
 				ERR_print_errors_fp(stderr);
@@ -91,7 +93,7 @@ namespace ibrcommon
 			std::vector<unsigned char> sign(EVP_PKEY_size(_pkey));
 			unsigned int size = EVP_PKEY_size(_pkey);
 
-			_return_code = EVP_SignFinal(&_ctx, &sign[0], &size, _pkey);
+			_return_code = EVP_SignFinal(_ctx, &sign[0], &size, _pkey);
 
 			_sign = std::string((const char*)&sign[0], size);
 
@@ -107,7 +109,7 @@ namespace ibrcommon
 		if (!_sign_valid)
 		{
 			sync();
-			_return_code = EVP_VerifyFinal(&_ctx, reinterpret_cast<const unsigned char *>(their_sign.c_str()), static_cast<unsigned int>(their_sign.size()), _pkey);
+			_return_code = EVP_VerifyFinal(_ctx, reinterpret_cast<const unsigned char *>(their_sign.c_str()), static_cast<unsigned int>(their_sign.size()), _pkey);
 			_sign_valid = true;
 		}
 		return _return_code;
@@ -145,7 +147,7 @@ namespace ibrcommon
 		if (!_verify)
 			// hashing
 		{
-			if (!EVP_SignUpdate(&_ctx, &out_buf_[0], iend - ibegin))
+			if (!EVP_SignUpdate(_ctx, &out_buf_[0], iend - ibegin))
 			{
 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to feed data into the signature function" << IBRCOMMON_LOGGER_ENDL;
 				ERR_print_errors_fp(stderr);
@@ -153,7 +155,7 @@ namespace ibrcommon
 		}
 		else
 		{
-			if (!EVP_VerifyUpdate(&_ctx, &out_buf_[0], iend - ibegin))
+			if (!EVP_VerifyUpdate(_ctx, &out_buf_[0], iend - ibegin))
 			{
 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to feed data into the verification function" << IBRCOMMON_LOGGER_ENDL;
 				ERR_print_errors_fp(stderr);

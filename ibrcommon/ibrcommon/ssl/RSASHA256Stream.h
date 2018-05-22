@@ -106,7 +106,7 @@ namespace ibrcommon
 
 		/** the context in which the streamed data will be feed into for
 		calculation of the hash/signature */
-		EVP_MD_CTX _ctx;
+		EVP_MD_CTX * _ctx;
 
 		/** tells if the context needs to be finalized to get a valid signature or
 		verification */

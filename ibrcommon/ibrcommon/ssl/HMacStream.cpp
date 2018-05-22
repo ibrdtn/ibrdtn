@@ -20,29 +20,30 @@
  */
 
 #include "ibrcommon/ssl/HMacStream.h"
+#include "openssl_compat.h"
 
 namespace ibrcommon
 {
 	HMacStream::HMacStream(const unsigned char * const key, const int key_size)
 	 : HashStream(EVP_MAX_MD_SIZE, BUFF_SIZE), key_(key), key_size_(key_size)
 	{
-		HMAC_CTX_init(&ctx_);
-		HMAC_Init_ex(&ctx_, key_, key_size_, EVP_sha1(), NULL);
+		ctx_ = HMAC_CTX_new();
+		HMAC_Init_ex(ctx_, key_, key_size_, EVP_sha1(), NULL);
 	}
 
 	HMacStream::~HMacStream()
 	{
-		HMAC_CTX_cleanup(&ctx_);
+		HMAC_CTX_free(ctx_);
 	}
 
 	void HMacStream::update(char *buf, const size_t size)
 	{
 		// hashing
-		HMAC_Update(&ctx_, (unsigned char*)buf, size);
+		HMAC_Update(ctx_, (unsigned char*)buf, size);
 	}
 
 	void HMacStream::finalize(char * hash, unsigned int &size)
 	{
-		HMAC_Final(&ctx_, (unsigned char*)hash, &size);
+		HMAC_Final(ctx_, (unsigned char*)hash, &size);
 	}
 }

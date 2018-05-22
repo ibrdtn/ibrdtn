@@ -23,6 +23,7 @@
 
 #include "ibrcommon/Logger.h"
 
+#include "openssl_compat.h"
 #include <openssl/err.h>
 
 namespace ibrcommon
@@ -42,7 +43,20 @@ static int create(BIO *bio);
 //static int destroy(BIO *bio);
 //static long (*callback_ctrl)(BIO *, int, bio_info_cb *);
 
-
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+BIO_METHOD * BIO_iostream_method()
+{
+	static BIO_METHOD *iostream_method = NULL;
+	if (iostream_method) {
+		iostream_method = BIO_meth_new(iostreamBIO::type, iostreamBIO::name);
+		BIO_meth_set_write(iostream_method, bwrite);
+		BIO_meth_set_read(iostream_method, bread);
+		BIO_meth_set_ctrl(iostream_method, ctrl);
+		BIO_meth_set_create(iostream_method, create);
+	}
+	return iostream_method;
+}
+#else
 static BIO_METHOD iostream_method =
 {
 		iostreamBIO::type,
@@ -56,12 +70,17 @@ static BIO_METHOD iostream_method =
 		NULL,//destroy,
 		NULL//callback_ctrl
 };
+BIO_METHOD * BIO_iostream_method()
+{
+	return &iostream_method;
+}
+#endif
 
 iostreamBIO::iostreamBIO(std::iostream *stream)
 	:	_stream(stream)
 {
 	/* create BIO */
-	_bio = BIO_new(&iostream_method);
+	_bio = BIO_new(BIO_iostream_method());
 	if(!_bio){
 		/* creation failed, throw exception */
 		char err_buf[ERR_BUF_SIZE];
@@ -72,7 +91,7 @@ iostreamBIO::iostreamBIO(std::iostream *stream)
 	}
 
 	/* save the iostream in the bio object */
-	_bio->ptr = stream;
+	BIO_set_data(_bio, (void *) stream);
 }
 
 BIO * iostreamBIO::getBIO(){
@@ -81,10 +100,10 @@ BIO * iostreamBIO::getBIO(){
 
 static int create(BIO *bio)
 {
-	bio->ptr = NULL;
-	/* (from openssl memory bio) */
-	bio->shutdown=1;
-	bio->init=1;
+	BIO_set_data(bio, NULL);
+	BIO_set_shutdown(bio, 1);
+	BIO_set_init(bio, 1);
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 	/* from bss_mem.c (openssl):
 	 * bio->num is used to hold the value to return on 'empty', if it is
 	 * 0, should_retry is not set
@@ -93,6 +112,7 @@ static int create(BIO *bio)
 	 * it is set to 0 since the underlying stream is blocking
 	 */
 	bio->num= 0;
+#endif
 
 	return 1;
 }
@@ -102,7 +122,7 @@ static int create(BIO *bio)
 static long ctrl(BIO *bio, int cmd, long  num, void *)
 {
 	long ret;
-	std::iostream *stream = reinterpret_cast<std::iostream*>(bio->ptr);
+	std::iostream *stream = reinterpret_cast<std::iostream*>(BIO_get_data(bio));
 
 	IBRCOMMON_LOGGER_DEBUG_TAG("iostreamBIO", 90) << "ctrl called, cmd: " << cmd << ", num: " << num << "." << IBRCOMMON_LOGGER_ENDL;
 
@@ -147,8 +167,12 @@ static long ctrl(BIO *bio, int cmd, long  num, void *)
 
 static int bread(BIO *bio, char *buf, int len)
 {
-	std::iostream *stream = reinterpret_cast<std::iostream*>(bio->ptr);
+	std::iostream *stream = reinterpret_cast<std::iostream*>(BIO_get_data(bio));
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+	int num_bytes = 0;
+#else
 	int num_bytes = bio->num;
+#endif
 
 	try{
 		/* make sure to read at least 1 byte and then read as much as we can */
@@ -170,7 +194,7 @@ static int bwrite(BIO *bio, const char *buf, int len)
 	if(len == 0){
 		return 0;
 	}
-	std::iostream *stream = reinterpret_cast<std::iostream*>(bio->ptr);
+	std::iostream *stream = reinterpret_cast<std::iostream*>(BIO_get_data(bio));
 
 	/* write the data */
 	try{
