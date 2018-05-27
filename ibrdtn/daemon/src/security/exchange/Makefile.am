@@ -22,6 +22,8 @@ exchange_SOURCES += \
 	NFCProtocol.cpp \
 	NoneProtocol.h \
 	NoneProtocol.cpp \
+	openssl_compat.h \
+	openssl_compat.cpp \
 	QRCodeProtocol.h \
 	QRCodeProtocol.cpp
 	
