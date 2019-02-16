@@ -619,7 +619,7 @@ gf_inline void mul_x(void *r, const void *x)
 
 /*  A slow generic version of gf_mul (a = a * b) */
 
-void gf_mul(void *a, const void* b);
+void ibrdtn_gf_mul(void *a, const void* b);
 
 /*  This version uses 64k bytes of table space on the stack.
     A 16 byte buffer has to be multiplied by a 16 byte key

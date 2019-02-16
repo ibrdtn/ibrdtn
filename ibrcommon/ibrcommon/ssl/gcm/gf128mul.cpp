@@ -103,7 +103,7 @@
 
 const unsigned short gf_tab[256] = gf_dat(xda);
 
-void gf_mul(void *a, const void* b)
+void ibrdtn_gf_mul(void *a, const void* b)
 {   uint_32t r[GF_BYTE_LEN >> 2], p[8][GF_BYTE_LEN >> 2];
     int i;
 
