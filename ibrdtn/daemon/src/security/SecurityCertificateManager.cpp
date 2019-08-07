@@ -22,6 +22,7 @@
 #include "security/SecurityCertificateManager.h"
 #include "Configuration.h"
 
+#include <cstring>
 #include <cstdlib>
 
 #include <ibrcommon/Logger.h>
