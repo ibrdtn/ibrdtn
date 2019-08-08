@@ -1508,11 +1508,12 @@ namespace dtn
 		 	 */
 			if (conf.getDiscovery().enabled())
 			{
-				// get the discovery port
-				int disco_port = conf.getDiscovery().port();
+				// get the discovery ports (local_port=remote_port if local_port is not defined)
+				int disco_local_port = conf.getDiscovery().localPort();
+				int disco_remote_port = conf.getDiscovery().port();
 
 				// create the IPND agent
-				dtn::net::IPNDAgent *ipnd = new dtn::net::IPNDAgent( disco_port );
+				dtn::net::IPNDAgent *ipnd = new dtn::net::IPNDAgent( disco_local_port );
 
 				try {
 					const std::set<ibrcommon::vaddress> addr = conf.getDiscovery().address();
@@ -1522,10 +1523,10 @@ namespace dtn
 				} catch (const dtn::daemon::Configuration::ParameterNotFoundException&) {
 					// by default set multicast equivalent of broadcast
 					if (ibrcommon::basesocket::hasSupport(AF_INET6))
-						ipnd->add(ibrcommon::vaddress("ff02::142", disco_port, AF_INET6));
+						ipnd->add(ibrcommon::vaddress("ff02::142", disco_remote_port, AF_INET6));
 
 					if (ibrcommon::basesocket::hasSupport(AF_INET))
-						ipnd->add(ibrcommon::vaddress("224.0.0.142", disco_port, AF_INET));
+						ipnd->add(ibrcommon::vaddress("224.0.0.142", disco_remote_port, AF_INET));
 				}
 
 				// add all CL interfaces to discovery

@@ -187,6 +187,7 @@ namespace dtn
 				int version() const;
 				const std::set<ibrcommon::vaddress> address() const throw (ParameterNotFoundException);
 				int port() const;
+				int localPort() const;
 				unsigned int interval() const;
 				bool enableCrosslayer() const;
 			};
@@ -540,6 +541,9 @@ namespace dtn
 				ibrcommon::File _pidfile;
 				bool _kill;
 				dtn::data::Size _threads;
+				long _start_time;
+				long _stop_time;
+				long _seed;
 
 			protected:
 				Daemon();
@@ -551,6 +555,9 @@ namespace dtn
 				const ibrcommon::File& getPidFile() const;
 				bool kill_daemon() const;
 				dtn::data::Size getThreads() const;
+				long start_time() const;
+				long stop_time() const;
+				long seed() const;
 			};
 
 			class TimeSync : public Configuration::Extension

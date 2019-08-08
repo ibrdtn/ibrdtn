@@ -47,6 +47,36 @@
 
 dtn::daemon::NativeDaemon _dtnd;
 
+// ------------------------------------------------------------
+#include <ibrcommon/thread/Thread.h>
+
+class TerminationThread: public ibrcommon::JoinableThread
+// This class defines a thread that can terminate the daemon after a
+// certain execution delay.
+{
+typedef void (*f_type)(int);
+private:
+  int delay_; // ms
+  f_type f_;
+		     
+public:
+  TerminationThread(int delay, f_type f) {
+    // Once the thread is started, function f will be called after the
+    // specified delay (ms).
+    delay_ = delay;
+    f_ = f;
+  }
+  
+  void run() throw ()
+  {
+    sleep(delay_);
+    std::cout << "Terminating daemon as planned\n";
+    (*f_)(SIGINT);
+  }
+  void __cancellation() throw () {}
+};
+// ------------------------------------------------------------
+
 /**
  * setup logging capabilities
  */
@@ -217,6 +247,45 @@ int main(int argc, char *argv[])
 
 	// load parameter into the configuration
 	conf.params(argc, argv);
+
+	// Processing timing parameters and random seed
+
+	// If argument 'seed' is defined, let us initalize the random
+	// generator with this value
+	long seed = conf.getDaemon().seed();
+	if (seed != -1) {
+	  std::cout << "Setting random seed: " << seed << "\n";
+	  srandom(seed);
+	}
+	
+	// If argument 'start_time' is defined, let us wait until the
+	// specified time before doing anything else (nota: 'start_time'
+	// should be an EPOCH value in ms)
+	long start_time = conf.getDaemon().start_time();
+	if (start_time != -1) {
+	  struct timeval now;
+	  ::gettimeofday(&now, NULL);
+	  long delay = start_time - (now.tv_sec * 1000);
+	  if (delay > 0) {
+	    std::cout << "Start deferred by " << delay << " ms\n";
+	    ibrcommon::Thread::sleep(delay);
+	  }
+	}
+
+	// If argument 'stop_time' is defined, let us make sure this process
+	// stops at the specified time (nota: 'stop_time' should be an EPOCH
+	// value in ms)
+	long stop_time = conf.getDaemon().stop_time();
+	if (stop_time != -1) {
+	  struct timeval now;
+	  ::gettimeofday(&now, NULL);
+	  long delay = stop_time - (now.tv_sec * 1000);
+	  if (delay > 0) {
+	    std::cout << "Will terminate in " << delay << " ms\n";
+	    TerminationThread *t_thread = new TerminationThread(delay, func_sighandler);
+	    t_thread->start();
+	  }
+	}
 
 #ifdef HAVE_LIBDAEMON
 	if (conf.getDaemon().daemonize())
