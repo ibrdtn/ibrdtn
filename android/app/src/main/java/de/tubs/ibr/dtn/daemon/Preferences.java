@@ -86,6 +86,7 @@ public class Preferences extends PreferenceActivity {
 	public static final String KEY_ENABLED = "enabledSwitch";
 	public static final String KEY_ENDPOINT_ID = "endpoint_id";
 	public static final String KEY_DISCOVERY_MODE = "discovery_mode";
+	public static final String KEY_BEACON_INTERVAL = "beacon_interval";
 	public static final String KEY_P2P_ENABLED = "p2p_enabled";
 	public static final String KEY_DEBUG_MODE = "debugging";
 	
@@ -109,7 +110,7 @@ public class Preferences extends PreferenceActivity {
 	// These preferences show their value as summary
 	private final static String[] mSummaryPrefs = {
 		KEY_ENDPOINT_ID, KEY_ROUTING, KEY_SECURITY_MODE, KEY_LOG_OPTIONS, KEY_LOG_DEBUG_VERBOSITY,
-		KEY_TIMESYNC_MODE, KEY_STORAGE_MODE, KEY_UPLINK_MODE, KEY_DISCOVERY_MODE
+		KEY_TIMESYNC_MODE, KEY_STORAGE_MODE, KEY_UPLINK_MODE, KEY_DISCOVERY_MODE, KEY_BEACON_INTERVAL
 	};
 
 	private Boolean mBound = false;
@@ -585,6 +586,9 @@ public class Preferences extends PreferenceActivity {
 			
 			if (Preferences.KEY_DISCOVERY_MODE.equals(key))
 				prefChangedIntent.putExtra(key, prefs.getString(key, "smart"));
+
+			if (Preferences.KEY_BEACON_INTERVAL.equals(key))
+				prefChangedIntent.putExtra(key, prefs.getString(key, "5"));
 			
 			if (Preferences.KEY_LOG_OPTIONS.equals(key))
 				prefChangedIntent.putExtra(key, prefs.getString(key, "0"));
@@ -786,6 +790,8 @@ public class Preferences extends PreferenceActivity {
 
 			// limit pre-dated timestamp to 2 weeks
 			p.println("limit_predated_timestamp = 1209600");
+
+			p.println("discovery_interval = " + preferences.getString(KEY_BEACON_INTERVAL, "5"));
 
 			// specify a security path for keys
 			File sec_folder = DaemonStorageUtils.getSecurityPath(context);

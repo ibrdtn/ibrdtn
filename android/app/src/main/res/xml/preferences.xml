@@ -47,6 +47,12 @@
             android:key="discovery_mode"
             android:title="@string/pref_discovery_title" >
         </ListPreference>
+	<EditTextPreference
+            android:defaultValue="5"
+            android:key="beacon_interval"
+            android:title="@string/pref_beacon_interval"
+            android:inputType="number"
+            android:singleLine="true" />
         <ListPreference
             android:defaultValue="wifi"
             android:entries="@array/uplink_modes_names"

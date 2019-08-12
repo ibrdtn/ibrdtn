@@ -60,6 +60,8 @@
     <string name="pref_storage">Storage</string>
     <string name="pref_storage_description">How to store bundles on the device.</string>
     <string name="pref_discovery_title">Discover Policy</string>
+    <string name="pref_beacon_interval">Beacon Interval</string>
+    <string name="pref_beacon_interval_desc">Beacon interval in seconds</string>
     <string name="menu_neighbor_connect">Connect</string>
     <string name="toast_no_application">No application found to handle this endpoint.</string>
 </resources>

@@ -78,6 +78,6 @@ public class DaemonStorageUtils {
 	}
 	
 	public static String getConfigurationFile(Context context) {
-		return context.getFilesDir().getPath() + "/" + "config";
+		return context.getFilesDir().getPath() + File.separatorChar + "config";
 	}
 }
