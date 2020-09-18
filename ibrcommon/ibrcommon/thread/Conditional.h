@@ -43,7 +43,7 @@ namespace ibrcommon
 					COND_ERROR = 2
 				};
 
-				ConditionalAbortException(abort_t abort, string what = "Conditional has been unblocked.") throw() : ibrcommon::Exception(what), reason(abort)
+				ConditionalAbortException(abort_t abort, string what = "Conditional has been unblocked.") noexcept : ibrcommon::Exception(what), reason(abort)
 				{
 				};
 
@@ -53,25 +53,25 @@ namespace ibrcommon
 			Conditional();
 			virtual ~Conditional();
 
-			void signal(bool broadcast = false) throw ();
+			void signal(bool broadcast = false) noexcept;
 
 			/*
 			 * Wait until signal() is called or the timeout exceeds.
 			 * @param timeout A timeout in milliseconds.
 			 * @throw ConditionalAbortException If a timeout occur or the Conditional is aborted by abort() the ConditionalAbortException is thrown.
 			 */
-			void wait(size_t timeout = 0) throw (ConditionalAbortException);
-			void wait(struct timespec *ts) throw (ConditionalAbortException);
+			void wait(size_t timeout = 0) noexcept (false);
+			void wait(struct timespec *ts) noexcept (false);
 
 			/**
 			 * Abort all waits on this conditional.
 			 */
-			void abort() throw ();
+			void abort() noexcept;
 
 			/**
 			 * Removes the abort call off this conditional.
 			 */
-			void reset() throw ();
+			void reset() noexcept;
 
 			/**
 			 * Convert a millisecond timeout into use for high resolution
@@ -79,7 +79,7 @@ namespace ibrcommon
 			 * @param timeout to convert.
 			 * @param hires timespec representation to fill.
 			 */
-			static void gettimeout(size_t timeout, struct timespec *hires) throw ();
+			static void gettimeout(size_t timeout, struct timespec *hires) noexcept;
 
 		private:
 			bool isLocked();

@@ -55,7 +55,7 @@ namespace ibrcommon
 		return false;
 	}
 
-	void Conditional::signal (bool broadcast) throw ()
+	void Conditional::signal (bool broadcast) noexcept
 	{
 #ifdef __DEVELOPMENT_ASSERTIONS__
 		// assert a locked Conditional
@@ -68,7 +68,7 @@ namespace ibrcommon
 			pthread_cond_signal( &cond );
 	}
 
-	void Conditional::wait(size_t timeout) throw (ConditionalAbortException)
+	void Conditional::wait(size_t timeout) noexcept (false)
 	{
 #ifdef __DEVELOPMENT_ASSERTIONS__
 		// assert a locked Conditional
@@ -91,7 +91,7 @@ namespace ibrcommon
 		}
 	}
 
-	void Conditional::wait(struct timespec *ts) throw (ConditionalAbortException)
+	void Conditional::wait(struct timespec *ts) noexcept (false)
 	{
 #ifdef __DEVELOPMENT_ASSERTIONS__
 		// assert a locked Conditional
@@ -129,7 +129,7 @@ namespace ibrcommon
 #endif
 	}
 
-	void Conditional::gettimeout(size_t msec, struct timespec *ts) throw ()
+	void Conditional::gettimeout(size_t msec, struct timespec *ts) noexcept
 	{
 #if _POSIX_TIMERS > 0 && defined(HAVE_PTHREAD_CONDATTR_SETCLOCK)
 	#if defined(_POSIX_MONOTONIC_CLOCK)
@@ -151,7 +151,7 @@ namespace ibrcommon
 		}
 	}
 
-	void Conditional::abort() throw ()
+	void Conditional::abort() noexcept
 	{
 #ifdef __DEVELOPMENT_ASSERTIONS__
 		// assert a locked Conditional
@@ -162,7 +162,7 @@ namespace ibrcommon
 		_abort = true;
 	}
 
-	void Conditional::reset() throw ()
+	void Conditional::reset() noexcept
 	{
 		_abort = false;
 	}
