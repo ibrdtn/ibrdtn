@@ -149,7 +149,7 @@ namespace ibrcommon
 		 *
 		 * @return The next element of the queue
 		 */
-		T take() throw (QueueUnblockedException)
+		T take() noexcept(false)
 		{
 			try {
 				ibrcommon::MutexLock l(_cond);
@@ -173,7 +173,7 @@ namespace ibrcommon
 		 * @param timeout A timeout in milliseconds
 		 * @return The next element of the queue
 		 */
-		T poll(size_t timeout = 0) throw (QueueUnblockedException)
+		T poll(size_t timeout = 0) noexcept(false)
 		{
 			try {
 				ibrcommon::MutexLock l(_cond);
@@ -197,13 +197,13 @@ namespace ibrcommon
 			}
 		}
 
-		void abort() throw ()
+		void abort() noexcept()
 		{
 			ibrcommon::MutexLock l(_cond);
 			_cond.abort();
 		}
 
-		void reset() throw ()
+		void reset() noexcept()
 		{
 			_cond.reset();
 		}
@@ -214,7 +214,7 @@ namespace ibrcommon
 			QUEUE_EMPTY = 1
 		};
 
-		void wait(WAIT_MODES mode, const size_t timeout = 0) throw (QueueUnblockedException)
+		void wait(WAIT_MODES mode, const size_t timeout = 0) noexcept(false)
 		{
 			ibrcommon::MutexLock l(_cond);
 			if (timeout == 0)
@@ -240,7 +240,7 @@ namespace ibrcommon
 				if (_changed) _queue._cond.signal(true);
 			};
 
-			void wait(WAIT_MODES mode, const size_t timeout = 0) throw (QueueUnblockedException)
+			void wait(WAIT_MODES mode, const size_t timeout = 0) noexcept(false)
 			{
 				if (timeout == 0)
 				{
@@ -307,7 +307,7 @@ namespace ibrcommon
 			}
 		}
 
-		void __wait(const WAIT_MODES mode) throw (QueueUnblockedException)
+		void __wait(const WAIT_MODES mode) noexcept(false)
 		{
 			try {
 				switch (mode)
@@ -345,7 +345,7 @@ namespace ibrcommon
 			}
 		}
 
-		void __wait(const WAIT_MODES mode, const size_t timeout) throw (QueueUnblockedException)
+		void __wait(const WAIT_MODES mode, const size_t timeout) noexcept(false)
 		{
 			try {
 				struct timespec ts;
