@@ -45,27 +45,27 @@ namespace dtn
 			StaticRoutingExtension();
 			virtual ~StaticRoutingExtension();
 
-			virtual const std::string getTag() const throw ();
+			virtual const std::string getTag() const noexcept;
 
 			/**
 			 * This method is called every time something has changed. The module
 			 * should search again for bundles to transfer to the given peer.
 			 */
-			virtual void eventDataChanged(const dtn::data::EID &peer) throw ();
+			virtual void eventDataChanged(const dtn::data::EID &peer) noexcept;
 
 			/**
 			 * This method is called every time a bundle was queued
 			 */
-			virtual void eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ();
+			virtual void eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept;
 
-			void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
-			void raiseEvent(const dtn::routing::StaticRouteChangeEvent &evt) throw ();
-			void componentUp() throw ();
-			void componentDown() throw ();
+			void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
+			void raiseEvent(const dtn::routing::StaticRouteChangeEvent &evt) noexcept;
+			void componentUp() noexcept;
+			void componentDown() noexcept;
 
 		protected:
-			void run() throw ();
-			void __cancellation() throw ();
+			void run() noexcept;
+			void __cancellation() noexcept;
 
 		private:
 			class EIDRoute : public StaticRoute

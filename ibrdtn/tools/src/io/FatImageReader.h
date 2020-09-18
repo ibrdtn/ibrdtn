@@ -41,7 +41,7 @@ namespace io
 		{
 		public:
 			FatImageException(int errcode, const std::string &operation, const ibrcommon::File &file);
-			virtual ~FatImageException() throw ();
+			virtual ~FatImageException() noexcept;
 
 			int getErrorCode() const;
 
@@ -72,21 +72,21 @@ namespace io
 
 		typedef std::list<FATFile> filelist;
 
-		void list(filelist &files) const throw (FatImageException);
-		void list(const FATFile &directory, filelist &files) const throw (FatImageException);
+		void list(filelist &files) const noexcept (false);
+		void list(const FATFile &directory, filelist &files) const noexcept (false);
 
-		bool exists(const FATFile &file) const throw ();
+		bool exists(const FATFile &file) const noexcept;
 
-		time_t lastaccess(const FATFile &file) const throw ();
+		time_t lastaccess(const FATFile &file) const noexcept;
 
-		size_t size(const FATFile &file) const throw ();
+		size_t size(const FATFile &file) const noexcept;
 
-		bool isDirectory(const FATFile &file) const throw ();
+		bool isDirectory(const FATFile &file) const noexcept;
 
 		FileHandle open(const FATFile &file) const;
 
 	private:
-		void update(const FATFile &path, dirent_t &d) const throw (ibrcommon::IOException);
+		void update(const FATFile &path, dirent_t &d) const noexcept (false);
 
 		const static std::string TAG;
 

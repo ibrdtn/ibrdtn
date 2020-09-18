@@ -51,7 +51,7 @@ namespace dtn
 		public:
 			class OnChangeListener {
 			public:
-				virtual void onConfigurationChanged(const dtn::daemon::Configuration &conf) throw () = 0;
+				virtual void onConfigurationChanged(const dtn::daemon::Configuration &conf) noexcept = 0;
 			};
 
 			class NetConfig
@@ -182,7 +182,7 @@ namespace dtn
 				bool announce() const;
 				bool shortbeacon() const;
 				int version() const;
-				const std::set<ibrcommon::vaddress> address() const throw (ParameterNotFoundException);
+				const std::set<ibrcommon::vaddress> address() const noexcept (false);
 				int port() const;
 				unsigned int interval() const;
 				bool enableCrosslayer() const;

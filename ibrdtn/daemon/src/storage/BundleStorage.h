@@ -47,7 +47,7 @@ namespace dtn
 			class BundleLoadException : public NoBundleFoundException
 			{
 			public:
-				BundleLoadException(string what = "Error while loading bundle data.") throw() : NoBundleFoundException(what)
+				BundleLoadException(string what = "Error while loading bundle data.") noexcept : NoBundleFoundException(what)
 				{
 				};
 			};
@@ -55,7 +55,7 @@ namespace dtn
 			class StorageSizeExeededException : public ibrcommon::Exception
 			{
 			public:
-				StorageSizeExeededException(string what = "No space left in the storage.") throw() : ibrcommon::Exception(what)
+				StorageSizeExeededException(string what = "No space left in the storage.") noexcept : ibrcommon::Exception(what)
 				{
 				};
 			};
@@ -92,7 +92,7 @@ namespace dtn
 			/**
 			 * @see BundleSeeker::get(BundleSelector &cb, BundleResult &result)
 			 */
-			virtual void get(const BundleSelector &cb, BundleResult &result) throw (NoBundleFoundException, BundleSelectorException) = 0;
+			virtual void get(const BundleSelector &cb, BundleResult &result) noexcept (false) = 0;
 
 			/**
 			 * @see BundleSeeker::getDistinctDestinations()
@@ -186,12 +186,12 @@ namespace dtn
 			 */
 			BundleStorage(const dtn::data::Length &maxsize);
 
-			void allocSpace(const dtn::data::Length &size) throw (StorageSizeExeededException);
-			void freeSpace(const dtn::data::Length &size) throw ();
-			void clearSpace() throw ();
+			void allocSpace(const dtn::data::Length &size) noexcept (false);
+			void freeSpace(const dtn::data::Length &size) noexcept;
+			void clearSpace() noexcept;
 
-			void eventBundleAdded(const dtn::data::MetaBundle &b) throw ();
-			void eventBundleRemoved(const dtn::data::BundleID &id) throw ();
+			void eventBundleAdded(const dtn::data::MetaBundle &b) noexcept;
+			void eventBundleRemoved(const dtn::data::BundleID &id) noexcept;
 
 			bool _faulty;
 

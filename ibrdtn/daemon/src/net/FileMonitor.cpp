@@ -42,7 +42,7 @@ namespace dtn
 		{
 		}
 
-		void inotifysocket::up() throw (ibrcommon::socket_exception)
+		void inotifysocket::up() noexcept (false)
 		{
 			if (_state != SOCKET_DOWN)
 				throw ibrcommon::socket_exception("socket is already up");
@@ -55,7 +55,7 @@ namespace dtn
 			_state = SOCKET_UP;
 		}
 
-		void inotifysocket::down() throw (ibrcommon::socket_exception)
+		void inotifysocket::down() noexcept (false)
 		{
 			if (_state != SOCKET_UP)
 				throw ibrcommon::socket_exception("socket is not up");
@@ -74,7 +74,7 @@ namespace dtn
 			_state = SOCKET_DOWN;
 		}
 
-		void inotifysocket::watch(const ibrcommon::File &path, int opts) throw (ibrcommon::socket_exception)
+		void inotifysocket::watch(const ibrcommon::File &path, int opts) noexcept (false)
 		{
 #ifdef HAVE_SYS_INOTIFY_H
 			int wd = inotify_add_watch(this->fd(), path.getPath().c_str(), opts);
@@ -82,7 +82,7 @@ namespace dtn
 #endif
 		}
 
-		ssize_t inotifysocket::read(char *data, size_t len) throw (ibrcommon::socket_exception)
+		ssize_t inotifysocket::read(char *data, size_t len) noexcept (false)
 		{
 #ifdef HAVE_SYS_INOTIFY_H
 			return ::read(this->fd(), data, len);
@@ -118,9 +118,9 @@ namespace dtn
 			_watchset.insert(watch);
 		}
 
-		void FileMonitor::componentUp() throw ()
+		void FileMonitor::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				_socket.up();
 			} catch (const ibrcommon::socket_exception &ex) {
@@ -128,7 +128,7 @@ namespace dtn
 			}
 		}
 
-		void FileMonitor::componentRun() throw ()
+		void FileMonitor::componentRun() noexcept
 		{
 #ifdef HAVE_SYS_INOTIFY_H
 			while (_running)
@@ -163,12 +163,12 @@ namespace dtn
 #endif
 		}
 
-		void FileMonitor::componentDown() throw ()
+		void FileMonitor::componentDown() noexcept
 		{
 			_socket.down();
 		}
 
-		void FileMonitor::__cancellation() throw ()
+		void FileMonitor::__cancellation() noexcept
 		{
 			_socket.down();
 		}

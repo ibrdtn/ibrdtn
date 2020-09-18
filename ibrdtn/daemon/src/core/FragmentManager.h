@@ -39,7 +39,7 @@ namespace dtn
 		class FragmentationAbortedException : public ibrcommon::Exception
 		{
 		public:
-			FragmentationAbortedException(string what = "Fragmentation aborted.") throw() : ibrcommon::Exception(what)
+			FragmentationAbortedException(string what = "Fragmentation aborted.") noexcept : ibrcommon::Exception(what)
 			{
 			}
 		};
@@ -47,7 +47,7 @@ namespace dtn
 		class FragmentationProhibitedException : public FragmentationAbortedException
 		{
 		public:
-			FragmentationProhibitedException(string what = "Fragmentation is prohibited.") throw() : FragmentationAbortedException(what)
+			FragmentationProhibitedException(string what = "Fragmentation is prohibited.") noexcept : FragmentationAbortedException(what)
 			{
 			}
 		};
@@ -55,7 +55,7 @@ namespace dtn
 		class FragmentationNotNecessaryException : public FragmentationAbortedException
 		{
 		public:
-			FragmentationNotNecessaryException(string what = "Fragmentation is not necessary.") throw() : FragmentationAbortedException(what)
+			FragmentationNotNecessaryException(string what = "Fragmentation is not necessary.") noexcept : FragmentationAbortedException(what)
 			{
 			}
 		};
@@ -68,13 +68,13 @@ namespace dtn
 			FragmentManager();
 			virtual ~FragmentManager();
 
-			void __cancellation() throw ();
+			void __cancellation() noexcept;
 
-			void componentUp() throw ();
-			void componentRun() throw ();
-			void componentDown() throw ();
+			void componentUp() noexcept;
+			void componentRun() noexcept;
+			void componentDown() noexcept;
 
-			void raiseEvent(const dtn::routing::QueueBundleEvent &evt) throw ();
+			void raiseEvent(const dtn::routing::QueueBundleEvent &evt) noexcept;
 
 			const std::string getName() const;
 
@@ -84,7 +84,7 @@ namespace dtn
 			 * @param id
 			 * @param offset
 			 */
-			static void setOffset(const dtn::data::EID &peer, const dtn::data::BundleID &id, const dtn::data::Length &abs_offset, const dtn::data::Length &frag_offset) throw ();
+			static void setOffset(const dtn::data::EID &peer, const dtn::data::BundleID &id, const dtn::data::Length &abs_offset, const dtn::data::Length &frag_offset) noexcept;
 
 			/**
 			 * Get the offset of a transmission
@@ -92,7 +92,7 @@ namespace dtn
 			 * @param id
 			 * @return
 			 */
-			static dtn::data::Length getOffset(const dtn::data::EID &peer, const dtn::data::BundleID &id) throw ();
+			static dtn::data::Length getOffset(const dtn::data::EID &peer, const dtn::data::BundleID &id) noexcept;
 
 			/**
 			 * Split-up a bundle into several pieces
@@ -100,7 +100,7 @@ namespace dtn
 			 * @param maxPayloadLength payload length maximum per fragment
 			 * @param fragments list of all fragments
 			 */
-			static void split(const dtn::data::Bundle &bundle, const dtn::data::Length &maxPayloadLength, std::list<dtn::data::Bundle> &fragments) throw (FragmentationAbortedException);
+			static void split(const dtn::data::Bundle &bundle, const dtn::data::Length &maxPayloadLength, std::list<dtn::data::Bundle> &fragments) noexcept (false);
 
 		private:
 			class Transmission
@@ -119,7 +119,7 @@ namespace dtn
 			};
 
 			static void expire_offsets(const dtn::data::Timestamp &timestamp);
-			static dtn::data::Length get_payload_offset(const dtn::data::Bundle &bundle, const dtn::data::Length &abs_offset, const dtn::data::Length &frag_offset) throw ();
+			static dtn::data::Length get_payload_offset(const dtn::data::Bundle &bundle, const dtn::data::Length &abs_offset, const dtn::data::Length &frag_offset) noexcept;
 
 			/**
 			 * adds all necessary blocks from the bundle to the fragment

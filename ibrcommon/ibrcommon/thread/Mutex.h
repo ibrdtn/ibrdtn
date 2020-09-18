@@ -30,7 +30,7 @@ namespace ibrcommon
 	class MutexException : public ibrcommon::Exception
 	{
 	public:
-		MutexException(string what = "An error occured during mutex operation.") throw() : ibrcommon::Exception(what)
+		MutexException(string what = "An error occured during mutex operation.") noexcept : ibrcommon::Exception(what)
 		{
 		};
 	};

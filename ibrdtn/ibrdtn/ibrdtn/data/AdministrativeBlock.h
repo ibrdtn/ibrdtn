@@ -19,7 +19,7 @@ namespace dtn
 			class WrongRecordException : public ibrcommon::Exception
 			{
 			public:
-				WrongRecordException(string what = "This administrative block is not of the expected type.") throw() : ibrcommon::Exception(what)
+				WrongRecordException(string what = "This administrative block is not of the expected type.") noexcept : ibrcommon::Exception(what)
 				{
 				};
 			};
@@ -27,7 +27,7 @@ namespace dtn
 			AdministrativeBlock();
 			virtual ~AdministrativeBlock() = 0;
 
-			virtual void read(const dtn::data::PayloadBlock &p) throw (WrongRecordException) = 0;
+			virtual void read(const dtn::data::PayloadBlock &p) noexcept (false) = 0;
 			virtual void write(dtn::data::PayloadBlock &p) const = 0;
 		};
 	} /* namespace data */

@@ -40,7 +40,7 @@ public:
 	class BIOException : public ibrcommon::Exception
 	{
 	public:
-		BIOException(const std::string &what) throw() : Exception(what)
+		BIOException(const std::string &what) noexcept : Exception(what)
 		{
 		};
 	};

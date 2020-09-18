@@ -37,7 +37,7 @@ namespace dtn
 		{
 		}
 
-		void EventConnection::raiseEvent(const dtn::core::NodeEvent &node) throw ()
+		void EventConnection::raiseEvent(const dtn::core::NodeEvent &node) noexcept
 		{
 			ibrcommon::MutexLock l(_mutex);
 			if (!_running) return;
@@ -73,7 +73,7 @@ namespace dtn
 			_stream << std::endl;
 		}
 
-		void EventConnection::raiseEvent(const dtn::core::GlobalEvent &global) throw ()
+		void EventConnection::raiseEvent(const dtn::core::GlobalEvent &global) noexcept
 		{
 			ibrcommon::MutexLock l(_mutex);
 			if (!_running) return;
@@ -123,7 +123,7 @@ namespace dtn
 			_stream << std::endl;
 		}
 
-		void EventConnection::raiseEvent(const dtn::net::BundleReceivedEvent &received) throw ()
+		void EventConnection::raiseEvent(const dtn::net::BundleReceivedEvent &received) noexcept
 		{
 			ibrcommon::MutexLock l(_mutex);
 			if (!_running) return;
@@ -154,7 +154,7 @@ namespace dtn
 			_stream << std::endl;
 		}
 
-		void EventConnection::raiseEvent(const dtn::core::CustodyEvent &custody) throw ()
+		void EventConnection::raiseEvent(const dtn::core::CustodyEvent &custody) noexcept
 		{
 			ibrcommon::MutexLock l(_mutex);
 			if (!_running) return;
@@ -196,7 +196,7 @@ namespace dtn
 			_stream << std::endl;
 		}
 
-		void EventConnection::raiseEvent(const dtn::net::TransferAbortedEvent &aborted) throw ()
+		void EventConnection::raiseEvent(const dtn::net::TransferAbortedEvent &aborted) noexcept
 		{
 			ibrcommon::MutexLock l(_mutex);
 			if (!_running) return;
@@ -221,7 +221,7 @@ namespace dtn
 			_stream << std::endl;
 		}
 
-		void EventConnection::raiseEvent(const dtn::net::TransferCompletedEvent &completed) throw ()
+		void EventConnection::raiseEvent(const dtn::net::TransferCompletedEvent &completed) noexcept
 		{
 			ibrcommon::MutexLock l(_mutex);
 			if (!_running) return;
@@ -251,7 +251,7 @@ namespace dtn
 			_stream << std::endl;
 		}
 
-		void EventConnection::raiseEvent(const dtn::net::ConnectionEvent &connection) throw ()
+		void EventConnection::raiseEvent(const dtn::net::ConnectionEvent &connection) noexcept
 		{
 			ibrcommon::MutexLock l(_mutex);
 			if (!_running) return;
@@ -286,7 +286,7 @@ namespace dtn
 			_stream << std::endl;
 		}
 
-		void EventConnection::raiseEvent(const dtn::routing::QueueBundleEvent &queued) throw ()
+		void EventConnection::raiseEvent(const dtn::routing::QueueBundleEvent &queued) noexcept
 		{
 			ibrcommon::MutexLock l(_mutex);
 			if (!_running) return;
@@ -368,7 +368,7 @@ namespace dtn
 			dtn::core::EventDispatcher<dtn::routing::QueueBundleEvent>::remove(this);
 		}
 
-		void EventConnection::__cancellation() throw ()
+		void EventConnection::__cancellation() noexcept
 		{
 		}
 	} /* namespace api */

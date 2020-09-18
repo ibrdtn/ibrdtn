@@ -67,17 +67,17 @@ namespace dtn
 			class RejectedException : public dtn::SerializationFailedException
 			{
 			public:
-				RejectedException(string what = "A validate method has the bundle rejected.") throw() : dtn::SerializationFailedException(what)
+				RejectedException(string what = "A validate method has the bundle rejected.") noexcept : dtn::SerializationFailedException(what)
 				{
 				};
 			};
 
 			virtual ~Validator() {};
 
-			virtual void validate(const dtn::data::PrimaryBlock&) const throw (RejectedException) = 0;
-			virtual void validate(const dtn::data::Block&, const dtn::data::Number&) const throw (RejectedException) = 0;
-			virtual void validate(const dtn::data::PrimaryBlock&, const dtn::data::Block&, const dtn::data::Number&) const throw (RejectedException) = 0;
-			virtual void validate(const dtn::data::Bundle&) const throw (RejectedException) = 0;
+			virtual void validate(const dtn::data::PrimaryBlock&) const noexcept (false) = 0;
+			virtual void validate(const dtn::data::Block&, const dtn::data::Number&) const noexcept (false) = 0;
+			virtual void validate(const dtn::data::PrimaryBlock&, const dtn::data::Block&, const dtn::data::Number&) const noexcept (false) = 0;
+			virtual void validate(const dtn::data::Bundle&) const noexcept (false) = 0;
 		};
 
 		class AcceptValidator : public Validator
@@ -86,10 +86,10 @@ namespace dtn
 			AcceptValidator();
 			virtual ~AcceptValidator();
 
-			virtual void validate(const dtn::data::PrimaryBlock&) const throw (RejectedException);
-			virtual void validate(const dtn::data::Block&, const dtn::data::Number&) const throw (RejectedException);
-			virtual void validate(const dtn::data::PrimaryBlock&, const dtn::data::Block&, const dtn::data::Number&) const throw (RejectedException);
-			virtual void validate(const dtn::data::Bundle&) const throw (RejectedException);
+			virtual void validate(const dtn::data::PrimaryBlock&) const noexcept (false);
+			virtual void validate(const dtn::data::Block&, const dtn::data::Number&) const noexcept (false);
+			virtual void validate(const dtn::data::PrimaryBlock&, const dtn::data::Block&, const dtn::data::Number&) const noexcept (false);
+			virtual void validate(const dtn::data::Bundle&) const noexcept (false);
 		};
 
 		class DefaultSerializer : public Serializer

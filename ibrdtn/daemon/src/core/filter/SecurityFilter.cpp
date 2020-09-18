@@ -42,7 +42,7 @@ namespace dtn
 		{
 		}
 
-		BundleFilter::ACTION SecurityFilter::evaluate(const FilterContext &context) const throw ()
+		BundleFilter::ACTION SecurityFilter::evaluate(const FilterContext &context) const noexcept
 		{
 #ifdef IBRDTN_SUPPORT_BSP
 			switch (_mode)
@@ -122,7 +122,7 @@ namespace dtn
 			return BundleFilter::evaluate(context);
 		}
 
-		BundleFilter::ACTION SecurityFilter::filter(const FilterContext &context, dtn::data::Bundle &bundle) const throw ()
+		BundleFilter::ACTION SecurityFilter::filter(const FilterContext &context, dtn::data::Bundle &bundle) const noexcept
 		{
 #ifdef IBRDTN_SUPPORT_BSP
 			switch (_mode)

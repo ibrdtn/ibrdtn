@@ -93,17 +93,17 @@ void tcpstreamtest::runTest()
 	};
 }
 
-void tcpstreamtest::StreamChecker::__cancellation() throw ()
+void tcpstreamtest::StreamChecker::__cancellation() noexcept
 {
 	_running = false;
 	_sock.down();
 }
 
-void tcpstreamtest::StreamChecker::setup() throw () {
+void tcpstreamtest::StreamChecker::setup() noexcept {
 	_running = true;
 }
 
-void tcpstreamtest::StreamChecker::run() throw ()
+void tcpstreamtest::StreamChecker::run() noexcept
 {
 	try {
 		char values[10] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };

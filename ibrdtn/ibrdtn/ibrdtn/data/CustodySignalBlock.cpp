@@ -38,7 +38,7 @@ namespace dtn
 		{
 		}
 
-		void CustodySignalBlock::read(const dtn::data::PayloadBlock &p) throw (WrongRecordException)
+		void CustodySignalBlock::read(const dtn::data::PayloadBlock &p) noexcept (false)
 		{
 			ibrcommon::BLOB::Reference r = p.getBLOB();
 			ibrcommon::BLOB::iostream stream = r.iostream();

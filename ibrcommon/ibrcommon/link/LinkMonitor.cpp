@@ -42,7 +42,7 @@ namespace ibrcommon
 		join();
 	}
 
-	void LinkMonitor::add(const ibrcommon::vinterface &iface) throw ()
+	void LinkMonitor::add(const ibrcommon::vinterface &iface) noexcept
 	{
 		// check if there exists an address set for this interface
 		if (_addr_map.find(iface) != _addr_map.end()) return;
@@ -54,7 +54,7 @@ namespace ibrcommon
 		_addr_map[iface].insert(addr.begin(), addr.end());
 	}
 
-	void LinkMonitor::remove() throw ()
+	void LinkMonitor::remove() noexcept
 	{
 		// get all monitored interfaces
 		const std::set<vinterface> ifaces = _lmgr.getMonitoredInterfaces();
@@ -72,7 +72,7 @@ namespace ibrcommon
 		}
 	}
 
-	void LinkMonitor::run() throw ()
+	void LinkMonitor::run() noexcept
 	{
 		ibrcommon::MutexLock l(_cond);
 
@@ -162,7 +162,7 @@ namespace ibrcommon
 		}
 	}
 
-	void LinkMonitor::__cancellation() throw ()
+	void LinkMonitor::__cancellation() noexcept
 	{
 		// debug
 		IBRCOMMON_LOGGER_DEBUG_TAG(TAG, 60) << "cancelled" << IBRCOMMON_LOGGER_ENDL;

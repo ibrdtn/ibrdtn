@@ -90,12 +90,12 @@ namespace dtn
 			_sessionmap.clear();
 		}
 
-		void KeyExchanger::__cancellation() throw ()
+		void KeyExchanger::__cancellation() noexcept
 		{
 			_queue.abort();
 		}
 
-		void KeyExchanger::componentUp() throw ()
+		void KeyExchanger::componentUp() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::security::KeyExchangeEvent>::add(this);
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::add(this);
@@ -104,7 +104,7 @@ namespace dtn
 			_queue.reset();
 		}
 
-		void KeyExchanger::componentRun() throw ()
+		void KeyExchanger::componentRun() noexcept
 		{
 			// initialize all protocols
 			for (std::map<int, KeyExchangeProtocol*>::iterator it = _protocols.begin(); it != _protocols.end(); ++it)
@@ -132,7 +132,7 @@ namespace dtn
 			}
 		}
 
-		void KeyExchanger::componentDown() throw ()
+		void KeyExchanger::componentDown() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::security::KeyExchangeEvent>::remove(this);
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::remove(this);
@@ -169,12 +169,12 @@ namespace dtn
 			} catch (const ibrcommon::Exception&) {}
 		}
 
-		void KeyExchanger::raiseEvent(const KeyExchangeEvent &kee) throw ()
+		void KeyExchanger::raiseEvent(const KeyExchangeEvent &kee) noexcept
 		{
 			_queue.push(new ExchangeTask(kee.getEID(), kee.getData()));
 		}
 
-		void KeyExchanger::raiseEvent(const dtn::core::TimeEvent&) throw ()
+		void KeyExchanger::raiseEvent(const dtn::core::TimeEvent&) noexcept
 		{
 			const dtn::data::Timestamp now = dtn::utils::Clock::getMonotonicTimestamp();
 
@@ -311,7 +311,7 @@ namespace dtn
 		 : _peer(peer), _data(data)
 		{}
 
-		void KeyExchanger::ExchangeTask::execute(KeyExchanger &exchanger) throw ()
+		void KeyExchanger::ExchangeTask::execute(KeyExchanger &exchanger) noexcept
 		{
 			try
 			{
@@ -454,7 +454,7 @@ namespace dtn
 		 : _timestamp(timestamp)
 		{}
 
-		void KeyExchanger::ExpireTask::execute(KeyExchanger &exchanger) throw ()
+		void KeyExchanger::ExpireTask::execute(KeyExchanger &exchanger) noexcept
 		{
 			// free expired sessions
 			exchanger.expire(_timestamp);
@@ -519,7 +519,7 @@ namespace dtn
 			return *session;
 		}
 
-		KeyExchangeSession& KeyExchanger::getSession(const dtn::data::EID &peer, const dtn::security::KeyExchangeData &data) throw (ibrcommon::Exception)
+		KeyExchangeSession& KeyExchanger::getSession(const dtn::data::EID &peer, const dtn::security::KeyExchangeData &data) noexcept (false)
 		{
 			const std::string session_key = KeyExchangeSession::getSessionKey(peer, data.getSessionId());
 

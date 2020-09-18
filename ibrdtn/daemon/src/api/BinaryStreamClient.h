@@ -36,15 +36,15 @@ namespace dtn
 				BinaryStreamClient(ClientHandler &client, ibrcommon::socketstream &stream);
 				virtual ~BinaryStreamClient();
 
-				virtual void eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases csc) throw ();
-				virtual void eventTimeout() throw ();
-				virtual void eventError() throw ();
-				virtual void eventConnectionDown() throw ();
-				virtual void eventConnectionUp(const dtn::streams::StreamContactHeader &header) throw ();
+				virtual void eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases csc) noexcept;
+				virtual void eventTimeout() noexcept;
+				virtual void eventError() noexcept;
+				virtual void eventConnectionDown() noexcept;
+				virtual void eventConnectionUp(const dtn::streams::StreamContactHeader &header) noexcept;
 
-				virtual void eventBundleRefused() throw ();
-				virtual void eventBundleForwarded() throw ();
-				virtual void eventBundleAck(const dtn::data::Length &ack) throw ();
+				virtual void eventBundleRefused() noexcept;
+				virtual void eventBundleForwarded() noexcept;
+				virtual void eventBundleAck(const dtn::data::Length &ack) noexcept;
 
 				const dtn::data::EID& getPeer() const;
 
@@ -53,7 +53,7 @@ namespace dtn
 				void received(const dtn::streams::StreamContactHeader &h);
 				void run();
 				void finally();
-				void __cancellation() throw ();
+				void __cancellation() noexcept;
 				bool good() const;
 
 			private:
@@ -64,8 +64,8 @@ namespace dtn
 					virtual ~Sender();
 
 				protected:
-					void run() throw ();
-					void __cancellation() throw ();
+					void run() noexcept;
+					void __cancellation() noexcept;
 
 					void received(const dtn::streams::StreamContactHeader &h);
 					bool good() const;

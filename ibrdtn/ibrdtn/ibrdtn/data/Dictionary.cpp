@@ -62,7 +62,7 @@ namespace dtn
 		{
 		}
 
-		Number Dictionary::get(const std::string &value) const throw (EntryNotFoundException)
+		Number Dictionary::get(const std::string &value) const noexcept (false)
 		{
 			std::string bytes = _bytestream.str();
 			const char *bytebegin = bytes.c_str();

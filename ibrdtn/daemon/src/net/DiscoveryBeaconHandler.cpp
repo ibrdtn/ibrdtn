@@ -29,11 +29,11 @@ namespace dtn
 		{
 		}
 
-		void DiscoveryBeaconHandler::onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) throw ()
+		void DiscoveryBeaconHandler::onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) noexcept
 		{
 		}
 
-		void DiscoveryBeaconHandler::onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &beacon) throw (NoServiceHereException)
+		void DiscoveryBeaconHandler::onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &beacon) noexcept (false)
 		{
 			throw NoServiceHereException();
 		}

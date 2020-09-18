@@ -65,26 +65,26 @@ namespace dtn
 		{
 		}
 
-		void FileConvergenceLayer::componentUp() throw ()
+		void FileConvergenceLayer::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			dtn::core::EventDispatcher<dtn::core::NodeEvent>::add(this);
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::add(this);
 		}
 
-		void FileConvergenceLayer::componentDown() throw ()
+		void FileConvergenceLayer::componentDown() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			dtn::core::EventDispatcher<dtn::core::NodeEvent>::remove(this);
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::remove(this);
 		}
 
-		void FileConvergenceLayer::__cancellation() throw ()
+		void FileConvergenceLayer::__cancellation() noexcept
 		{
 			_tasks.abort();
 		}
 
-		void FileConvergenceLayer::componentRun() throw ()
+		void FileConvergenceLayer::componentRun() noexcept
 		{
 			try {
 				while (true)
@@ -222,7 +222,7 @@ namespace dtn
 			} catch (const ibrcommon::QueueUnblockedException &ex) { };
 		}
 
-		void FileConvergenceLayer::raiseEvent(const dtn::core::NodeEvent &node) throw ()
+		void FileConvergenceLayer::raiseEvent(const dtn::core::NodeEvent &node) noexcept
 		{
 			if (node.getAction() == dtn::core::NODE_AVAILABLE)
 			{
@@ -234,7 +234,7 @@ namespace dtn
 			}
 		}
 
-		void FileConvergenceLayer::raiseEvent(const dtn::core::TimeEvent &time) throw ()
+		void FileConvergenceLayer::raiseEvent(const dtn::core::TimeEvent &time) noexcept
 		{
 			if (time.getAction() == dtn::core::TIME_SECOND_TICK)
 			{

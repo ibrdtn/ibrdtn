@@ -64,7 +64,7 @@ namespace dtn
 		 * Bind to the local socket.
 		 * @throw If the bind fails, an DatagramException is thrown.
 		 */
-		void LOWPANDatagramService::bind() throw (DatagramException)
+		void LOWPANDatagramService::bind() noexcept (false)
 		{
 			try {
 				_vsocket.destroy();
@@ -92,7 +92,7 @@ namespace dtn
 		 * @param buf The buffer to send.
 		 * @param length The number of available bytes in the buffer.
 		 */
-		void LOWPANDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const std::string &identifier, const char *buf, size_t length) throw (DatagramException)
+		void LOWPANDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const std::string &identifier, const char *buf, size_t length) noexcept (false)
 		{
 			try {
 				if (length > _params.max_msg_length)
@@ -149,7 +149,7 @@ namespace dtn
 		 * @param buf The buffer to send.
 		 * @param length The number of available bytes in the buffer.
 		 */
-		void LOWPANDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const char *buf, size_t length) throw (DatagramException)
+		void LOWPANDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const char *buf, size_t length) noexcept (false)
 		{
 			try {
 				if (length > _params.max_msg_length)
@@ -211,7 +211,7 @@ namespace dtn
 		 * @throw If the receive call failed for any reason, an DatagramException is thrown.
 		 * @return The number of received bytes.
 		 */
-		size_t LOWPANDatagramService::recvfrom(char *buf, size_t length, char &type, char &flags, unsigned int &seqno, std::string &address) throw (DatagramException)
+		size_t LOWPANDatagramService::recvfrom(char *buf, size_t length, char &type, char &flags, unsigned int &seqno, std::string &address) noexcept (false)
 		{
 			try {
 				ibrcommon::socketset readfds;

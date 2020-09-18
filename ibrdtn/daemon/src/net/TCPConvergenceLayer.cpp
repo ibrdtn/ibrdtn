@@ -73,7 +73,7 @@ namespace dtn
 			_vsocket.destroy();
 		}
 
-		void TCPConvergenceLayer::add(const ibrcommon::vinterface &net, int port) throw ()
+		void TCPConvergenceLayer::add(const ibrcommon::vinterface &net, int port) noexcept
 		{
 			// do not allow any futher binding if we already bound to any interface
 			if (_any_port > 0) return;
@@ -97,7 +97,7 @@ namespace dtn
 			}
 		}
 
-		void TCPConvergenceLayer::listen(const ibrcommon::vinterface &net, int port) throw ()
+		void TCPConvergenceLayer::listen(const ibrcommon::vinterface &net, int port) noexcept
 		{
 			try {
 				// add the new interface to internal data-structures
@@ -162,7 +162,7 @@ namespace dtn
 			}
 		}
 
-		void TCPConvergenceLayer::unlisten(const ibrcommon::vinterface &iface) throw ()
+		void TCPConvergenceLayer::unlisten(const ibrcommon::vinterface &iface) noexcept
 		{
 			ibrcommon::socketset socks = _vsocket.get(iface);
 			for (ibrcommon::socketset::iterator iter = socks.begin(); iter != socks.end(); ++iter) {
@@ -189,7 +189,7 @@ namespace dtn
 			return dtn::core::Node::CONN_TCPIP;
 		}
 
-		void TCPConvergenceLayer::onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &beacon) throw (dtn::net::DiscoveryBeaconHandler::NoServiceHereException)
+		void TCPConvergenceLayer::onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &beacon) noexcept (false)
 		{
 			ibrcommon::MutexLock l(_interface_lock);
 
@@ -273,7 +273,7 @@ namespace dtn
 			return TCPConvergenceLayer::TAG;
 		}
 
-		void TCPConvergenceLayer::raiseEvent(const dtn::net::P2PDialupEvent &dialup) throw ()
+		void TCPConvergenceLayer::raiseEvent(const dtn::net::P2PDialupEvent &dialup) noexcept
 		{
 			switch (dialup.type)
 			{
@@ -509,19 +509,19 @@ namespace dtn
 			}
 		}
 
-		void TCPConvergenceLayer::addTrafficIn(size_t amount) throw ()
+		void TCPConvergenceLayer::addTrafficIn(size_t amount) noexcept
 		{
 			ibrcommon::MutexLock l(_stats_lock);
 			_stats_in += amount;
 		}
 
-		void TCPConvergenceLayer::addTrafficOut(size_t amount) throw ()
+		void TCPConvergenceLayer::addTrafficOut(size_t amount) noexcept
 		{
 			ibrcommon::MutexLock l(_stats_lock);
 			_stats_out += amount;
 		}
 
-		void TCPConvergenceLayer::componentRun() throw ()
+		void TCPConvergenceLayer::componentRun() noexcept
 		{
 			try {
 				while (true)
@@ -580,7 +580,7 @@ namespace dtn
 			}
 		}
 
-		void TCPConvergenceLayer::__cancellation() throw ()
+		void TCPConvergenceLayer::__cancellation() noexcept
 		{
 			_vsocket.down();
 		}
@@ -598,12 +598,12 @@ namespace dtn
 			}
 		}
 
-		void TCPConvergenceLayer::componentUp() throw ()
+		void TCPConvergenceLayer::componentUp() noexcept
 		{
 			// listen on P2P dial-up events
 			dtn::core::EventDispatcher<dtn::net::P2PDialupEvent>::add(this);
 
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// listen on the socket
 				_vsocket.up();
@@ -613,12 +613,12 @@ namespace dtn
 			}
 		}
 
-		void TCPConvergenceLayer::componentDown() throw ()
+		void TCPConvergenceLayer::componentDown() noexcept
 		{
 			// un-listen on P2P dial-up events
 			dtn::core::EventDispatcher<dtn::net::P2PDialupEvent>::remove(this);
 
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// shutdown all sockets
 				_vsocket.down();

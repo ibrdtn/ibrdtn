@@ -305,7 +305,7 @@ namespace dtn
 			_attr_list.clear();
 		}
 
-		dtn::data::Size Node::size() const throw ()
+		dtn::data::Size Node::size() const noexcept
 		{
 			return _uri_list.size() + _attr_list.size();
 		}
@@ -403,7 +403,7 @@ namespace dtn
 			return ret;
 		}
 
-		const dtn::data::EID& Node::getEID() const throw ()
+		const dtn::data::EID& Node::getEID() const noexcept
 		{
 			return _id;
 		}
@@ -523,7 +523,7 @@ namespace dtn
 			_connect_immediately = val;
 		}
 
-		bool Node::isAvailable() const throw ()
+		bool Node::isAvailable() const noexcept
 		{
 			if (dtn::core::BundleCore::getInstance().isGloballyConnected()) {
 				return !_uri_list.empty();
@@ -546,7 +546,7 @@ namespace dtn
 			return false;
 		}
 
-		bool Node::isAvailable(const Node::URI &uri) const throw ()
+		bool Node::isAvailable(const Node::URI &uri) const noexcept
 		{
 			if (dtn::core::BundleCore::getInstance().isGloballyConnected()) {
 				return true;
@@ -571,12 +571,12 @@ namespace dtn
 			}
 		}
 
-		void Node::setAnnounced(bool val) throw ()
+		void Node::setAnnounced(bool val) noexcept
 		{
 			_announced_mark = val;
 		}
 
-		bool Node::isAnnounced() const throw ()
+		bool Node::isAnnounced() const noexcept
 		{
 			return _announced_mark;
 		}

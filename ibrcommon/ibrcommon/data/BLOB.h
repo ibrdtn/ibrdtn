@@ -36,7 +36,7 @@ namespace ibrcommon
 	class CanNotOpenFileException : public ibrcommon::IOException
 	{
 	public:
-		CanNotOpenFileException(ibrcommon::File f) throw() : IOException("Could not open file " + f.getPath() + ".")
+		CanNotOpenFileException(ibrcommon::File f) noexcept : IOException("Could not open file " + f.getPath() + ".")
 		{
 		};
 	};

@@ -29,7 +29,7 @@ namespace ibrcommon
 	class TLSException : public ibrcommon::Exception
 	{
 	public:
-		TLSException(const std::string &what) throw() : Exception(what)
+		TLSException(const std::string &what) noexcept : Exception(what)
 		{
 		}
 	};
@@ -37,7 +37,7 @@ namespace ibrcommon
 	class ContextCreationException : public TLSException
 	{
 	public:
-		ContextCreationException(const std::string &what) throw() : TLSException(what)
+		ContextCreationException(const std::string &what) noexcept : TLSException(what)
 		{
 		};
 	};
@@ -45,7 +45,7 @@ namespace ibrcommon
 	class SSLCreationException : public TLSException
 	{
 	public:
-		SSLCreationException(const std::string &what) throw() : TLSException(what)
+		SSLCreationException(const std::string &what) noexcept : TLSException(what)
 		{
 		};
 	};
@@ -53,7 +53,7 @@ namespace ibrcommon
 	class BIOCreationException : public TLSException
 	{
 	public:
-		BIOCreationException(const std::string &what) throw() : TLSException(what)
+		BIOCreationException(const std::string &what) noexcept : TLSException(what)
 		{
 		};
 	};
@@ -61,7 +61,7 @@ namespace ibrcommon
 	class TLSHandshakeException : public TLSException
 	{
 	public:
-		TLSHandshakeException(const std::string &what) throw() : TLSException(what)
+		TLSHandshakeException(const std::string &what) noexcept : TLSException(what)
 		{
 		};
 	};
@@ -69,7 +69,7 @@ namespace ibrcommon
 	class TLSNotInitializedException : public TLSException
 	{
 	public:
-		TLSNotInitializedException(const std::string &what) throw() : TLSException(what)
+		TLSNotInitializedException(const std::string &what) noexcept : TLSException(what)
 		{
 		};
 	};
@@ -77,7 +77,7 @@ namespace ibrcommon
 	class TLSCertificateFileException : public TLSException
 	{
 	public:
-		TLSCertificateFileException(const std::string &what) throw() : TLSException(what)
+		TLSCertificateFileException(const std::string &what) noexcept : TLSException(what)
 		{
 		};
 	};
@@ -85,7 +85,7 @@ namespace ibrcommon
 	class TLSKeyFileException : public TLSException
 	{
 	public:
-		TLSKeyFileException(const std::string &what) throw() : TLSException(what)
+		TLSKeyFileException(const std::string &what) noexcept : TLSException(what)
 		{
 		};
 	};
@@ -93,7 +93,7 @@ namespace ibrcommon
 	class TLSCertificateVerificationException : public TLSException
 	{
 	public:
-		TLSCertificateVerificationException(const std::string &what) throw() : TLSException(what)
+		TLSCertificateVerificationException(const std::string &what) noexcept : TLSException(what)
 		{
 		};
 	};

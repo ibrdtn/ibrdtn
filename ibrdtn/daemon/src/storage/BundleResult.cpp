@@ -23,7 +23,7 @@ namespace dtn
 		BundleResultList::~BundleResultList() {
 		}
 
-		void BundleResultList::put(const dtn::data::MetaBundle &bundle) throw () {
+		void BundleResultList::put(const dtn::data::MetaBundle &bundle) noexcept {
 			this->push_back(bundle);
 		}
 
@@ -33,7 +33,7 @@ namespace dtn
 		BundleResultQueue::~BundleResultQueue() {
 		}
 
-		void BundleResultQueue::put(const dtn::data::MetaBundle &bundle) throw () {
+		void BundleResultQueue::put(const dtn::data::MetaBundle &bundle) noexcept {
 			this->push(bundle);
 		}
 	} /* namespace storage */

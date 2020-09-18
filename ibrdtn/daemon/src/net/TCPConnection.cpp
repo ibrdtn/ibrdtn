@@ -111,11 +111,11 @@ namespace dtn
 			(*getProtocolStream()).reject();
 		}
 
-		void TCPConnection::eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases) throw ()
+		void TCPConnection::eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases) noexcept
 		{
 		}
 
-		void TCPConnection::eventTimeout() throw ()
+		void TCPConnection::eventTimeout() noexcept
 		{
 			// event
 			ConnectionEvent::raise(ConnectionEvent::CONNECTION_TIMEOUT, _node);
@@ -128,11 +128,11 @@ namespace dtn
 			}
 		}
 
-		void TCPConnection::eventError() throw ()
+		void TCPConnection::eventError() noexcept
 		{
 		}
 
-		void TCPConnection::initiateExtendedHandshake() throw (ibrcommon::Exception)
+		void TCPConnection::initiateExtendedHandshake() noexcept (false)
 		{
 #ifdef WITH_TLS
 			/* if both nodes support TLS, activate it */
@@ -190,7 +190,7 @@ namespace dtn
 #endif
 		}
 
-		void TCPConnection::eventConnectionUp(const dtn::streams::StreamContactHeader &header) throw ()
+		void TCPConnection::eventConnectionUp(const dtn::streams::StreamContactHeader &header) noexcept
 		{
 			_peer = header;
 
@@ -248,7 +248,7 @@ namespace dtn
 			ConnectionEvent::raise(ConnectionEvent::CONNECTION_UP, _node);
 		}
 
-		void TCPConnection::eventConnectionDown() throw ()
+		void TCPConnection::eventConnectionDown() noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG(TCPConnection::TAG, 40) << "eventConnectionDown()" << IBRCOMMON_LOGGER_ENDL;
 
@@ -269,7 +269,7 @@ namespace dtn
 			}
 		}
 
-		void TCPConnection::eventBundleRefused() throw ()
+		void TCPConnection::eventBundleRefused() noexcept
 		{
 			ibrcommon::Queue<dtn::net::BundleTransfer>::Locked l = _sentqueue.exclusive();
 
@@ -292,7 +292,7 @@ namespace dtn
 			l.pop();
 		}
 
-		void TCPConnection::eventBundleForwarded() throw ()
+		void TCPConnection::eventBundleForwarded() noexcept
 		{
 			ibrcommon::Queue<dtn::net::BundleTransfer>::Locked l = _sentqueue.exclusive();
 
@@ -315,22 +315,22 @@ namespace dtn
 			l.pop();
 		}
 
-		void TCPConnection::eventBundleAck(const dtn::data::Length &ack) throw ()
+		void TCPConnection::eventBundleAck(const dtn::data::Length &ack) noexcept
 		{
 			_lastack = ack;
 		}
 
-		void TCPConnection::addTrafficIn(size_t amount) throw ()
+		void TCPConnection::addTrafficIn(size_t amount) noexcept
 		{
 			_callback.addTrafficIn(amount);
 		}
 
-		void TCPConnection::addTrafficOut(size_t amount) throw ()
+		void TCPConnection::addTrafficOut(size_t amount) noexcept
 		{
 			_callback.addTrafficOut(amount);
 		}
 
-		void TCPConnection::initialize() throw ()
+		void TCPConnection::initialize() noexcept
 		{
 			// start the receiver for incoming bundles + handshake
 			try {
@@ -340,7 +340,7 @@ namespace dtn
 			}
 		}
 
-		void TCPConnection::shutdown() throw ()
+		void TCPConnection::shutdown() noexcept
 		{
 			try {
 				// shutdown
@@ -355,7 +355,7 @@ namespace dtn
 			}
 		}
 
-		void TCPConnection::__cancellation() throw ()
+		void TCPConnection::__cancellation() noexcept
 		{
 			// mark the connection as aborted
 			_aborted = true;
@@ -364,7 +364,7 @@ namespace dtn
 			if (_socket_stream != NULL) _socket_stream->close();
 		}
 
-		void TCPConnection::finally() throw ()
+		void TCPConnection::finally() noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG(TCPConnection::TAG, 60) << "TCPConnection down" << IBRCOMMON_LOGGER_ENDL;
 
@@ -387,7 +387,7 @@ namespace dtn
 			clearQueue();
 		}
 
-		void TCPConnection::setup() throw ()
+		void TCPConnection::setup() noexcept
 		{
 			_flags |= dtn::streams::StreamContactHeader::REQUEST_ACKNOWLEDGMENTS;
 			_flags |= dtn::streams::StreamContactHeader::REQUEST_NEGATIVE_ACKNOWLEDGMENTS;
@@ -500,7 +500,7 @@ namespace dtn
 			} catch (const bad_cast&) { };
 		}
 
-		void TCPConnection::run() throw ()
+		void TCPConnection::run() noexcept
 		{
 			try {
 				if (_socket == NULL) {
@@ -602,7 +602,7 @@ namespace dtn
 			}
 		}
 
-		TCPConnection::safe_streamconnection TCPConnection::getProtocolStream() throw (ibrcommon::Exception)
+		TCPConnection::safe_streamconnection TCPConnection::getProtocolStream() noexcept (false)
 		{
 			return safe_streamconnection(_protocol_stream, _protocol_stream_mutex);
 		}
@@ -617,7 +617,7 @@ namespace dtn
 		{
 		}
 
-		void TCPConnection::KeepaliveSender::run() throw ()
+		void TCPConnection::KeepaliveSender::run() noexcept
 		{
 			try {
 				ibrcommon::MutexLock l(_wait);
@@ -640,7 +640,7 @@ namespace dtn
 			} catch (const std::exception&) { };
 		}
 
-		void TCPConnection::KeepaliveSender::__cancellation() throw ()
+		void TCPConnection::KeepaliveSender::__cancellation() noexcept
 		{
 			ibrcommon::MutexLock l(_wait);
 			_wait.abort();
@@ -655,13 +655,13 @@ namespace dtn
 		{
 		}
 
-		void TCPConnection::Sender::__cancellation() throw ()
+		void TCPConnection::Sender::__cancellation() noexcept
 		{
 			// cancel the main thread in here
 			ibrcommon::Queue<dtn::net::BundleTransfer>::abort();
 		}
 
-		void TCPConnection::Sender::run() throw ()
+		void TCPConnection::Sender::run() noexcept
 		{
 			try {
 				dtn::storage::BundleStorage &storage = dtn::core::BundleCore::getInstance().getStorage();
@@ -802,7 +802,7 @@ namespace dtn
 			return _socket_stream->good();
 		}
 
-		void TCPConnection::Sender::finally() throw ()
+		void TCPConnection::Sender::finally() noexcept
 		{
 		}
 

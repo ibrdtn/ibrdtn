@@ -82,11 +82,11 @@ namespace ibrcommon
 			bool isLocal() const;
 			bool isAny() const;
 
-			sa_family_t family() const throw (address_exception);
-			std::string scope() const throw (scope_not_set);
-			const std::string address() const throw (address_not_set);
-			const std::string name() const throw (address_exception);
-			const std::string service() const throw (service_not_set);
+			sa_family_t family() const noexcept (false);
+			std::string scope() const noexcept (false);
+			const std::string address() const noexcept (false);
+			const std::string name() const noexcept (false);
+			const std::string service() const noexcept (false);
 
 			void setService(const uint32_t port);
 			void setService(const std::string &service);

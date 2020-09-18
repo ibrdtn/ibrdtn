@@ -58,7 +58,7 @@ namespace dtn
 			}
 		}
 
-		size_t SQLiteBundleSet::Factory::create(SQLiteDatabase &db) throw (SQLiteDatabase::SQLiteQueryException)
+		size_t SQLiteBundleSet::Factory::create(SQLiteDatabase &db) noexcept (false)
 		{
 			ibrcommon::MutexLock l(_create_lock);
 
@@ -70,13 +70,13 @@ namespace dtn
 			return __create(db, name, false);
 		}
 
-		size_t SQLiteBundleSet::Factory::create(SQLiteDatabase &db, const std::string &name) throw (SQLiteDatabase::SQLiteQueryException)
+		size_t SQLiteBundleSet::Factory::create(SQLiteDatabase &db, const std::string &name) noexcept (false)
 		{
 			ibrcommon::MutexLock l(_create_lock);
 			return __create(db, name, true);
 		}
 
-		size_t SQLiteBundleSet::Factory::__create(SQLiteDatabase &db, const std::string &name, bool persistent) throw (SQLiteDatabase::SQLiteQueryException)
+		size_t SQLiteBundleSet::Factory::__create(SQLiteDatabase &db, const std::string &name, bool persistent) noexcept (false)
 		{
 			// create a new name (fails, if the name already exists)
 			SQLiteDatabase::Statement st1(db._database, SQLiteDatabase::_sql_queries[SQLiteDatabase::BUNDLE_SET_NAME_ADD]);
@@ -96,7 +96,7 @@ namespace dtn
 			throw SQLiteDatabase::SQLiteQueryException("could not create the bundle-set name");
 		}
 
-		bool SQLiteBundleSet::Factory::__exists(SQLiteDatabase &db, const std::string &name, bool persistent) throw (SQLiteDatabase::SQLiteQueryException)
+		bool SQLiteBundleSet::Factory::__exists(SQLiteDatabase &db, const std::string &name, bool persistent) noexcept (false)
 		{
 			SQLiteDatabase::Statement st(db._database, SQLiteDatabase::_sql_queries[SQLiteDatabase::BUNDLE_SET_NAME_GET_ID]);
 			sqlite3_bind_text(*st, 1, name.c_str(), static_cast<int>(name.length()), SQLITE_TRANSIENT);
@@ -205,7 +205,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteBundleSet::add(const dtn::data::MetaBundle &bundle) throw ()
+		void SQLiteBundleSet::add(const dtn::data::MetaBundle &bundle) noexcept
 		{
 			try {
 				// insert bundle id into database
@@ -238,7 +238,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteBundleSet::clear() throw ()
+		void SQLiteBundleSet::clear() noexcept
 		{
 			try {
 				SQLiteDatabase::Statement st(_sqldb._database, SQLiteDatabase::_sql_queries[SQLiteDatabase::BUNDLE_SET_CLEAR]);
@@ -253,7 +253,7 @@ namespace dtn
 			_bf.clear();
 		}
 
-		bool SQLiteBundleSet::has(const dtn::data::BundleID &id) const throw ()
+		bool SQLiteBundleSet::has(const dtn::data::BundleID &id) const noexcept
 		{
 			// check bloom-filter first
 			if (!id.isIn(_bf)) return false;
@@ -287,7 +287,7 @@ namespace dtn
 			return false;
 		}
 
-		void SQLiteBundleSet::expire(const dtn::data::Timestamp timestamp) throw ()
+		void SQLiteBundleSet::expire(const dtn::data::Timestamp timestamp) noexcept
 		{
 			// we can not expire bundles if we have no idea of time
 			if (timestamp == 0) return;
@@ -336,7 +336,7 @@ namespace dtn
 			rebuild_bloom_filter();
 		}
 
-		dtn::data::Size SQLiteBundleSet::size() const throw ()
+		dtn::data::Size SQLiteBundleSet::size() const noexcept
 		{
 			int rows = 0;
 
@@ -355,17 +355,17 @@ namespace dtn
 			return rows;
 		}
 
-		dtn::data::Length SQLiteBundleSet::getLength() const throw ()
+		dtn::data::Length SQLiteBundleSet::getLength() const noexcept
 		{
 			return dtn::data::Number(_bf.size()).getLength() + _bf.size();
 		}
 
-		const ibrcommon::BloomFilter& SQLiteBundleSet::getBloomFilter() const throw ()
+		const ibrcommon::BloomFilter& SQLiteBundleSet::getBloomFilter() const noexcept
 		{
 			return _bf;
 		}
 
-		std::set<dtn::data::MetaBundle> SQLiteBundleSet::getNotIn(const ibrcommon::BloomFilter &filter) const throw ()
+		std::set<dtn::data::MetaBundle> SQLiteBundleSet::getNotIn(const ibrcommon::BloomFilter &filter) const noexcept
 		{
 			std::set<dtn::data::MetaBundle> ret;
 
@@ -423,7 +423,7 @@ namespace dtn
 			return stream;
 		}
 
-		void SQLiteBundleSet::new_expire_time(const dtn::data::Timestamp &ttl) throw ()
+		void SQLiteBundleSet::new_expire_time(const dtn::data::Timestamp &ttl) noexcept
 		{
 			if (_next_expiration == 0 || ttl < _next_expiration)
 			{
@@ -456,7 +456,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteBundleSet::get_bundleid(SQLiteDatabase::Statement &st, dtn::data::BundleID &id, int offset) const throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteBundleSet::get_bundleid(SQLiteDatabase::Statement &st, dtn::data::BundleID &id, int offset) const noexcept (false)
 		{
 			id.source = dtn::data::EID((const char*)sqlite3_column_text(*st, offset + 0));
 			id.timestamp = sqlite3_column_int64(*st, offset + 1);

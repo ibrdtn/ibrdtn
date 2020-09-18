@@ -44,12 +44,12 @@ namespace dtn
 		{
 		}
 
-		void Client::AsyncReceiver::__cancellation() throw ()
+		void Client::AsyncReceiver::__cancellation() noexcept
 		{
 			_running = false;
 		}
 
-		void Client::AsyncReceiver::run() throw ()
+		void Client::AsyncReceiver::run() noexcept
 		{
 			try {
 				while (!_client.eof() && _running)
@@ -167,7 +167,7 @@ namespace dtn
 			shutdown(StreamConnection::CONNECTION_SHUTDOWN_ERROR);
 		}
 
-		void Client::eventConnectionDown() throw ()
+		void Client::eventConnectionDown() noexcept
 		{
 			_inqueue.abort();
 
@@ -178,7 +178,7 @@ namespace dtn
 			}
 		}
 
-		void Client::eventBundleAck(const dtn::data::Length &ack) throw ()
+		void Client::eventBundleAck(const dtn::data::Length &ack) noexcept
 		{
 			lastack = ack;
 		}
@@ -206,7 +206,7 @@ namespace dtn
 			flush();
 		}
 
-		dtn::data::Bundle Client::getBundle(const dtn::data::Timeout timeout) throw (ConnectionException)
+		dtn::data::Bundle Client::getBundle(const dtn::data::Timeout timeout) noexcept (false)
 		{
 			try {
 				return _inqueue.poll(timeout * 1000);

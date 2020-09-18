@@ -180,9 +180,9 @@ namespace ibrcommon
 
 			STATE get() const;
 
-			void set(STATE s) throw (state_exception);
-			void wait(STATE s, STATE abortstate = NONE) throw (state_exception);
-			void setwait(STATE s, STATE abortstate = NONE) throw (state_exception);
+			void set(STATE s) noexcept (false);
+			void wait(STATE s, STATE abortstate = NONE) noexcept (false);
+			void setwait(STATE s, STATE abortstate = NONE) noexcept (false);
 
 		private:
 			void __change(STATE s);

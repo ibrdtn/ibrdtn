@@ -43,9 +43,9 @@ namespace dtn
 		{
 		public:
 			virtual ~DatagramConnectionCallback() {};
-			virtual void callback_send(DatagramConnection &connection, const char &flags, const unsigned int &seqno, const std::string &destination, const char *buf, const dtn::data::Length &len) throw (DatagramException) = 0;
-			virtual void callback_ack(DatagramConnection &connection, const unsigned int &seqno, const std::string &destination) throw (DatagramException) = 0;
-			virtual void callback_nack(DatagramConnection &connection, const unsigned int &seqno, const std::string &destination) throw (DatagramException) = 0;
+			virtual void callback_send(DatagramConnection &connection, const char &flags, const unsigned int &seqno, const std::string &destination, const char *buf, const dtn::data::Length &len) noexcept (false) = 0;
+			virtual void callback_ack(DatagramConnection &connection, const unsigned int &seqno, const std::string &destination) noexcept (false) = 0;
+			virtual void callback_nack(DatagramConnection &connection, const unsigned int &seqno, const std::string &destination) noexcept (false) = 0;
 
 			virtual void connectionUp(const DatagramConnection *conn) = 0;
 			virtual void connectionDown(const DatagramConnection *conn) = 0;
@@ -64,11 +64,11 @@ namespace dtn
 			DatagramConnection(const std::string &identifier, const DatagramService::Parameter &params, DatagramConnectionCallback &callback);
 			virtual ~DatagramConnection();
 
-			void run() throw ();
-			void setup() throw ();
-			void finally() throw ();
+			void run() noexcept;
+			void setup() noexcept;
+			void finally() noexcept;
 
-			virtual void __cancellation() throw ();
+			virtual void __cancellation() noexcept;
 
 			void shutdown();
 
@@ -135,7 +135,7 @@ namespace dtn
 				 * @param buf Buffer with received data
 				 * @param len Length of the buffer
 				 */
-				void queue(const char *buf, const dtn::data::Length &len, bool isFirst) throw (DatagramException);
+				void queue(const char *buf, const dtn::data::Length &len, bool isFirst) noexcept (false);
 
 				/**
 				 * Close the stream to terminate all blocking
@@ -217,11 +217,11 @@ namespace dtn
 				/**
 				 * skip the current bundle
 				 */
-				void skip() throw ();
+				void skip() noexcept;
 
-				void run() throw ();
-				void finally() throw ();
-				void __cancellation() throw ();
+				void run() noexcept;
+				void finally() noexcept;
+				void __cancellation() noexcept;
 
 				ibrcommon::Queue<dtn::net::BundleTransfer> queue;
 
@@ -237,7 +237,7 @@ namespace dtn
 			/**
 			 * Send a new frame
 			 */
-			void stream_send(const char *buf, const dtn::data::Length &len, bool last) throw (DatagramException);
+			void stream_send(const char *buf, const dtn::data::Length &len, bool last) noexcept (false);
 
 			/**
 			 * Adjust the average RTT by the new measured value

@@ -51,7 +51,7 @@ namespace ibrcommon
 		join();
 	}
 
-	void Timer::__cancellation() throw ()
+	void Timer::__cancellation() noexcept
 	{
 		MutexLock l(_state);
 		_state.setState(TIMER_CANCELLED);
@@ -82,7 +82,7 @@ namespace ibrcommon
 		return _timeout / 1000;
 	}
 
-	void Timer::run() throw ()
+	void Timer::run() noexcept
 	{
 		MutexLock l(_state);
 		_state.setState(TIMER_RUNNING);

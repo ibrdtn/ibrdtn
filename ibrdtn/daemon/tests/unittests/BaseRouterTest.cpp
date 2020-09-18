@@ -57,8 +57,8 @@ void BaseRouterTest::testGetRouter()
 		ExtensionTest() {};
 		~ExtensionTest() {};
 
-		void componentUp() throw () {};
-		void componentDown() throw () {};
+		void componentUp() noexcept {};
+		void componentDown() noexcept {};
 
 
 		dtn::routing::BaseRouter& testGetRouter()
@@ -83,8 +83,8 @@ void BaseRouterTest::testAddExtension()
 		ExtensionTest() {};
 		~ExtensionTest() {};
 
-		void componentUp() throw () {};
-		void componentDown() throw () {};
+		void componentUp() noexcept {};
+		void componentDown() noexcept {};
 
 		dtn::routing::BaseRouter& testGetRouter()
 		{
@@ -106,8 +106,8 @@ void BaseRouterTest::testTransferTo()
 		ExtensionTest() {};
 		~ExtensionTest() {};
 
-		void componentUp() throw () {};
-		void componentDown() throw () {};
+		void componentUp() noexcept {};
+		void componentDown() noexcept {};
 
 		void testTransfer(const dtn::data::EID &destination, const dtn::data::MetaBundle &meta)
 		{

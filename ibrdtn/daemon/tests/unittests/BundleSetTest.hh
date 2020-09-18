@@ -45,7 +45,7 @@ class BundleSetTest : public CppUnit::TestFixture {
 			ExpiredBundleCounter();
 			virtual ~ExpiredBundleCounter();
 
-			void eventBundleExpired(const dtn::data::MetaBundle &b) throw ();
+			void eventBundleExpired(const dtn::data::MetaBundle &b) noexcept;
 			int counter;
 		};
 		void genbundles(dtn::data::BundleSet &l, int number, int offset, int max);

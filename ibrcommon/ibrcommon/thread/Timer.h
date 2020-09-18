@@ -81,8 +81,8 @@ namespace ibrcommon
 		size_t getTimeout() const;
 
 	protected:
-		void run() throw ();
-		void __cancellation() throw ();
+		void run() noexcept;
+		void __cancellation() noexcept;
 
 	private:
 		enum TIMER_STATE

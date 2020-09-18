@@ -47,18 +47,18 @@ namespace dtn
 			NeighborRoutingExtension();
 			virtual ~NeighborRoutingExtension();
 
-			virtual const std::string getTag() const throw ();
+			virtual const std::string getTag() const noexcept;
 
-			virtual void eventDataChanged(const dtn::data::EID &peer) throw ();
+			virtual void eventDataChanged(const dtn::data::EID &peer) noexcept;
 
-			virtual void eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ();
+			virtual void eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept;
 
-			void componentUp() throw ();
-			void componentDown() throw ();
+			void componentUp() noexcept;
+			void componentDown() noexcept;
 
 		protected:
-			void run() throw ();
-			void __cancellation() throw ();
+			void run() noexcept;
+			void __cancellation() noexcept;
 
 		private:
 			class Task

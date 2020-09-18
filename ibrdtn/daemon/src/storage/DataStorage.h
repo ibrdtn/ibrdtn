@@ -44,7 +44,7 @@ namespace dtn
 			class DataNotAvailableException : public ibrcommon::Exception
 			{
 			public:
-				DataNotAvailableException(string what = "Requested data is not available.") throw() : Exception(what)
+				DataNotAvailableException(string what = "Requested data is not available.") noexcept : Exception(what)
 				{ };
 			};
 
@@ -100,7 +100,7 @@ namespace dtn
 			const Hash store(Container *data);
 			void store(const Hash &hash, Container *data);
 
-			DataStorage::istream retrieve(const Hash &hash) throw (DataNotAvailableException);
+			DataStorage::istream retrieve(const Hash &hash) noexcept (false);
 			void remove(const Hash &hash);
 
 			/**
@@ -129,8 +129,8 @@ namespace dtn
 			/*** END: methods for unit-testing ***/
 
 		protected:
-			void run() throw ();
-			void __cancellation() throw ();
+			void run() noexcept;
+			void __cancellation() noexcept;
 
 		private:
 			class Task

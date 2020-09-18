@@ -43,7 +43,7 @@ namespace dtn
 			class EntryNotFoundException : public dtn::InvalidDataException
 			{
 			public:
-				EntryNotFoundException(string what = "The requested dictionary entry is not available.") throw() : dtn::InvalidDataException(what)
+				EntryNotFoundException(string what = "The requested dictionary entry is not available.") noexcept : dtn::InvalidDataException(what)
 				{
 				};
 			};
@@ -115,7 +115,7 @@ namespace dtn
 		private:
 			bool exists(const std::string&) const;
 			void add(const std::string&);
-			Number get(const std::string&) const throw (EntryNotFoundException);
+			Number get(const std::string&) const noexcept (false);
 
 			std::stringstream _bytestream;
 		};

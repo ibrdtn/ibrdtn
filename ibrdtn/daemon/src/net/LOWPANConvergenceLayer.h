@@ -54,9 +54,9 @@ namespace dtn
 			 * this method updates the given values
 			 */
 			void onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &announcement)
-				throw (dtn::net::DiscoveryBeaconHandler::NoServiceHereException);
+				noexcept (false);
 
-			void onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) throw ();
+			void onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) noexcept;
 
 			dtn::core::Node::Protocol getDiscoveryProtocol() const;
 
@@ -83,10 +83,10 @@ namespace dtn
 			void remove(const LOWPANConnection *conn);
 
 		protected:
-			virtual void componentUp() throw ();
-			virtual void componentRun() throw ();
-			virtual void componentDown() throw ();
-			void __cancellation() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentRun() noexcept;
+			virtual void componentDown() noexcept;
+			void __cancellation() noexcept;
 
 		private:
 			static const size_t BUFF_SIZE;

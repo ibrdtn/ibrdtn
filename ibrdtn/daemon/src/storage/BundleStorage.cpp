@@ -133,7 +133,7 @@ namespace dtn
 			return _currentsize;
 		}
 
-		void BundleStorage::allocSpace(const dtn::data::Length &size) throw (StorageSizeExeededException)
+		void BundleStorage::allocSpace(const dtn::data::Length &size) noexcept (false)
 		{
 			ibrcommon::MutexLock l(_sizelock);
 
@@ -147,7 +147,7 @@ namespace dtn
 			_currentsize += size;
 		}
 
-		void BundleStorage::freeSpace(const dtn::data::Length &size) throw ()
+		void BundleStorage::freeSpace(const dtn::data::Length &size) noexcept
 		{
 			ibrcommon::MutexLock l(_sizelock);
 			if (size > _currentsize)
@@ -161,13 +161,13 @@ namespace dtn
 			}
 		}
 
-		void BundleStorage::clearSpace() throw ()
+		void BundleStorage::clearSpace() noexcept
 		{
 			ibrcommon::MutexLock l(_sizelock);
 			_currentsize = 0;
 		}
 
-		void BundleStorage::eventBundleAdded(const dtn::data::MetaBundle &b) throw ()
+		void BundleStorage::eventBundleAdded(const dtn::data::MetaBundle &b) noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG("BundleStorage", 2) << "add bundle to index: " << b.toString() << IBRCOMMON_LOGGER_ENDL;
 
@@ -177,7 +177,7 @@ namespace dtn
 			}
 		}
 
-		void BundleStorage::eventBundleRemoved(const dtn::data::BundleID &id) throw ()
+		void BundleStorage::eventBundleRemoved(const dtn::data::BundleID &id) noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG("BundleStorage", 2) << "remove bundle from index: " << id.toString() << IBRCOMMON_LOGGER_ENDL;
 

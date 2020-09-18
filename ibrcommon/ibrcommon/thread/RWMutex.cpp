@@ -34,7 +34,7 @@ namespace ibrcommon
 		pthread_rwlock_destroy(&_rwlock);
 	}
 
-	void RWMutex::trylock() throw (MutexException)
+	void RWMutex::trylock() noexcept (false)
 	{
 		switch (pthread_rwlock_tryrdlock(&_rwlock))
 		{
@@ -52,17 +52,17 @@ namespace ibrcommon
 		}
 	}
 
-	void RWMutex::enter() throw (MutexException)
+	void RWMutex::enter() noexcept (false)
 	{
 		pthread_rwlock_rdlock(&_rwlock);
 	}
 
-	void RWMutex::leave() throw (MutexException)
+	void RWMutex::leave() noexcept (false)
 	{
 		pthread_rwlock_unlock(&_rwlock);
 	}
 
-	void RWMutex::trylock_wr() throw (MutexException)
+	void RWMutex::trylock_wr() noexcept (false)
 	{
 		switch (pthread_rwlock_trywrlock(&_rwlock))
 		{
@@ -80,7 +80,7 @@ namespace ibrcommon
 		}
 	}
 
-	void RWMutex::enter_wr() throw (MutexException)
+	void RWMutex::enter_wr() noexcept (false)
 	{
 		pthread_rwlock_wrlock(&_rwlock);
 	}

@@ -37,7 +37,7 @@ namespace dtn
 		class FilterException : public ibrcommon::Exception
 		{
 		public:
-			FilterException(std::string what) throw () : ibrcommon::Exception(what)
+			FilterException(std::string what) noexcept : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -48,28 +48,28 @@ namespace dtn
 			virtual ~FilterContext();
 
 			void setMetaBundle(const dtn::data::MetaBundle &data);
-			const dtn::data::MetaBundle& getMetaBundle() const throw (FilterException);
+			const dtn::data::MetaBundle& getMetaBundle() const noexcept (false);
 
 			void setBundle(const dtn::data::Bundle &data);
-			const dtn::data::Bundle& getBundle() const throw (FilterException);
+			const dtn::data::Bundle& getBundle() const noexcept (false);
 
 			void setPrimaryBlock(const dtn::data::PrimaryBlock &data);
-			const dtn::data::PrimaryBlock& getPrimaryBlock() const throw (FilterException);
+			const dtn::data::PrimaryBlock& getPrimaryBlock() const noexcept (false);
 
-			const dtn::data::BundleID& getBundleID() const throw (FilterException);
+			const dtn::data::BundleID& getBundleID() const noexcept (false);
 
 			void setBlock(const dtn::data::Block &block, const dtn::data::Number &size);
-			const dtn::data::Block& getBlock() const throw (FilterException);
-			dtn::data::Number getBlockLength() const throw (FilterException);
+			const dtn::data::Block& getBlock() const noexcept (false);
+			dtn::data::Number getBlockLength() const noexcept (false);
 
 			void setPeer(const dtn::data::EID &endpoint);
-			const dtn::data::EID& setPeer() const throw (FilterException);
+			const dtn::data::EID& setPeer() const noexcept (false);
 
 			void setProtocol(const dtn::core::Node::Protocol &protocol);
-			dtn::core::Node::Protocol getProtocol() const throw (FilterException);
+			dtn::core::Node::Protocol getProtocol() const noexcept (false);
 
 			void setRouting(const dtn::routing::RoutingExtension &routing);
-			const std::string getRoutingTag() const throw (FilterException);
+			const std::string getRoutingTag() const noexcept (false);
 
 		private:
 			const dtn::data::MetaBundle *_metabundle;
@@ -104,13 +104,13 @@ namespace dtn
 			/**
 			 * Evaluates a context and results in ACCEPT, REJECT, or DROP directive
 			 */
-			virtual ACTION evaluate(const FilterContext &context) const throw ();
+			virtual ACTION evaluate(const FilterContext &context) const noexcept;
 
 			/**
 			 * Filters a bundle with a context. The bundle may be modified during
 			 * the processing.
 			 */
-			virtual ACTION filter(const FilterContext &context, dtn::data::Bundle &bundle) const throw ();
+			virtual ACTION filter(const FilterContext &context, dtn::data::Bundle &bundle) const noexcept;
 
 			/**
 			 * append a bundle filter at the end of the chain
@@ -125,24 +125,24 @@ namespace dtn
 		{
 		public:
 			virtual ~AcceptFilter() {};
-			virtual ACTION evaluate(const FilterContext&) const throw () { return ACCEPT; };
-			virtual ACTION filter(const FilterContext&, dtn::data::Bundle&) const throw () { return ACCEPT; };
+			virtual ACTION evaluate(const FilterContext&) const noexcept { return ACCEPT; };
+			virtual ACTION filter(const FilterContext&, dtn::data::Bundle&) const noexcept { return ACCEPT; };
 		};
 
 		class DropFilter : public BundleFilter
 		{
 		public:
 			virtual ~DropFilter() {};
-			virtual ACTION evaluate(const FilterContext&) const throw () { return DROP; };
-			virtual ACTION filter(const FilterContext&, dtn::data::Bundle&) const throw () { return DROP; };
+			virtual ACTION evaluate(const FilterContext&) const noexcept { return DROP; };
+			virtual ACTION filter(const FilterContext&, dtn::data::Bundle&) const noexcept { return DROP; };
 		};
 
 		class RejectFilter : public BundleFilter
 		{
 		public:
 			virtual ~RejectFilter() {};
-			virtual ACTION evaluate(const FilterContext&) const throw () { return REJECT; };
-			virtual ACTION filter(const FilterContext&, dtn::data::Bundle&) const throw () { return REJECT; };
+			virtual ACTION evaluate(const FilterContext&) const noexcept { return REJECT; };
+			virtual ACTION filter(const FilterContext&, dtn::data::Bundle&) const noexcept { return REJECT; };
 		};
 	} /* namespace core */
 } /* namespace dtn */

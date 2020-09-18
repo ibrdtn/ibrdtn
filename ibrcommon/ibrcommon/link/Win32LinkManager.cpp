@@ -28,12 +28,12 @@ namespace ibrcommon
 	{
 		down();
 	}
-	void Win32LinkManager::up() throw()
+	void Win32LinkManager::up() noexcept
 	{
 		_lm.start();
 	}
 
-	void Win32LinkManager::down() throw()
+	void Win32LinkManager::down() noexcept
 	{
 		_lm.stop();
 		_lm.join();
@@ -185,7 +185,7 @@ namespace ibrcommon
 		return ret;
 	}
 
-	void Win32LinkManager::addEventListener(const vinterface &iface, LinkManager::EventCallback *cb) throw ()
+	void Win32LinkManager::addEventListener(const vinterface &iface, LinkManager::EventCallback *cb) noexcept
 	{
 		// initialize LinkManager with new listened interface
 		_lm.add(iface);
@@ -194,7 +194,7 @@ namespace ibrcommon
 		LinkManager::addEventListener(iface, cb);
 	}
 
-	void Win32LinkManager::removeEventListener(const vinterface &iface, LinkManager::EventCallback *cb) throw ()
+	void Win32LinkManager::removeEventListener(const vinterface &iface, LinkManager::EventCallback *cb) noexcept
 	{
 		// call super-method
 		LinkManager::removeEventListener(iface, cb);
@@ -203,7 +203,7 @@ namespace ibrcommon
 		_lm.remove();
 	}
 
-	void Win32LinkManager::removeEventListener(LinkManager::EventCallback *cb) throw ()
+	void Win32LinkManager::removeEventListener(LinkManager::EventCallback *cb) noexcept
 	{
 		// call super-method
 		LinkManager::removeEventListener(cb);

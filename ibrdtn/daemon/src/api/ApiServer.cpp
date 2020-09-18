@@ -102,15 +102,15 @@ namespace dtn
 			_sockets.destroy();
 		}
 
-		void ApiServer::__cancellation() throw ()
+		void ApiServer::__cancellation() noexcept
 		{
 			// shut-down all server sockets
 			_sockets.down();
 		}
 
-		void ApiServer::componentUp() throw ()
+		void ApiServer::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// bring up all server sockets
 				_sockets.up();
@@ -122,7 +122,7 @@ namespace dtn
 			startGarbageCollector();
 		}
 
-		void ApiServer::componentRun() throw ()
+		void ApiServer::componentRun() noexcept
 		{
 			try {
 				while (!_shutdown)
@@ -213,7 +213,7 @@ namespace dtn
 			}
 		}
 
-		void ApiServer::componentDown() throw ()
+		void ApiServer::componentDown() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::routing::QueueBundleEvent>::remove(this);
 
@@ -350,7 +350,7 @@ namespace dtn
 			}
 		}
 
-		void ApiServer::raiseEvent(const dtn::routing::QueueBundleEvent &queued) throw ()
+		void ApiServer::raiseEvent(const dtn::routing::QueueBundleEvent &queued) noexcept
 		{
 			// ignore fragments - we can not deliver them directly to the client
 			if (queued.bundle.isFragment()) return;

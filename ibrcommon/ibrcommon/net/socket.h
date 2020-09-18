@@ -88,10 +88,10 @@ namespace ibrcommon {
 			__what = ss.str();
 		};
 
-		virtual ~socket_raw_error() throw()
+		virtual ~socket_raw_error() noexcept
 		{};
 
-		virtual const char* what() const throw()
+		virtual const char* what() const noexcept
 		{
 			return __what.c_str();
 		}
@@ -121,20 +121,20 @@ namespace ibrcommon {
 		 * and bind to the interface if necessary.
 		 * @throw socket_exception if the action has failed
 		 */
-		virtual void up() throw (socket_exception) = 0;
+		virtual void up() noexcept (false) = 0;
 
 		/**
 		 * Close and destroy the file descriptor of this
 		 * socket assignment.
 		 * @throw socket_exception if the action has failed
 		 */
-		virtual void down() throw (socket_exception) = 0;
+		virtual void down() noexcept (false) = 0;
 
 		/**
 		 * Return the file descriptor for this socket.
 		 * @throw socket_exception if no file descriptor is available
 		 */
-		virtual int fd() const throw (socket_exception);
+		virtual int fd() const noexcept (false);
 
 		/**
 		 * Return the file descriptor and bring the socket into the down state
@@ -142,13 +142,13 @@ namespace ibrcommon {
 		 * destroyed.
 		 * @return The file descriptor of this socket.
 		 */
-		virtual int release() throw (socket_exception);
+		virtual int release() noexcept (false);
 
 		/**
 		 * Standard socket calls
 		 */
-		void close() throw (socket_exception);
-		void shutdown(int how) throw (socket_exception);
+		void close() noexcept (false);
+		void shutdown(int how) noexcept (false);
 
 		/**
 		 * @return True, if this socket is up and ready.
@@ -159,13 +159,13 @@ namespace ibrcommon {
 		 * return the family of a socket
 		 * @return
 		 */
-		sa_family_t get_family() const throw (socket_exception);
-		static sa_family_t get_family(int fd) throw (socket_exception);
+		sa_family_t get_family() const noexcept (false);
+		static sa_family_t get_family(int fd) noexcept (false);
 
 		/**
 		 * Checks if the given network protocol is supported
 		 */
-		static bool hasSupport(const sa_family_t family, const int type = SOCK_DGRAM, const int protocol = 0) throw ();
+		static bool hasSupport(const sa_family_t family, const int type = SOCK_DGRAM, const int protocol = 0) noexcept;
 
 	protected:
 		/**
@@ -190,19 +190,19 @@ namespace ibrcommon {
 		/**
 		 * Error check methods
 		 */
-		void check_socket_error(const int err) const throw (socket_exception);
-		void check_bind_error(const int err, const std::string &msg = "") const throw (socket_exception);
+		void check_socket_error(const int err) const noexcept (false);
+		void check_bind_error(const int err, const std::string &msg = "") const noexcept (false);
 
-		void set_blocking_mode(bool val, int fd = -1) const throw (socket_exception);
-		void set_keepalive(bool val, int fd = -1) const throw (socket_exception);
-		void set_linger(bool val, int l = 1, int fd = -1) const throw (socket_exception);
-		void set_reuseaddr(bool val, int fd = -1) const throw (socket_exception);
-		void set_nodelay(bool val, int fd = -1) const throw (socket_exception);
+		void set_blocking_mode(bool val, int fd = -1) const noexcept (false);
+		void set_keepalive(bool val, int fd = -1) const noexcept (false);
+		void set_linger(bool val, int l = 1, int fd = -1) const noexcept (false);
+		void set_reuseaddr(bool val, int fd = -1) const noexcept (false);
+		void set_nodelay(bool val, int fd = -1) const noexcept (false);
 
-		void init_socket(const vaddress &addr, int type, int protocol) throw (socket_exception);
-		void init_socket(int domain, int type, int protocol) throw (socket_exception);
+		void init_socket(const vaddress &addr, int type, int protocol) noexcept (false);
+		void init_socket(int domain, int type, int protocol) noexcept (false);
 
-		void bind(int fd, struct sockaddr *addr, socklen_t len) throw (socket_exception);
+		void bind(int fd, struct sockaddr *addr, socklen_t len) noexcept (false);
 
 		// contains the current socket state
 		socketstate _state;
@@ -226,13 +226,13 @@ namespace ibrcommon {
 		};
 
 		virtual ~clientsocket() = 0;
-		virtual void up() throw (socket_exception);
-		virtual void down() throw (socket_exception);
+		virtual void up() noexcept (false);
+		virtual void down() noexcept (false);
 
-		ssize_t send(const char *data, size_t len, int flags = 0) throw (socket_exception);
-		ssize_t recv(char *data, size_t len, int flags = 0) throw (socket_exception);
+		ssize_t send(const char *data, size_t len, int flags = 0) noexcept (false);
+		ssize_t recv(char *data, size_t len, int flags = 0) noexcept (false);
 
-		void set(CLIENT_OPTION opt, bool val) throw (socket_exception);
+		void set(CLIENT_OPTION opt, bool val) noexcept (false);
 
 	protected:
 		clientsocket();
@@ -246,11 +246,11 @@ namespace ibrcommon {
 		};
 
 		virtual ~serversocket() = 0;
-		virtual void up() throw (socket_exception) = 0;
-		virtual void down() throw (socket_exception) = 0;
+		virtual void up() noexcept (false) = 0;
+		virtual void down() noexcept (false) = 0;
 
-		void listen(int connections) throw (socket_exception);
-		virtual clientsocket* accept(ibrcommon::vaddress &addr) throw (socket_exception) = 0;
+		void listen(int connections) noexcept (false);
+		virtual clientsocket* accept(ibrcommon::vaddress &addr) noexcept (false) = 0;
 
 		void set(SERVER_OPTION opt, bool val);
 
@@ -258,17 +258,17 @@ namespace ibrcommon {
 		serversocket();
 		serversocket(int fd);
 
-		int _accept_fd(ibrcommon::vaddress &addr) throw (socket_exception);
+		int _accept_fd(ibrcommon::vaddress &addr) noexcept (false);
 	};
 
 	class datagramsocket : public basesocket {
 	public:
 		virtual ~datagramsocket() = 0;
-		virtual void up() throw (socket_exception) = 0;
-		virtual void down() throw (socket_exception) = 0;
+		virtual void up() noexcept (false) = 0;
+		virtual void down() noexcept (false) = 0;
 
-		virtual ssize_t recvfrom(char *buf, size_t buflen, int flags, ibrcommon::vaddress &addr) throw (socket_exception);
-		virtual void sendto(const char *buf, size_t buflen, int flags, const ibrcommon::vaddress &addr) throw (socket_exception);
+		virtual ssize_t recvfrom(char *buf, size_t buflen, int flags, ibrcommon::vaddress &addr) noexcept (false);
+		virtual void sendto(const char *buf, size_t buflen, int flags, const ibrcommon::vaddress &addr) noexcept (false);
 
 	protected:
 		datagramsocket();
@@ -283,8 +283,8 @@ namespace ibrcommon {
 		filesocket(int fd);
 		filesocket(const File &file);
 		virtual ~filesocket();
-		virtual void up() throw (socket_exception);
-		virtual void down() throw (socket_exception);
+		virtual void up() noexcept (false);
+		virtual void down() noexcept (false);
 
 	private:
 		const File _filename;
@@ -298,13 +298,13 @@ namespace ibrcommon {
 	public:
 		fileserversocket(const File &file, int listen = 0);
 		virtual ~fileserversocket();
-		virtual void up() throw (socket_exception);
-		virtual void down() throw (socket_exception);
+		virtual void up() noexcept (false);
+		virtual void down() noexcept (false);
 
-		virtual clientsocket* accept(ibrcommon::vaddress &addr) throw (socket_exception);
+		virtual clientsocket* accept(ibrcommon::vaddress &addr) noexcept (false);
 
 	private:
-		void bind(const File &file) throw (socket_exception);
+		void bind(const File &file) noexcept (false);
 
 	private:
 		const File _filename;
@@ -319,8 +319,8 @@ namespace ibrcommon {
 		tcpsocket(int fd);
 		tcpsocket(const vaddress &destination, const timeval *timeout = NULL);
 		virtual ~tcpsocket();
-		virtual void up() throw (socket_exception);
-		virtual void down() throw (socket_exception);
+		virtual void up() noexcept (false);
+		virtual void down() noexcept (false);
 
 	private:
 		const vaddress _address;
@@ -337,15 +337,15 @@ namespace ibrcommon {
 		tcpserversocket(const int port, int listen = 0);
 		tcpserversocket(const vaddress &address, int listen = 0);
 		virtual ~tcpserversocket();
-		virtual void up() throw (socket_exception);
-		virtual void down() throw (socket_exception);
+		virtual void up() noexcept (false);
+		virtual void down() noexcept (false);
 
 		const vaddress& get_address() const;
 
-		virtual clientsocket* accept(ibrcommon::vaddress &addr) throw (socket_exception);
+		virtual clientsocket* accept(ibrcommon::vaddress &addr) noexcept (false);
 
 	protected:
-		void bind(const vaddress &addr) throw (socket_exception);
+		void bind(const vaddress &addr) noexcept (false);
 
 	private:
 		const vaddress _address;
@@ -361,13 +361,13 @@ namespace ibrcommon {
 		udpsocket();
 		udpsocket(const vaddress &address);
 		virtual ~udpsocket();
-		virtual void up() throw (socket_exception);
-		virtual void down() throw (socket_exception);
+		virtual void up() noexcept (false);
+		virtual void down() noexcept (false);
 
 		const vaddress& get_address() const;
 
 	protected:
-		void bind(const vaddress &addr) throw (socket_exception);
+		void bind(const vaddress &addr) noexcept (false);
 
 		const vaddress _address;
 	};
@@ -376,14 +376,14 @@ namespace ibrcommon {
 	public:
 		multicastsocket(const vaddress &address);
 		virtual ~multicastsocket();
-		virtual void up() throw (socket_exception);
-		virtual void down() throw (socket_exception);
+		virtual void up() noexcept (false);
+		virtual void down() noexcept (false);
 
-		void join(const vaddress &group, const vinterface &iface) throw (socket_exception);
-		void leave(const vaddress &group, const vinterface &iface) throw (socket_exception);
+		void join(const vaddress &group, const vinterface &iface) noexcept (false);
+		void leave(const vaddress &group, const vinterface &iface) noexcept (false);
 
 	private:
-		void mcast_op(int optname, const vaddress &group, const vinterface &iface) throw (socket_exception);
+		void mcast_op(int optname, const vaddress &group, const vinterface &iface) noexcept (false);
 	};
 }
 

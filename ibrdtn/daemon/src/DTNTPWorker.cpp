@@ -185,7 +185,7 @@ namespace dtn
 			return stream;
 		}
 
-		void DTNTPWorker::raiseEvent(const dtn::core::TimeEvent &t) throw ()
+		void DTNTPWorker::raiseEvent(const dtn::core::TimeEvent &t) noexcept
 		{
 			if (t.getAction() != dtn::core::TIME_SECOND_TICK) return;
 
@@ -380,7 +380,7 @@ namespace dtn
 			}
 		}
 
-		void DTNTPWorker::onUpdateBeacon(const ibrcommon::vinterface&, DiscoveryBeacon &announcement) throw (NoServiceHereException)
+		void DTNTPWorker::onUpdateBeacon(const ibrcommon::vinterface&, DiscoveryBeacon &announcement) noexcept (false)
 		{
 			if (!_announce_rating) throw NoServiceHereException("Discovery of time sync mechanisms disabled.");
 

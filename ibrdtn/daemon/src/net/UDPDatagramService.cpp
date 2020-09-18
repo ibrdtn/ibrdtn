@@ -57,7 +57,7 @@ namespace dtn
 		 * Bind to the local socket.
 		 * @throw If the bind fails, an DatagramException is thrown.
 		 */
-		void UDPDatagramService::bind() throw (DatagramException)
+		void UDPDatagramService::bind() noexcept (false)
 		{
 			// delete all sockets
 			_vsocket.destroy();
@@ -127,7 +127,7 @@ namespace dtn
 		 * @param buf The buffer to send.
 		 * @param length The number of available bytes in the buffer.
 		 */
-		void UDPDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const std::string &identifier, const char *buf, size_t length) throw (DatagramException)
+		void UDPDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const std::string &identifier, const char *buf, size_t length) noexcept (false)
 		{
 			// decode address identifier
 			ibrcommon::vaddress destination;
@@ -142,13 +142,13 @@ namespace dtn
 		 * @param buf The buffer to send.
 		 * @param length The number of available bytes in the buffer.
 		 */
-		void UDPDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const char *buf, size_t length) throw (DatagramException)
+		void UDPDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const char *buf, size_t length) noexcept (false)
 		{
 			// forward to actually send method using the broadcast address
 			send(type, flags, seqno, BROADCAST_ADDR, buf, length);
 		}
 
-		void UDPDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const ibrcommon::vaddress &destination, const char *buf, size_t length) throw (DatagramException)
+		void UDPDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const ibrcommon::vaddress &destination, const char *buf, size_t length) noexcept (false)
 		{
 			try {
 				std::vector<char> tmp(length + 2);
@@ -191,7 +191,7 @@ namespace dtn
 		 * @throw If the receive call failed for any reason, an DatagramException is thrown.
 		 * @return The number of received bytes.
 		 */
-		size_t UDPDatagramService::recvfrom(char *buf, size_t length, char &type, char &flags, unsigned int &seqno, std::string &address) throw (DatagramException)
+		size_t UDPDatagramService::recvfrom(char *buf, size_t length, char &type, char &flags, unsigned int &seqno, std::string &address) noexcept (false)
 		{
 			try {
 				ibrcommon::socketset readfds;

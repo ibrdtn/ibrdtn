@@ -72,7 +72,7 @@ namespace dtn
 			 * @param net Interface to listen on
 			 * @param port Port to listen on
 			 */
-			void add(const ibrcommon::vinterface &net, int port) throw ();
+			void add(const ibrcommon::vinterface &net, int port) noexcept;
 
 			/**
 			 * Queue a new transmission job for this convergence layer.
@@ -101,36 +101,36 @@ namespace dtn
 			/**
 			 * this method updates the given values
 			 */
-			void onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &beacon) throw (NoServiceHereException);
+			void onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &beacon) noexcept (false);
 
 			void eventNotify(const ibrcommon::LinkEvent &evt);
 
 			/**
 			 * @see EventReceiver::raiseEvent()
 			 */
-			void raiseEvent(const dtn::net::P2PDialupEvent &evt) throw ();
+			void raiseEvent(const dtn::net::P2PDialupEvent &evt) noexcept;
 
 			virtual void resetStats();
 
 			virtual void getStats(ConvergenceLayer::stats_data &data) const;
 
 		protected:
-			void __cancellation() throw ();
+			void __cancellation() noexcept;
 
-			void componentUp() throw ();
-			void componentRun() throw ();
-			void componentDown() throw ();
+			void componentUp() noexcept;
+			void componentRun() noexcept;
+			void componentDown() noexcept;
 
 		private:
 			/**
 			 * Listen to a specific interface
 			 */
-			void listen(const ibrcommon::vinterface &iface, int port) throw ();
+			void listen(const ibrcommon::vinterface &iface, int port) noexcept;
 
 			/**
 			 * Remove a specific interface
 			 */
-			void unlisten(const ibrcommon::vinterface &iface) throw ();
+			void unlisten(const ibrcommon::vinterface &iface) noexcept;
 
 			/**
 			 * closes all active tcp connections
@@ -153,12 +153,12 @@ namespace dtn
 			/**
 			 * Reports inbound traffic amount
 			 */
-			void addTrafficIn(size_t) throw ();
+			void addTrafficIn(size_t) noexcept;
 
 			/**
 			 * Reports outbound traffic amount
 			 */
-			void addTrafficOut(size_t) throw ();
+			void addTrafficOut(size_t) noexcept;
 
 			static const int DEFAULT_PORT;
 

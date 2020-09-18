@@ -173,7 +173,7 @@ namespace dtn
 			return hash;
 		}
 
-		DataStorage::istream DataStorage::retrieve(const DataStorage::Hash &hash) throw (DataNotAvailableException)
+		DataStorage::istream DataStorage::retrieve(const DataStorage::Hash &hash) noexcept (false)
 		{
 			ibrcommon::File file = _path.get(hash.value);
 
@@ -195,12 +195,12 @@ namespace dtn
 			_tasks.wait(ibrcommon::Queue< Task* >::QUEUE_EMPTY);
 		}
 
-		void DataStorage::__cancellation() throw ()
+		void DataStorage::__cancellation() noexcept
 		{
 			_tasks.abort();
 		}
 
-		void DataStorage::run() throw ()
+		void DataStorage::run() noexcept
 		{
 			try {
 				while (true)

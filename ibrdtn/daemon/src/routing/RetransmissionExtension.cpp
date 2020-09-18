@@ -42,7 +42,7 @@ namespace dtn
 		{
 		}
 
-		void RetransmissionExtension::componentUp() throw ()
+		void RetransmissionExtension::componentUp() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::add(this);
 			dtn::core::EventDispatcher<dtn::net::TransferAbortedEvent>::add(this);
@@ -50,7 +50,7 @@ namespace dtn
 			dtn::core::EventDispatcher<dtn::core::BundleExpiredEvent>::add(this);
 		}
 
-		void RetransmissionExtension::componentDown() throw ()
+		void RetransmissionExtension::componentDown() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::remove(this);
 			dtn::core::EventDispatcher<dtn::net::TransferAbortedEvent>::remove(this);
@@ -58,14 +58,14 @@ namespace dtn
 			dtn::core::EventDispatcher<dtn::core::BundleExpiredEvent>::remove(this);
 		}
 
-		void RetransmissionExtension::eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ()
+		void RetransmissionExtension::eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept
 		{
 			// remove the bundleid in our list
 			RetransmissionData data(meta, peer);
 			_set.erase(data);
 		}
 
-		void RetransmissionExtension::raiseEvent(const dtn::core::TimeEvent &time) throw ()
+		void RetransmissionExtension::raiseEvent(const dtn::core::TimeEvent &time) noexcept
 		{
 			ibrcommon::MutexLock l(_mutex);
 			if (!_queue.empty())
@@ -102,14 +102,14 @@ namespace dtn
 			}
 		}
 
-		void RetransmissionExtension::raiseEvent(const dtn::net::TransferAbortedEvent &aborted) throw ()
+		void RetransmissionExtension::raiseEvent(const dtn::net::TransferAbortedEvent &aborted) noexcept
 		{
 			// remove the bundleid in our list
 			RetransmissionData data(aborted.getBundleID(), aborted.getPeer());
 			_set.erase(data);
 		}
 
-		void RetransmissionExtension::raiseEvent(const dtn::routing::RequeueBundleEvent &requeue) throw ()
+		void RetransmissionExtension::raiseEvent(const dtn::routing::RequeueBundleEvent &requeue) noexcept
 		{
 			const RetransmissionData data(requeue.getBundle(), requeue.getPeer(), requeue.getProtocol());
 
@@ -144,7 +144,7 @@ namespace dtn
 			}
 		}
 
-		void RetransmissionExtension::raiseEvent(const dtn::core::BundleExpiredEvent &expired) throw ()
+		void RetransmissionExtension::raiseEvent(const dtn::core::BundleExpiredEvent &expired) noexcept
 		{
 			// delete all matching elements in the queue
 			ibrcommon::MutexLock l(_mutex);

@@ -61,7 +61,7 @@ namespace dtn
 			 * this method updates the given values
 			 */
 			void onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &announcement)
-				throw (dtn::net::DiscoveryBeaconHandler::NoServiceHereException);
+				noexcept (false);
 
 			dtn::core::Node::Protocol getDiscoveryProtocol() const;
 
@@ -79,14 +79,14 @@ namespace dtn
 			virtual void getStats(ConvergenceLayer::stats_data &data) const;
 
 		protected:
-			virtual void componentUp() throw ();
-			virtual void componentRun() throw ();
-			virtual void componentDown() throw ();
-			void __cancellation() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentRun() noexcept;
+			virtual void componentDown() noexcept;
+			void __cancellation() noexcept;
 
 		private:
-			void receive(dtn::data::Bundle&, dtn::data::EID &sender) throw (ibrcommon::socket_exception, dtn::InvalidDataException);
-			void send(const ibrcommon::vaddress &addr, const std::string &data) throw (ibrcommon::socket_exception, NoAddressFoundException);
+			void receive(dtn::data::Bundle&, dtn::data::EID &sender) noexcept (false);
+			void send(const ibrcommon::vaddress &addr, const std::string &data) noexcept (false);
 
 			ibrcommon::vsocket _vsocket;
 			ibrcommon::vinterface _net;

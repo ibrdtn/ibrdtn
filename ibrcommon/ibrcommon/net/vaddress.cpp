@@ -166,7 +166,7 @@ namespace ibrcommon
 		return (_address == VADDR_ANY);
 	}
 
-	sa_family_t vaddress::family() const throw (address_exception)
+	sa_family_t vaddress::family() const noexcept (false)
 	{
 		if (_family != AF_UNSPEC)
 			return _family;
@@ -201,20 +201,20 @@ namespace ibrcommon
 		return fam;
 	}
 
-	std::string vaddress::scope() const throw (scope_not_set)
+	std::string vaddress::scope() const noexcept (false)
 	{
 		if (_scope.length() == 0) throw scope_not_set();
 		return _scope;
 	}
 
-	const std::string vaddress::address() const throw (address_not_set)
+	const std::string vaddress::address() const noexcept (false)
 	{
 		if (_address.length() == 0) throw address_not_set();
 		if (isAny()) throw address_not_set();
 		return _address;
 	}
 
-	const std::string vaddress::name() const throw (address_exception)
+	const std::string vaddress::name() const noexcept (false)
 	{
 		struct addrinfo hints;
 		char addr_str[256];
@@ -241,7 +241,7 @@ namespace ibrcommon
 		return std::string(addr_str);
 	}
 
-	const std::string vaddress::service() const throw (service_not_set)
+	const std::string vaddress::service() const noexcept (false)
 	{
 		if (_service.length() == 0) throw service_not_set();
 		return _service;

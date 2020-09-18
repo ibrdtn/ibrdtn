@@ -45,9 +45,9 @@ public:
 		TestThread(size_t time = 0);
 		~TestThread();
 
-		void run() throw ();
-		void __cancellation() throw ();
-		void finally() throw ();
+		void run() noexcept;
+		void __cancellation() noexcept;
+		void finally() noexcept;
 
 		bool _running;
 		size_t _finally;
@@ -60,9 +60,9 @@ public:
 		DetachedTestThread(ibrcommon::Conditional &cond, bool &run, size_t time = 0);
 		~DetachedTestThread();
 
-		void run() throw ();
-		void __cancellation() throw ();
-		void finally() throw ();
+		void run() noexcept;
+		void __cancellation() noexcept;
+		void finally() noexcept;
 
 	private:
 		ibrcommon::Conditional &_cond;

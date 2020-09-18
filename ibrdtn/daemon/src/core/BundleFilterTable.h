@@ -53,13 +53,13 @@ namespace dtn
 			/**
 			 * Evaluates a context and results in ACCEPT, REJECT, or DROP directive
 			 */
-			virtual ACTION evaluate(const FilterContext &context) const throw ();
+			virtual ACTION evaluate(const FilterContext &context) const noexcept;
 
 			/**
 			 * Filters a bundle with a context. The bundle may be modified during
 			 * the processing.
 			 */
-			virtual ACTION filter(const FilterContext &context, dtn::data::Bundle &bundle) const throw ();
+			virtual ACTION filter(const FilterContext &context, dtn::data::Bundle &bundle) const noexcept;
 
 		private:
 			typedef std::list<BundleFilter*> chain;

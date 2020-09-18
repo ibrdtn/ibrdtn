@@ -108,7 +108,7 @@ bool StressBLOB::BLOBWorker::check()
 	return true;
 }
 
-void StressBLOB::BLOBWorker::run() throw ()
+void StressBLOB::BLOBWorker::run() noexcept
 {
 	for (unsigned int i = 0; i < _count; ++i)
 	{
@@ -131,6 +131,6 @@ void StressBLOB::BLOBWorker::run() throw ()
 	}
 }
 
-void StressBLOB::BLOBWorker::__cancellation() throw ()
+void StressBLOB::BLOBWorker::__cancellation() noexcept
 {
 }

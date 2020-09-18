@@ -43,10 +43,10 @@ namespace dtn
 				ValueNotFoundException()
 				: ibrcommon::Exception("The requested value is not available.") { };
 
-				virtual ~ValueNotFoundException() throw () { };
+				virtual ~ValueNotFoundException() noexcept { };
 			};
 
-			float get(const dtn::data::EID &neighbor) const throw (ValueNotFoundException);
+			float get(const dtn::data::EID &neighbor) const noexcept (false);
 			void set(const dtn::data::EID &neighbor, float value);
 			void clear();
 			size_t size() const;

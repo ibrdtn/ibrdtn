@@ -39,9 +39,9 @@ class tcpstreamtest : public CPPUNIT_NS :: TestFixture
 		StreamChecker(int port, int chars = 10);
 		~StreamChecker();
 
-		virtual void setup() throw ();
-		virtual void run() throw ();
-		virtual void __cancellation() throw ();
+		virtual void setup() noexcept;
+		virtual void run() noexcept;
+		virtual void __cancellation() noexcept;
 
 		bool _error;
 

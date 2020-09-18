@@ -45,7 +45,7 @@ ThreadTest::DetachedTestThread::~DetachedTestThread()
 
 }
 
-void ThreadTest::DetachedTestThread::run() throw ()
+void ThreadTest::DetachedTestThread::run() noexcept
 {
 	// set run to true
 	{
@@ -59,11 +59,11 @@ void ThreadTest::DetachedTestThread::run() throw ()
 	}
 }
 
-void ThreadTest::DetachedTestThread::finally() throw ()
+void ThreadTest::DetachedTestThread::finally() noexcept
 {
 }
 
-void ThreadTest::DetachedTestThread::__cancellation() throw ()
+void ThreadTest::DetachedTestThread::__cancellation() noexcept
 {
 	ibrcommon::MutexLock l(_cond);
 	_run = false;
@@ -80,12 +80,12 @@ ThreadTest::TestThread::~TestThread()
 	join();
 }
 
-void ThreadTest::TestThread::__cancellation() throw ()
+void ThreadTest::TestThread::__cancellation() noexcept
 {
 	_running = false;
 }
 
-void ThreadTest::TestThread::run() throw ()
+void ThreadTest::TestThread::run() noexcept
 {
 	if (_time == 0)
 	{
@@ -98,7 +98,7 @@ void ThreadTest::TestThread::run() throw ()
 	}
 }
 
-void ThreadTest::TestThread::finally() throw ()
+void ThreadTest::TestThread::finally() noexcept
 {
 	_finally++;
 }

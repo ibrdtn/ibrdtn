@@ -154,7 +154,7 @@ namespace dtn
 		{
 		}
 
-		std::vector<std::string> NativeDaemon::getVersion() const throw ()
+		std::vector<std::string> NativeDaemon::getVersion() const noexcept
 		{
 			std::vector<std::string> ret;
 			ret.push_back(VERSION);
@@ -162,22 +162,22 @@ namespace dtn
 			return ret;
 		}
 
-		void NativeDaemon::clearStorage() const throw ()
+		void NativeDaemon::clearStorage() const noexcept
 		{
 			dtn::core::BundleCore::getInstance().getStorage().clear();
 		}
 
-		void NativeDaemon::setLeMode(bool low_energy) const throw ()
+		void NativeDaemon::setLeMode(bool low_energy) const noexcept
 		{
 			dtn::core::GlobalEvent::raise(low_energy ? dtn::core::GlobalEvent::GLOBAL_LOW_ENERGY : dtn::core::GlobalEvent::GLOBAL_NORMAL);
 		}
 
-		void NativeDaemon::startDiscovery() const throw ()
+		void NativeDaemon::startDiscovery() const noexcept
 		{
 			dtn::core::GlobalEvent::raise(dtn::core::GlobalEvent::GLOBAL_START_DISCOVERY);
 		}
 
-		void NativeDaemon::stopDiscovery() const throw ()
+		void NativeDaemon::stopDiscovery() const noexcept
 		{
 			dtn::core::GlobalEvent::raise(dtn::core::GlobalEvent::GLOBAL_STOP_DISCOVERY);
 		}
@@ -277,7 +277,7 @@ namespace dtn
 			}
 		}
 
-		void NativeDaemon::raiseEvent(const dtn::core::NodeEvent &node) throw ()
+		void NativeDaemon::raiseEvent(const dtn::core::NodeEvent &node) noexcept
 		{
 			const std::string event = node.getName();
 			std::string action;
@@ -309,7 +309,7 @@ namespace dtn
 			_eventcb->eventRaised(event, action, data);
 		}
 
-		void NativeDaemon::raiseEvent(const dtn::core::GlobalEvent &global) throw ()
+		void NativeDaemon::raiseEvent(const dtn::core::GlobalEvent &global) noexcept
 		{
 			const std::string event = global.getName();
 			std::string action;
@@ -356,7 +356,7 @@ namespace dtn
 			_eventcb->eventRaised(event, action, data);
 		}
 
-		void NativeDaemon::raiseEvent(const dtn::net::BundleReceivedEvent &received) throw ()
+		void NativeDaemon::raiseEvent(const dtn::net::BundleReceivedEvent &received) noexcept
 		{
 			const std::string event = received.getName();
 			std::string action;
@@ -375,7 +375,7 @@ namespace dtn
 			_eventcb->eventRaised(event, action, data);
 		}
 
-		void NativeDaemon::raiseEvent(const dtn::core::CustodyEvent &custody) throw ()
+		void NativeDaemon::raiseEvent(const dtn::core::CustodyEvent &custody) noexcept
 		{
 			const std::string event = custody.getName();
 			std::string action;
@@ -401,7 +401,7 @@ namespace dtn
 			_eventcb->eventRaised(event, action, data);
 		}
 
-		void NativeDaemon::raiseEvent(const dtn::net::TransferAbortedEvent &aborted) throw ()
+		void NativeDaemon::raiseEvent(const dtn::net::TransferAbortedEvent &aborted) noexcept
 		{
 			const std::string event = aborted.getName();
 			std::string action;
@@ -419,7 +419,7 @@ namespace dtn
 			_eventcb->eventRaised(event, action, data);
 		}
 
-		void NativeDaemon::raiseEvent(const dtn::net::TransferCompletedEvent &completed) throw ()
+		void NativeDaemon::raiseEvent(const dtn::net::TransferCompletedEvent &completed) noexcept
 		{
 			const std::string event = completed.getName();
 			std::string action;
@@ -437,7 +437,7 @@ namespace dtn
 			_eventcb->eventRaised(event, action, data);
 		}
 
-		void NativeDaemon::raiseEvent(const dtn::net::ConnectionEvent &connection) throw ()
+		void NativeDaemon::raiseEvent(const dtn::net::ConnectionEvent &connection) noexcept
 		{
 			const std::string event = connection.getName();
 			std::string action;
@@ -469,7 +469,7 @@ namespace dtn
 			_eventcb->eventRaised(event, action, data);
 		}
 
-		void NativeDaemon::raiseEvent(const dtn::routing::QueueBundleEvent &queued) throw ()
+		void NativeDaemon::raiseEvent(const dtn::routing::QueueBundleEvent &queued) noexcept
 		{
 			const std::string event = queued.getName();
 			std::string action;
@@ -486,7 +486,7 @@ namespace dtn
 		}
 
 #ifdef IBRDTN_SUPPORT_BSP
-		void NativeDaemon::raiseEvent(const dtn::security::KeyExchangeEvent &keyExchange) throw ()
+		void NativeDaemon::raiseEvent(const dtn::security::KeyExchangeEvent &keyExchange) noexcept
 		{
 			const std::string event = keyExchange.getName();
 			std::string action;
@@ -533,12 +533,12 @@ namespace dtn
 		}
 #endif
 
-		std::string NativeDaemon::getLocalUri() const throw ()
+		std::string NativeDaemon::getLocalUri() const noexcept
 		{
 			return dtn::core::BundleCore::local.getString();
 		}
 
-		NativeStats NativeDaemon::getStats() throw ()
+		NativeStats NativeDaemon::getStats() noexcept
 		{
 			NativeStats ret;
 
@@ -573,7 +573,7 @@ namespace dtn
 			return ret;
 		}
 
-		NativeNode NativeDaemon::getInfo(const std::string &neighbor_eid) const throw (NativeDaemonException)
+		NativeNode NativeDaemon::getInfo(const std::string &neighbor_eid) const noexcept (false)
 		{
 			NativeNode nn(neighbor_eid);
 
@@ -617,7 +617,7 @@ namespace dtn
 			return nn;
 		}
 
-		std::vector<std::string> NativeDaemon::getNeighbors() const throw ()
+		std::vector<std::string> NativeDaemon::getNeighbors() const noexcept
 		{
 			std::vector<std::string> ret;
 
@@ -632,7 +632,7 @@ namespace dtn
 			return ret;
 		}
 
-		void NativeDaemon::addConnection(std::string eid, std::string protocol, std::string address, std::string service, bool local) const throw ()
+		void NativeDaemon::addConnection(std::string eid, std::string protocol, std::string address, std::string service, bool local) const noexcept
 		{
 			dtn::core::Node n(eid);
 			dtn::core::Node::Type t = dtn::core::Node::NODE_STATIC_GLOBAL;
@@ -658,7 +658,7 @@ namespace dtn
 			}
 		}
 
-		void NativeDaemon::removeConnection(std::string eid, std::string protocol, std::string address, std::string service, bool local) const throw ()
+		void NativeDaemon::removeConnection(std::string eid, std::string protocol, std::string address, std::string service, bool local) const noexcept
 		{
 			dtn::core::Node n(eid);
 			dtn::core::Node::Type t = dtn::core::Node::NODE_STATIC_GLOBAL;
@@ -731,7 +731,7 @@ namespace dtn
 #endif
 		}
 
-		NativeKeyInfo NativeDaemon::getKeyInfo(std::string eid) const throw (NativeDaemonException)
+		NativeKeyInfo NativeDaemon::getKeyInfo(std::string eid) const noexcept (false)
 		{
 #ifdef IBRDTN_SUPPORT_BSP
 			try {
@@ -757,7 +757,7 @@ namespace dtn
 #endif
 		}
 
-		void NativeDaemon::removeKey(std::string eid) const throw (NativeDaemonException)
+		void NativeDaemon::removeKey(std::string eid) const noexcept (false)
 		{
 #ifdef IBRDTN_SUPPORT_BSP
 			try {
@@ -775,7 +775,7 @@ namespace dtn
 #endif
 		}
 
-		void NativeDaemon::setLogging(const std::string &defaultTag, int logLevel) const throw ()
+		void NativeDaemon::setLogging(const std::string &defaultTag, int logLevel) const noexcept
 		{
 			/**
 			 * setup logging capabilities
@@ -827,7 +827,7 @@ namespace dtn
 		/**
 		 * Set the path to the log file
 		 */
-		void NativeDaemon::setLogFile(const std::string &path, int logLevel) const throw ()
+		void NativeDaemon::setLogFile(const std::string &path, int logLevel) const noexcept
 		{
 			// logging options
 			unsigned char logopts = ibrcommon::Logger::LOG_DATETIME | ibrcommon::Logger::LOG_LEVEL | ibrcommon::Logger::LOG_TAG;
@@ -860,12 +860,12 @@ namespace dtn
 			ibrcommon::Logger::setLogfile(lf, logsys, logopts);
 		}
 
-		DaemonRunLevel NativeDaemon::getRunLevel() const throw ()
+		DaemonRunLevel NativeDaemon::getRunLevel() const noexcept
 		{
 			return _runlevel;
 		}
 
-		void NativeDaemon::init(DaemonRunLevel rl) throw (NativeDaemonException)
+		void NativeDaemon::init(DaemonRunLevel rl) noexcept (false)
 		{
 			ibrcommon::MutexLock l(_runlevel_cond);
 			if (_runlevel < rl) {
@@ -881,7 +881,7 @@ namespace dtn
 			}
 		}
 
-		void NativeDaemon::init_up(DaemonRunLevel rl) throw (NativeDaemonException)
+		void NativeDaemon::init_up(DaemonRunLevel rl) noexcept (false)
 		{
 			switch (rl) {
 			case RUNLEVEL_ZERO:
@@ -937,7 +937,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeDaemon::TAG, 5) << "runlevel " << rl << " reached" << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		void NativeDaemon::init_down(DaemonRunLevel rl) throw (NativeDaemonException)
+		void NativeDaemon::init_down(DaemonRunLevel rl) noexcept (false)
 		{
 			/**
 			 * shutdown all components of this runlevel
@@ -994,7 +994,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeDaemon::TAG, 5) << "runlevel " << (rl-1) << " reached" << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		void NativeDaemon::wait(DaemonRunLevel rl) throw ()
+		void NativeDaemon::wait(DaemonRunLevel rl) noexcept
 		{
 			try {
 				ibrcommon::MutexLock l(_runlevel_cond);
@@ -1004,7 +1004,7 @@ namespace dtn
 			}
 		}
 
-		void NativeDaemon::init_core() throw (NativeDaemonException)
+		void NativeDaemon::init_core() noexcept (false)
 		{
 			// enable link manager
 			ibrcommon::LinkManager::initialize();
@@ -1074,7 +1074,7 @@ namespace dtn
 #endif
 		}
 
-		void NativeDaemon::shutdown_core() throw (NativeDaemonException)
+		void NativeDaemon::shutdown_core() noexcept (false)
 		{
 			// shutdown the event switch
 			_event_loop->stop();
@@ -1101,7 +1101,7 @@ namespace dtn
 #endif
 		}
 
-		void NativeDaemon::init_storage() throw (NativeDaemonException)
+		void NativeDaemon::init_storage() noexcept (false)
 		{
 			dtn::daemon::Configuration &conf = dtn::daemon::Configuration::getInstance();
 
@@ -1227,7 +1227,7 @@ namespace dtn
 			} catch (const dtn::daemon::Configuration::ParameterNotSetException&) { }
 		}
 
-		void NativeDaemon::shutdown_storage() const throw (NativeDaemonException)
+		void NativeDaemon::shutdown_storage() const noexcept (false)
 		{
 			// reset BLOB provider to memory based
 			ibrcommon::BLOB::changeProvider(new ibrcommon::MemoryBLOBProvider(), true);
@@ -1239,7 +1239,7 @@ namespace dtn
 			dtn::core::BundleCore::getInstance().setStorage(NULL);
 		}
 
-		void NativeDaemon::init_routing() throw (NativeDaemonException)
+		void NativeDaemon::init_routing() noexcept (false)
 		{
 			// create the base router
 			dtn::routing::BaseRouter *router = new dtn::routing::BaseRouter();
@@ -1248,11 +1248,11 @@ namespace dtn
 			_components[RUNLEVEL_ROUTING].push_back(router);
 		}
 
-		void NativeDaemon::shutdown_routing() const throw (NativeDaemonException)
+		void NativeDaemon::shutdown_routing() const noexcept (false)
 		{
 		}
 
-		void NativeDaemon::init_api() throw (NativeDaemonException)
+		void NativeDaemon::init_api() noexcept (false)
 		{
 			dtn::daemon::Configuration &conf = dtn::daemon::Configuration::getInstance();
 
@@ -1319,7 +1319,7 @@ namespace dtn
 #endif
 		}
 
-		void NativeDaemon::shutdown_api() throw (NativeDaemonException)
+		void NativeDaemon::shutdown_api() noexcept (false)
 		{
 			for (app_list::iterator it = _apps.begin(); it != _apps.end(); ++it)
 			{
@@ -1328,7 +1328,7 @@ namespace dtn
 			_apps.clear();
 		}
 
-		void NativeDaemon::init_network() throw (NativeDaemonException)
+		void NativeDaemon::init_network() noexcept (false)
 		{
 			dtn::daemon::Configuration &conf = dtn::daemon::Configuration::getInstance();
 			dtn::core::BundleCore &core = dtn::core::BundleCore::getInstance();
@@ -1589,7 +1589,7 @@ namespace dtn
 			}
 		}
 
-		void NativeDaemon::shutdown_network() throw (NativeDaemonException)
+		void NativeDaemon::shutdown_network() noexcept (false)
 		{
 			dtn::daemon::Configuration &conf = dtn::daemon::Configuration::getInstance();
 			dtn::core::BundleCore &core = dtn::core::BundleCore::getInstance();
@@ -1617,7 +1617,7 @@ namespace dtn
 			}
 		}
 
-		void NativeDaemon::init_routing_extensions() throw (NativeDaemonException)
+		void NativeDaemon::init_routing_extensions() noexcept (false)
 		{
 			dtn::daemon::Configuration &conf = dtn::daemon::Configuration::getInstance();
 			dtn::routing::BaseRouter &router = dtn::core::BundleCore::getInstance().getRouter();
@@ -1691,7 +1691,7 @@ namespace dtn
 			router.extensionsUp();
 		}
 
-		void NativeDaemon::shutdown_routing_extensions() const throw (NativeDaemonException)
+		void NativeDaemon::shutdown_routing_extensions() const noexcept (false)
 		{
 			dtn::routing::BaseRouter &router = dtn::core::BundleCore::getInstance().getRouter();
 
@@ -1705,7 +1705,7 @@ namespace dtn
 		/**
 		 * Generate a reload signal
 		 */
-		void NativeDaemon::reload() throw ()
+		void NativeDaemon::reload() noexcept
 		{
 			// reload logger
 			ibrcommon::Logger::reload();
@@ -1717,7 +1717,7 @@ namespace dtn
 		/**
 		 * Enable / disable debugging at runtime
 		 */
-		void NativeDaemon::setDebug(int level) throw ()
+		void NativeDaemon::setDebug(int level) noexcept
 		{
 			// activate debugging
 			ibrcommon::Logger::setVerbosity(level);
@@ -1733,7 +1733,7 @@ namespace dtn
 		{
 		}
 
-		void NativeEventLoop::run(void) throw ()
+		void NativeEventLoop::run(void) noexcept
 		{
 			dtn::daemon::Configuration &conf = dtn::daemon::Configuration::getInstance();
 
@@ -1754,7 +1754,7 @@ namespace dtn
 			esw.terminate();
 		}
 
-		void NativeEventLoop::__cancellation() throw ()
+		void NativeEventLoop::__cancellation() noexcept
 		{
 			dtn::core::GlobalEvent::raise(dtn::core::GlobalEvent::GLOBAL_SHUTDOWN);
 			dtn::core::EventSwitch::getInstance().shutdown();

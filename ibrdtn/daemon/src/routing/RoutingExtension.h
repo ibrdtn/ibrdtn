@@ -43,8 +43,8 @@ namespace dtn
 			RoutingResult();
 			virtual ~RoutingResult();
 
-			virtual void put(const dtn::data::MetaBundle &bundle) throw ();
-			virtual void put(const dtn::data::MetaBundle &bundle, const dtn::core::Node::Protocol p) throw ();
+			virtual void put(const dtn::data::MetaBundle &bundle) noexcept;
+			virtual void put(const dtn::data::MetaBundle &bundle, const dtn::core::Node::Protocol p) noexcept;
 		};
 
 		class RoutingExtension
@@ -55,29 +55,29 @@ namespace dtn
 			RoutingExtension();
 			virtual ~RoutingExtension() = 0;
 
-			virtual void componentUp() throw () = 0;
-			virtual void componentDown() throw () = 0;
+			virtual void componentUp() noexcept = 0;
+			virtual void componentDown() noexcept = 0;
 
 			/**
 			 * Returns a tag used to identify the routing extension in filtering rules
 			 */
-			virtual const std::string getTag() const throw () { return "default"; }
+			virtual const std::string getTag() const noexcept { return "default"; }
 
 			/**
 			 * This method is called every time something has changed. The module
 			 * should search again for bundles to transfer to the given peer.
 			 */
-			virtual void eventDataChanged(const dtn::data::EID &peer) throw () { };
+			virtual void eventDataChanged(const dtn::data::EID &peer) noexcept { };
 
 			/**
 			 * This method is called every time a bundle has been completed successfully
 			 */
-			virtual void eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw () { };
+			virtual void eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept { };
 
 			/**
 			 * This method is called every time a bundle was queued
 			 */
-			virtual void eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw () { };
+			virtual void eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept { };
 
 			/**
 			 * If some data of another node is required. These method is called to collect all

@@ -59,8 +59,8 @@ namespace dtn
 			virtual const std::string getName() const;
 
 		protected:
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
 
 		private:
 			dtn::data::Timeout _frequency;

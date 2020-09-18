@@ -72,42 +72,42 @@ namespace dtn
 			/**
 			 * Add a bundle to the bundle-set
 			 */
-			virtual void add(const dtn::data::MetaBundle &bundle) throw ();
+			virtual void add(const dtn::data::MetaBundle &bundle) noexcept;
 
 			/**
 			 * Clear the whole bundle-set
 			 */
-			virtual void clear() throw ();
+			virtual void clear() noexcept;
 
 			/**
 			 * Check if a bundle id is in this bundle-set
 			 */
-			virtual bool has(const dtn::data::BundleID &bundle) const throw ();
+			virtual bool has(const dtn::data::BundleID &bundle) const noexcept;
 
 			/**
 			 * Check for expired entries in this bundle-set and remove them
 			 */
-			virtual void expire(const Timestamp timestamp) throw ();
+			virtual void expire(const Timestamp timestamp) noexcept;
 
 			/**
 			 * Returns the number of elements in this set
 			 */
-			virtual Size size() const throw ();
+			virtual Size size() const noexcept;
 
 			/**
 			 * Returns the data length of the serialized BundleSet
 			 */
-			Length getLength() const throw ();
+			Length getLength() const noexcept;
 
 			/**
 			 * Get the bloom-filter of this bundle-set
 			 */
-			const ibrcommon::BloomFilter& getBloomFilter() const throw ();
+			const ibrcommon::BloomFilter& getBloomFilter() const noexcept;
 
 			/**
 			 * Return bundles not in the given bloom-filter
 			 */
-			std::set<dtn::data::MetaBundle> getNotIn(const ibrcommon::BloomFilter &filter) const throw ();
+			std::set<dtn::data::MetaBundle> getNotIn(const ibrcommon::BloomFilter &filter) const noexcept;
 
 			/**
 			 * Serialize the bloom-filter of this bundle-set into a stream
@@ -127,7 +127,7 @@ namespace dtn
 			/**
 			 * Synchronize the bundle-set with the persistent set on the disk.
 			 */
-			virtual void sync() throw ();
+			virtual void sync() noexcept;
 
 		private:
             /**

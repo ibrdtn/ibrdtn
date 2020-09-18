@@ -46,7 +46,7 @@ namespace dtn
 			SecurityException(std::string what = "security has been violated") : ibrcommon::Exception(what)
 			{};
 
-			virtual ~SecurityException() throw() {};
+			virtual ~SecurityException() noexcept {};
 		};
 
 		class EncryptException : public SecurityException
@@ -55,7 +55,7 @@ namespace dtn
 			EncryptException(std::string what = "Encryption failed.") : SecurityException(what)
 			{};
 
-			virtual ~EncryptException() throw() {};
+			virtual ~EncryptException() noexcept {};
 		};
 
 		class DecryptException : public SecurityException
@@ -64,7 +64,7 @@ namespace dtn
 			DecryptException(std::string what = "Decryption failed.") : SecurityException(what)
 			{};
 
-			virtual ~DecryptException() throw() {};
+			virtual ~DecryptException() noexcept {};
 		};
 
 		class VerificationSkippedException : public SecurityException
@@ -73,7 +73,7 @@ namespace dtn
 			VerificationSkippedException(std::string what = "Verification skipped.") : SecurityException(what)
 			{};
 
-			virtual ~VerificationSkippedException() throw() {};
+			virtual ~VerificationSkippedException() noexcept {};
 		};
 
 		class VerificationFailedException : public SecurityException
@@ -82,7 +82,7 @@ namespace dtn
 			VerificationFailedException(std::string what = "Verification failed.") : SecurityException(what)
 			{};
 
-			virtual ~VerificationFailedException() throw() {};
+			virtual ~VerificationFailedException() noexcept {};
 		};
 
 		class ElementMissingException : public ibrcommon::Exception
@@ -91,7 +91,7 @@ namespace dtn
 			ElementMissingException(std::string what = "Requested element is missing.") : ibrcommon::Exception(what)
 			{};
 
-			virtual ~ElementMissingException() throw() {};
+			virtual ~ElementMissingException() noexcept {};
 		};
 
 		class MutableSerializer;

@@ -63,7 +63,7 @@ namespace dtn
 			return _stream.good();
 		}
 
-		void ExtendedApiHandler::__cancellation() throw ()
+		void ExtendedApiHandler::__cancellation() noexcept
 		{
 			// close the stream
 			_stream.close();
@@ -848,17 +848,17 @@ namespace dtn
 			ibrcommon::JoinableThread::join();
 		}
 
-		void ExtendedApiHandler::Sender::__cancellation() throw ()
+		void ExtendedApiHandler::Sender::__cancellation() noexcept
 		{
 			// abort all blocking calls on the registration object
 			_handler._client.getRegistration().abort();
 		}
 
-		void ExtendedApiHandler::Sender::finally() throw ()
+		void ExtendedApiHandler::Sender::finally() noexcept
 		{
 		}
 
-		void ExtendedApiHandler::Sender::run() throw ()
+		void ExtendedApiHandler::Sender::run() noexcept
 		{
 			Registration &reg = _handler._client.getRegistration();
 			try{

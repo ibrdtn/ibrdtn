@@ -42,7 +42,7 @@ namespace dtn
 			_metabundle = &data;
 		}
 
-		const dtn::data::MetaBundle& FilterContext::getMetaBundle() const throw (FilterException)
+		const dtn::data::MetaBundle& FilterContext::getMetaBundle() const noexcept (false)
 		{
 			if (_metabundle == NULL) throw FilterException("attribute not present in this context");
 			return *_metabundle;
@@ -54,13 +54,13 @@ namespace dtn
 			_primaryblock = &data;
 		}
 
-		const dtn::data::Bundle& FilterContext::getBundle() const throw (FilterException)
+		const dtn::data::Bundle& FilterContext::getBundle() const noexcept (false)
 		{
 			if (_bundle == NULL) throw FilterException("attribute not present in this context");
 			return *_bundle;
 		}
 
-		const dtn::data::BundleID& FilterContext::getBundleID() const throw (FilterException)
+		const dtn::data::BundleID& FilterContext::getBundleID() const noexcept (false)
 		{
 			if (_metabundle != NULL) return *_metabundle;
 			if (_primaryblock != NULL) return *_primaryblock;
@@ -72,7 +72,7 @@ namespace dtn
 			_primaryblock = &data;
 		}
 
-		const dtn::data::PrimaryBlock& FilterContext::getPrimaryBlock() const throw (FilterException)
+		const dtn::data::PrimaryBlock& FilterContext::getPrimaryBlock() const noexcept (false)
 		{
 			if (_primaryblock == NULL) throw FilterException("attribute not present in this context");
 			return *_primaryblock;
@@ -84,13 +84,13 @@ namespace dtn
 			_block_length = size;
 		}
 
-		const dtn::data::Block& FilterContext::getBlock() const throw (FilterException)
+		const dtn::data::Block& FilterContext::getBlock() const noexcept (false)
 		{
 			if (_block == NULL) throw FilterException("attribute not present in this context");
 			return *_block;
 		}
 
-		dtn::data::Number FilterContext::getBlockLength() const throw (FilterException)
+		dtn::data::Number FilterContext::getBlockLength() const noexcept (false)
 		{
 			if (_block == NULL) throw FilterException("attribute not present in this context");
 			return _block_length;
@@ -101,7 +101,7 @@ namespace dtn
 			_peer = &endpoint;
 		}
 
-		const dtn::data::EID& FilterContext::setPeer() const throw (FilterException)
+		const dtn::data::EID& FilterContext::setPeer() const noexcept (false)
 		{
 			if (_peer == NULL) throw FilterException("attribute not present in this context");
 			return *_peer;
@@ -112,7 +112,7 @@ namespace dtn
 			_protocol = protocol;
 		}
 
-		dtn::core::Node::Protocol FilterContext::getProtocol() const throw (FilterException)
+		dtn::core::Node::Protocol FilterContext::getProtocol() const noexcept (false)
 		{
 			if (_protocol == dtn::core::Node::CONN_UNDEFINED) throw FilterException("attribute not present in this context");
 			return _protocol;
@@ -123,7 +123,7 @@ namespace dtn
 			_routing = &routing;
 		}
 
-		const std::string FilterContext::getRoutingTag() const throw (FilterException)
+		const std::string FilterContext::getRoutingTag() const noexcept (false)
 		{
 			if (_routing == NULL) throw FilterException("attribute not present in this context");
 			return _routing->getTag();
@@ -149,12 +149,12 @@ namespace dtn
 			return this;
 		}
 
-		BundleFilter::ACTION BundleFilter::evaluate(const FilterContext &context) const throw ()
+		BundleFilter::ACTION BundleFilter::evaluate(const FilterContext &context) const noexcept
 		{
 			return (_next == NULL) ? BundleFilter::PASS : _next->evaluate(context);
 		}
 
-		BundleFilter::ACTION BundleFilter::filter(const FilterContext &context, dtn::data::Bundle &bundle) const throw ()
+		BundleFilter::ACTION BundleFilter::filter(const FilterContext &context, dtn::data::Bundle &bundle) const noexcept
 		{
 			return (_next == NULL) ? BundleFilter::PASS : _next->filter(context, bundle);
 		}

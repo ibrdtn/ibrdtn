@@ -149,37 +149,37 @@ public:
 	 * 	dtn::routing::QueueBundleEvent
 	 * 	dtn::core::NodeEvent
 	 */
-	void raiseEvent(const dtn::routing::QueueBundleEvent &evt) throw ();
-	void raiseEvent(const dtn::core::NodeEvent &evt) throw ();
+	void raiseEvent(const dtn::routing::QueueBundleEvent &evt) noexcept;
+	void raiseEvent(const dtn::core::NodeEvent &evt) noexcept;
 	/**
 	 * this method updates the given values for discovery service
 	 * It publishes the port number of the DHT instance
 	 */
 	void onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &beacon)
-			throw (dtn::net::DiscoveryBeaconHandler::NoServiceHereException);
+			noexcept (false);
 
 
 protected:
 	/**
 	 * returns true
 	 */
-	void __cancellation() throw ();
+	void __cancellation() noexcept;
 	/**
 	 * Reads the configured settings for the DHT and
 	 * initializes all needed sockets(IPv4&IPv6) for the DHT
 	 */
-	void componentUp() throw ();
+	void componentUp() noexcept;
 	/**
 	 * Runs the bootstrapping method and starts the DHT.
 	 * Executes the main loop with dtn_dht_periodic.
 	 * After exiting the main loop, the DHT is shut down.
 	 */
-	void componentRun() throw ();
+	void componentRun() noexcept;
 	/**
 	 * Calls the interrupt pipe to exit the main loop.
 	 * And so ends up the main loop indirectly
 	 */
-	void componentDown() throw ();
+	void componentDown() noexcept;
 };
 }
 }

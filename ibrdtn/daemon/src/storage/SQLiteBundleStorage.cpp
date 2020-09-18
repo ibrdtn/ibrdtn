@@ -158,7 +158,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteBundleStorage::componentRun() throw ()
+		void SQLiteBundleStorage::componentRun() noexcept
 		{
 			// loop until aborted
 			try {
@@ -188,9 +188,9 @@ namespace dtn
 			}
 		}
 
-		void SQLiteBundleStorage::componentUp() throw ()
+		void SQLiteBundleStorage::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 
 			//register Events
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::add(this);
@@ -204,9 +204,9 @@ namespace dtn
 			}
 		}
 
-		void SQLiteBundleStorage::componentDown() throw ()
+		void SQLiteBundleStorage::componentDown() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 
 			//unregister Events
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::remove(this);
@@ -216,7 +216,7 @@ namespace dtn
 			join();
 		}
 
-		void SQLiteBundleStorage::__cancellation() throw ()
+		void SQLiteBundleStorage::__cancellation() noexcept
 		{
 			_tasks.abort();
 		}
@@ -232,7 +232,7 @@ namespace dtn
 			return SQLiteBundleStorage::eid_set();
 		}
 
-		void SQLiteBundleStorage::get(const BundleSelector &cb, BundleResult &result) throw (NoBundleFoundException, BundleSelectorException)
+		void SQLiteBundleStorage::get(const BundleSelector &cb, BundleResult &result) noexcept (false)
 		{
 			ibrcommon::MutexLock l(_global_lock);
 			_database.get(cb, result);
@@ -538,7 +538,7 @@ namespace dtn
 			return 0;
 		}
 
-		void SQLiteBundleStorage::raiseEvent(const dtn::core::TimeEvent &time) throw ()
+		void SQLiteBundleStorage::raiseEvent(const dtn::core::TimeEvent &time) noexcept
 		{
 			if (time.getAction() == dtn::core::TIME_SECOND_TICK)
 			{
@@ -546,7 +546,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteBundleStorage::raiseEvent(const dtn::core::GlobalEvent &global) throw ()
+		void SQLiteBundleStorage::raiseEvent(const dtn::core::GlobalEvent &global) noexcept
 		{
 			if (global.getAction() == dtn::core::GlobalEvent::GLOBAL_IDLE)
 			{
@@ -632,7 +632,7 @@ namespace dtn
 			allocSpace(size);
 		}
 
-		void SQLiteBundleStorage::eventBundleExpired(const dtn::data::BundleID &id, const dtn::data::Length size) throw ()
+		void SQLiteBundleStorage::eventBundleExpired(const dtn::data::BundleID &id, const dtn::data::Length size) noexcept
 		{
 			// raise bundle removed event
 			eventBundleRemoved(id);

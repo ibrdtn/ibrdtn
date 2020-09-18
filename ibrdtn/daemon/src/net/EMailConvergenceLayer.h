@@ -58,14 +58,14 @@ namespace dtn
 			 * following events:
 			 *   - dtn::core::TimeEvent
 			 */
-			void raiseEvent(const dtn::core::TimeEvent &event) throw ();
+			void raiseEvent(const dtn::core::TimeEvent &event) noexcept;
 
 			/**
 			 * This method updates the given values for discovery service.
 			 * It publishes the email address of the EMail Convergence Layer
 			 */
 			void onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &beacon)
-					throw (DiscoveryBeaconHandler::NoServiceHereException);
+					noexcept (false);
 
 			/**
 			 * Returns the discovery protocol type:
@@ -95,10 +95,10 @@ namespace dtn
 			virtual const std::string getName() const;
 
 		protected:
-			void __cancellation() throw ();
+			void __cancellation() noexcept;
 
-			void componentUp() throw ();
-			void componentDown() throw ();
+			void componentUp() noexcept;
+			void componentDown() noexcept;
 
 		private:
 			/**

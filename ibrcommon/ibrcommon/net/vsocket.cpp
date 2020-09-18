@@ -259,7 +259,7 @@ namespace ibrcommon
 		return _state;
 	}
 
-	void vsocket::SocketState::set(STATE s) throw (state_exception)
+	void vsocket::SocketState::set(STATE s) noexcept (false)
 	{
 		try {
 			// try to get into state "s" and wait until this is possible
@@ -328,7 +328,7 @@ namespace ibrcommon
 		}
 	}
 
-	void vsocket::SocketState::setwait(STATE s, STATE abortstate) throw (state_exception)
+	void vsocket::SocketState::setwait(STATE s, STATE abortstate) noexcept (false)
 	{
 		try {
 			// try to get into state "s" and wait until this is possible
@@ -421,7 +421,7 @@ namespace ibrcommon
 		}
 	}
 
-	void vsocket::SocketState::wait(STATE s, STATE abortstate) throw (state_exception)
+	void vsocket::SocketState::wait(STATE s, STATE abortstate) noexcept (false)
 	{
 		try {
 			while (_state != s) {

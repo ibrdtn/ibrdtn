@@ -43,8 +43,8 @@ namespace dtn
 			SecurityFilter(MODE mode, BundleFilter::ACTION positive = BundleFilter::PASS, BundleFilter::ACTION negative = BundleFilter::PASS);
 			virtual ~SecurityFilter();
 
-			virtual ACTION evaluate(const FilterContext&) const throw ();
-			virtual ACTION filter(const FilterContext&, dtn::data::Bundle&) const throw ();
+			virtual ACTION evaluate(const FilterContext&) const noexcept;
+			virtual ACTION filter(const FilterContext&, dtn::data::Bundle&) const noexcept;
 
 		private:
 			const MODE _mode;

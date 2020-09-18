@@ -54,7 +54,7 @@ const std::string dtn::dht::DHTNameService::getName() const {
 	return "DHT Naming Service";
 }
 
-void dtn::dht::DHTNameService::__cancellation() throw () {
+void dtn::dht::DHTNameService::__cancellation() noexcept {
 }
 
 bool dtn::dht::DHTNameService::setNonBlockingInterruptPipe() {
@@ -72,7 +72,7 @@ bool dtn::dht::DHTNameService::setNonBlockingInterruptPipe() {
 	return true;
 }
 
-void dtn::dht::DHTNameService::componentUp() throw () {
+void dtn::dht::DHTNameService::componentUp() noexcept {
 	// register as discovery beacon handler
 	dtn::core::BundleCore::getInstance().getDiscoveryAgent().registerService(this);
 
@@ -190,7 +190,7 @@ void dtn::dht::DHTNameService::componentUp() throw () {
 	}
 }
 
-void dtn::dht::DHTNameService::componentRun() throw () {
+void dtn::dht::DHTNameService::componentRun() noexcept {
 	if (!this->_initialized) {
 		IBRCOMMON_LOGGER_TAG("DHTNameService", error) << "DHT is not initialized"
 					<<IBRCOMMON_LOGGER_ENDL;
@@ -437,7 +437,7 @@ void dtn::dht::DHTNameService::componentRun() throw () {
 	::close(_interrupt_pipe[1]);
 }
 
-void dtn::dht::DHTNameService::componentDown() throw () {
+void dtn::dht::DHTNameService::componentDown() noexcept {
 	// un-register as discovery beacon handler
 	dtn::core::BundleCore::getInstance().getDiscoveryAgent().unregisterService(this);
 
@@ -568,7 +568,7 @@ std::string dtn::dht::DHTNameService::getConvergenceLayerName(
 	return cltype_;
 }
 
-void dtn::dht::DHTNameService::raiseEvent(const dtn::routing::QueueBundleEvent &event) throw ()
+void dtn::dht::DHTNameService::raiseEvent(const dtn::routing::QueueBundleEvent &event) noexcept
 {
 	if (!event.bundle.destination.sameHost(dtn::core::BundleCore::local)
 			&& !event.bundle.destination.isNone()) {
@@ -576,7 +576,7 @@ void dtn::dht::DHTNameService::raiseEvent(const dtn::routing::QueueBundleEvent &
 	}
 }
 
-void dtn::dht::DHTNameService::raiseEvent(const dtn::core::NodeEvent &nodeevent) throw ()
+void dtn::dht::DHTNameService::raiseEvent(const dtn::core::NodeEvent &nodeevent) noexcept
 {
 	const dtn::core::Node &n = nodeevent.getNode();
 	if (!n.getEID().sameHost(dtn::core::BundleCore::local)) {
@@ -804,7 +804,7 @@ void dtn::dht::DHTNameService::bootstrappingIPs() {
 // TODO Nur für Interfaces zulassen, auf denen ich gebunden bin!
 
 void dtn::dht::DHTNameService::onUpdateBeacon(const ibrcommon::vinterface&, DiscoveryBeacon &beacon)
-		throw (dtn::net::DiscoveryBeaconHandler::NoServiceHereException) {
+		noexcept (false) {
 	if (this->_initialized) {
 		stringstream service;
 		service << "port=" << this->_context.port << ";";

@@ -44,7 +44,7 @@ QueueTest::TestThread::~TestThread()
 	join();
 }
 
-void QueueTest::TestThread::run() throw ()
+void QueueTest::TestThread::run() noexcept
 {
 	try {
 		while (true)
@@ -61,12 +61,12 @@ void QueueTest::TestThread::run() throw ()
 	}
 }
 
-void QueueTest::TestThread::__cancellation() throw ()
+void QueueTest::TestThread::__cancellation() noexcept
 {
 	_queue.abort();
 }
 
-void QueueTest::TestThread::finally() throw ()
+void QueueTest::TestThread::finally() noexcept
 {
 }
 

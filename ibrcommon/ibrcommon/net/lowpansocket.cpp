@@ -57,7 +57,7 @@ namespace ibrcommon
 
 	}
 
-	void lowpansocket::up() throw (socket_exception)
+	void lowpansocket::up() noexcept (false)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
@@ -83,7 +83,7 @@ namespace ibrcommon
 		_state = SOCKET_UP;
 	}
 
-	void lowpansocket::down() throw (socket_exception)
+	void lowpansocket::down() noexcept (false)
 	{
 		if ((_state == SOCKET_DOWN) || (_state == SOCKET_DESTROYED))
 			throw socket_exception("socket is not up");
@@ -91,7 +91,7 @@ namespace ibrcommon
 		this->close();
 	}
 
-	void lowpansocket::setAutoAck(bool enable) throw (socket_exception)
+	void lowpansocket::setAutoAck(bool enable) noexcept (false)
 	{
 		int optval = (enable ? 1 : 0);
 		if (::setsockopt(_fd, SOL_IEEE802154, WPAN_WANTACK, &optval, sizeof(optval)) < 0) {
@@ -99,7 +99,7 @@ namespace ibrcommon
 		}
 	}
 
-	ssize_t lowpansocket::recvfrom(char *buf, size_t buflen, int flags, ibrcommon::vaddress &addr) throw (socket_exception)
+	ssize_t lowpansocket::recvfrom(char *buf, size_t buflen, int flags, ibrcommon::vaddress &addr) noexcept (false)
 	{
 		struct sockaddr_storage clientAddress;
 		socklen_t clientAddressLength = sizeof(clientAddress);
@@ -122,7 +122,7 @@ namespace ibrcommon
 		return ret;
 	}
 
-	void lowpansocket::sendto(const char *buf, size_t buflen, int flags, const ibrcommon::vaddress &addr) throw (socket_exception)
+	void lowpansocket::sendto(const char *buf, size_t buflen, int flags, const ibrcommon::vaddress &addr) noexcept (false)
 	{
 		ssize_t ret = 0;
 		struct sockaddr_ieee802154 sockaddr;

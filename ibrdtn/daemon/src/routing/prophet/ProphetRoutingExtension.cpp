@@ -163,9 +163,9 @@ namespace dtn
 
 					virtual ~BundleFilter() {}
 
-					virtual dtn::data::Size limit() const throw () { return 0; }
+					virtual dtn::data::Size limit() const noexcept { return 0; }
 
-					virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+					virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const noexcept (false)
 					{
 						// do not delete any bundles with
 						if (meta.destination.getNode() == dtn::core::BundleCore::local)
@@ -205,13 +205,13 @@ namespace dtn
 			} catch (std::exception&) { }
 		}
 
-		void ProphetRoutingExtension::eventDataChanged(const dtn::data::EID &peer) throw ()
+		void ProphetRoutingExtension::eventDataChanged(const dtn::data::EID &peer) noexcept
 		{
 			// transfer the next bundle to this destination
 			_taskqueue.push( new SearchNextBundleTask( peer ) );
 		}
 
-		void ProphetRoutingExtension::eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ()
+		void ProphetRoutingExtension::eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept
 		{
 			// add forwarded entry to GTMX strategy
 			try {
@@ -220,7 +220,7 @@ namespace dtn
 			} catch (const std::bad_cast &ex) { };
 		}
 
-		void ProphetRoutingExtension::eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ()
+		void ProphetRoutingExtension::eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept
 		{
 			// new bundles trigger a recheck for all neighbors
 			const std::set<dtn::core::Node> nl = dtn::core::BundleCore::getInstance().getConnectionManager().getNeighbors();
@@ -237,7 +237,7 @@ namespace dtn
 			}
 		}
 
-		void ProphetRoutingExtension::raiseEvent(const dtn::core::TimeEvent &time) throw ()
+		void ProphetRoutingExtension::raiseEvent(const dtn::core::TimeEvent &time) noexcept
 		{
 			// expire bundles in the acknowledgment set
 			{
@@ -263,7 +263,7 @@ namespace dtn
 			}
 		}
 
-		void ProphetRoutingExtension::raiseEvent(const NodeHandshakeEvent &handshake) throw ()
+		void ProphetRoutingExtension::raiseEvent(const NodeHandshakeEvent &handshake) noexcept
 		{
 			if (handshake.state == NodeHandshakeEvent::HANDSHAKE_COMPLETED)
 			{
@@ -272,7 +272,7 @@ namespace dtn
 			}
 		}
 
-		void ProphetRoutingExtension::raiseEvent(const dtn::core::BundlePurgeEvent &purge) throw ()
+		void ProphetRoutingExtension::raiseEvent(const dtn::core::BundlePurgeEvent &purge) noexcept
 		{
 			if (purge.reason == dtn::core::BundlePurgeEvent::DELIVERED)
 			{
@@ -282,7 +282,7 @@ namespace dtn
 			}
 		}
 
-		void ProphetRoutingExtension::componentUp() throw ()
+		void ProphetRoutingExtension::componentUp() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::routing::NodeHandshakeEvent>::add(this);
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::add(this);
@@ -294,7 +294,7 @@ namespace dtn
 			// restore persistent routing data
 			if (_persistent_file.exists()) restore(_persistent_file);
 
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// run the thread
 				start();
@@ -303,7 +303,7 @@ namespace dtn
 			}
 		}
 
-		void ProphetRoutingExtension::componentDown() throw ()
+		void ProphetRoutingExtension::componentDown() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::routing::NodeHandshakeEvent>::remove(this);
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::remove(this);
@@ -321,7 +321,7 @@ namespace dtn
 			}
 		}
 
-		const std::string ProphetRoutingExtension::getTag() const throw ()
+		const std::string ProphetRoutingExtension::getTag() const noexcept
 		{
 			return "prophet";
 		}
@@ -345,7 +345,7 @@ namespace dtn
 			return ibrcommon::ThreadsafeReference<const AcknowledgementSet>(_acknowledgementSet, const_cast<AcknowledgementSet&>(_acknowledgementSet));
 		}
 
-		void ProphetRoutingExtension::ProphetRoutingExtension::run() throw ()
+		void ProphetRoutingExtension::ProphetRoutingExtension::run() noexcept
 		{
 			class BundleFilter : public dtn::storage::BundleSelector
 			{
@@ -356,9 +356,9 @@ namespace dtn
 
 				virtual ~BundleFilter() {};
 
-				virtual dtn::data::Size limit() const throw () { return _entry.getFreeTransferSlots(); };
+				virtual dtn::data::Size limit() const noexcept { return _entry.getFreeTransferSlots(); };
 
-				virtual bool addIfSelected(dtn::storage::BundleResult &result, const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+				virtual bool addIfSelected(dtn::storage::BundleResult &result, const dtn::data::MetaBundle &meta) const noexcept (false)
 				{
 					// check Scope Control Block - do not forward bundles with hop limit == 0
 					if (meta.hopcount == 0)
@@ -586,7 +586,7 @@ namespace dtn
 			}
 		}
 
-		void ProphetRoutingExtension::__cancellation() throw ()
+		void ProphetRoutingExtension::__cancellation() noexcept
 		{
 			_taskqueue.abort();
 		}

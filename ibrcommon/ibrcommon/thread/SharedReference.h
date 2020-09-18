@@ -36,7 +36,7 @@ namespace ibrcommon {
 			: _item(ref), _l(mutex)
 		{}
 
-		T& operator*() const throw (ibrcommon::Exception)
+		T& operator*() const noexcept (false)
 		{
 			if (_item == NULL) throw ibrcommon::Exception("object not initialized");
 			return *_item;

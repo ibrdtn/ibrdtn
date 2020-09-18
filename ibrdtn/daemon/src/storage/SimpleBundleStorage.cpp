@@ -166,9 +166,9 @@ namespace dtn
 			}
 		}
 
-		void SimpleBundleStorage::componentUp() throw ()
+		void SimpleBundleStorage::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 
 			// load persistent bundles
 			_datastore.iterateAll();
@@ -188,9 +188,9 @@ namespace dtn
 			}
 		}
 
-		void SimpleBundleStorage::componentDown() throw ()
+		void SimpleBundleStorage::componentDown() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::remove(this);
 			try {
@@ -210,7 +210,7 @@ namespace dtn
 			}
 		}
 
-		void SimpleBundleStorage::raiseEvent(const dtn::core::TimeEvent &time) throw ()
+		void SimpleBundleStorage::raiseEvent(const dtn::core::TimeEvent &time) noexcept
 		{
 			if (time.getAction() == dtn::core::TIME_SECOND_TICK)
 			{
@@ -253,7 +253,7 @@ namespace dtn
 			_datastore.setFaulty(mode);
 		}
 
-		void SimpleBundleStorage::get(const BundleSelector &cb, BundleResult &result) throw (NoBundleFoundException, BundleSelectorException)
+		void SimpleBundleStorage::get(const BundleSelector &cb, BundleResult &result) noexcept (false)
 		{
 			size_t items_added = 0;
 
@@ -465,7 +465,7 @@ namespace dtn
 			}
 		}
 
-		void SimpleBundleStorage::eventBundleExpired(const dtn::data::MetaBundle &b) throw ()
+		void SimpleBundleStorage::eventBundleExpired(const dtn::data::MetaBundle &b) noexcept
 		{
 			DataStorage::Hash hash(BundleContainer::createId(b));
 

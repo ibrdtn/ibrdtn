@@ -97,7 +97,7 @@ namespace dtn
 			class PlainDeserializerException : public ibrcommon::Exception
 			{
 				public:
-					PlainDeserializerException(string what = "") throw() : Exception(what)
+					PlainDeserializerException(string what = "") noexcept : Exception(what)
 					{
 					}
 			};
@@ -105,7 +105,7 @@ namespace dtn
 			class UnknownBlockException : public PlainDeserializerException
 			{
 				public:
-					UnknownBlockException(string what = "unknown block") throw() : PlainDeserializerException(what)
+					UnknownBlockException(string what = "unknown block") noexcept : PlainDeserializerException(what)
 					{
 					}
 			};
@@ -113,7 +113,7 @@ namespace dtn
 			class BlockNotProcessableException : public PlainDeserializerException
 			{
 				public:
-					BlockNotProcessableException(string what = "block not processable") throw() : PlainDeserializerException(what)
+					BlockNotProcessableException(string what = "block not processable") noexcept : PlainDeserializerException(what)
 					{
 					}
 			};

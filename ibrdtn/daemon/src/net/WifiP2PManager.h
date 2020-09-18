@@ -47,22 +47,22 @@ namespace dtn
 			/**
 			 * @see Component::__cancellation()
 			 */
-			virtual void __cancellation() throw ();
+			virtual void __cancellation() noexcept;
 
 			/**
 			 * @see Component::componentUp()
 			 */
-			virtual void componentUp() throw ();
+			virtual void componentUp() noexcept;
 
 			/**
 			 * @see Component::componentRun()
 			 */
-			virtual void componentRun() throw ();
+			virtual void componentRun() noexcept;
 
 			/**
 			 * @see Component::componentDown()
 			 */
-			virtual void componentDown() throw ();
+			virtual void componentDown() noexcept;
 
 			/**
 			 * @see Component::getName()

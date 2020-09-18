@@ -338,7 +338,7 @@ BundleSetTest::ExpiredBundleCounter::~ExpiredBundleCounter()
 {
 }
 
-void BundleSetTest::ExpiredBundleCounter::eventBundleExpired(const dtn::data::MetaBundle&) throw ()
+void BundleSetTest::ExpiredBundleCounter::eventBundleExpired(const dtn::data::MetaBundle&) noexcept
 {
 	counter++;
 }

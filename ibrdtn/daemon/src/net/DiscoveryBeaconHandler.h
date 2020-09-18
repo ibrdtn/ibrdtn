@@ -36,18 +36,18 @@ namespace dtn
 			class NoServiceHereException : public ibrcommon::Exception
 			{
 			public:
-				NoServiceHereException(std::string what = "No service available.") throw() : ibrcommon::Exception(what)
+				NoServiceHereException(std::string what = "No service available.") noexcept : ibrcommon::Exception(what)
 				{
 				};
 
-				virtual ~NoServiceHereException() throw() {};
+				virtual ~NoServiceHereException() noexcept {};
 			};
 
 			virtual ~DiscoveryBeaconHandler() = 0;
 
-			virtual void onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) throw ();
+			virtual void onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) noexcept;
 
-			virtual void onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &beacon) throw (NoServiceHereException);
+			virtual void onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &beacon) noexcept (false);
 		};
 	}
 }

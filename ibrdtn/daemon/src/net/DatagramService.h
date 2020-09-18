@@ -22,7 +22,7 @@ namespace dtn
 			DatagramException(const std::string &what) : ibrcommon::Exception(what)
 			{};
 
-			virtual ~DatagramException() throw() {};
+			virtual ~DatagramException() noexcept {};
 		};
 
 		class WrongSeqNoException : public DatagramException
@@ -32,7 +32,7 @@ namespace dtn
 			: DatagramException("Wrong sequence number received"), expected_seqno(exp_seqno)
 			{};
 
-			virtual ~WrongSeqNoException() throw() {};
+			virtual ~WrongSeqNoException() noexcept {};
 
 			const size_t expected_seqno;
 		};
@@ -79,7 +79,7 @@ namespace dtn
 			 * Bind to the local socket.
 			 * @throw If the bind fails, an DatagramException is thrown.
 			 */
-			virtual void bind() throw (DatagramException) = 0;
+			virtual void bind() noexcept (false) = 0;
 
 			/**
 			 * Shutdown the socket. Unblock all calls on the socket (recv, send, etc.)
@@ -93,7 +93,7 @@ namespace dtn
 			 * @param length The number of available bytes in the buffer.
 			 * @throw If the transmission wasn't successful this method will throw an exception.
 			 */
-			virtual void send(const char &type, const char &flags, const unsigned int &seqno, const std::string &address, const char *buf, size_t length) throw (DatagramException) = 0;
+			virtual void send(const char &type, const char &flags, const unsigned int &seqno, const std::string &address, const char *buf, size_t length) noexcept (false) = 0;
 
 			/**
 			 * Send the payload as datagram to all neighbors (broadcast)
@@ -101,7 +101,7 @@ namespace dtn
 			 * @param length The number of available bytes in the buffer.
 			 * @throw If the transmission wasn't successful this method will throw an exception.
 			 */
-			virtual void send(const char &type, const char &flags, const unsigned int &seqno, const char *buf, size_t length) throw (DatagramException) = 0;
+			virtual void send(const char &type, const char &flags, const unsigned int &seqno, const char *buf, size_t length) noexcept (false) = 0;
 
 			/**
 			 * Receive an incoming datagram.
@@ -111,7 +111,7 @@ namespace dtn
 			 * @throw If the receive call failed for any reason, an DatagramException is thrown.
 			 * @return The number of received bytes.
 			 */
-			virtual size_t recvfrom(char *buf, size_t length, char &type, char &flags, unsigned int &seqno, std::string &address) throw (DatagramException) = 0;
+			virtual size_t recvfrom(char *buf, size_t length, char &type, char &flags, unsigned int &seqno, std::string &address) noexcept (false) = 0;
 
 			/**
 			 * Get the tag for this service used in discovery messages.

@@ -47,7 +47,7 @@ namespace dtn
 			}
 		}
 
-		ExtensionBlock::Factory& ExtensionBlock::FactoryList::get(const block_t type) throw (ibrcommon::Exception)
+		ExtensionBlock::Factory& ExtensionBlock::FactoryList::get(const block_t type) noexcept (false)
 		{
 			std::map<block_t, ExtensionBlock::Factory*>::iterator iter = fmap.find(type);
 
@@ -59,7 +59,7 @@ namespace dtn
 			throw ibrcommon::Exception("Factory not available");
 		}
 
-		void ExtensionBlock::FactoryList::add(const block_t type, Factory *f) throw (ibrcommon::Exception)
+		void ExtensionBlock::FactoryList::add(const block_t type, Factory *f) noexcept (false)
 		{
 			try {
 				get(type);
@@ -86,7 +86,7 @@ namespace dtn
 			ExtensionBlock::factories->remove(_type);
 		}
 
-		ExtensionBlock::Factory& ExtensionBlock::Factory::get(block_t type) throw (ibrcommon::Exception)
+		ExtensionBlock::Factory& ExtensionBlock::Factory::get(block_t type) noexcept (false)
 		{
 			ExtensionBlock::FactoryList::initialize();
 			return ExtensionBlock::factories->get(type);

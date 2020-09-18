@@ -104,7 +104,7 @@ namespace dtn
 			dtn::core::BundleCore::inject(dtn::core::BundleCore::local, bundle);
 		}
 
-		void StatusReportGenerator::raiseEvent(const dtn::core::BundleEvent &bundleevent) throw ()
+		void StatusReportGenerator::raiseEvent(const dtn::core::BundleEvent &bundleevent) noexcept
 		{
 			const dtn::data::MetaBundle &b = bundleevent.getBundle();
 

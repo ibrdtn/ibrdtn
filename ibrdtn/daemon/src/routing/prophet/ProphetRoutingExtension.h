@@ -68,24 +68,24 @@ namespace dtn
 						dtn::data::Timestamp next_exchange_timeout);
 			virtual ~ProphetRoutingExtension();
 
-			virtual const std::string getTag() const throw ();
+			virtual const std::string getTag() const noexcept;
 
 			/* virtual methods from BaseRouter::Extension */
 			virtual void requestHandshake(const dtn::data::EID&, NodeHandshake&) const; ///< \see BaseRouter::Extension::requestHandshake
 			virtual void responseHandshake(const dtn::data::EID&, const NodeHandshake&, NodeHandshake&); ///< \see BaseRouter::Extension::responseHandshake
 			virtual void processHandshake(const dtn::data::EID&, NodeHandshake&); ///< \see BaseRouter::Extension::processHandshake
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
 
-			virtual void raiseEvent(const dtn::routing::NodeHandshakeEvent &evt) throw ();
-			virtual void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
-			virtual void raiseEvent(const dtn::core::BundlePurgeEvent &evt) throw ();
+			virtual void raiseEvent(const dtn::routing::NodeHandshakeEvent &evt) noexcept;
+			virtual void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
+			virtual void raiseEvent(const dtn::core::BundlePurgeEvent &evt) noexcept;
 
-			virtual void eventDataChanged(const dtn::data::EID &peer) throw ();
+			virtual void eventDataChanged(const dtn::data::EID &peer) noexcept;
 
-			virtual void eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ();
+			virtual void eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept;
 
-			virtual void eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ();
+			virtual void eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept;
 
 			/*!
 			 * Returns a threadsafe reference to the DeliveryPredictabilityMap. I.e. the corresponding
@@ -106,8 +106,8 @@ namespace dtn
 			 */
 			ibrcommon::ThreadsafeReference<const AcknowledgementSet> getAcknowledgementSet() const;
 		protected:
-			virtual void run() throw ();
-			void __cancellation() throw ();
+			virtual void run() noexcept;
+			void __cancellation() noexcept;
 		private:
 			/*!
 			 * Updates the DeliveryPredictabilityMap in the event that a neighbor has been encountered.

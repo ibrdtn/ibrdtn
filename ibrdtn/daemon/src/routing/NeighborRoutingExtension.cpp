@@ -59,12 +59,12 @@ namespace dtn
 			join();
 		}
 
-		void NeighborRoutingExtension::__cancellation() throw ()
+		void NeighborRoutingExtension::__cancellation() noexcept
 		{
 			_taskqueue.abort();
 		}
 
-		void NeighborRoutingExtension::run() throw ()
+		void NeighborRoutingExtension::run() noexcept
 		{
 #ifdef HAVE_SQLITE
 			class BundleFilter : public dtn::storage::BundleSelector, public dtn::storage::SQLiteDatabase::SQLBundleQuery
@@ -79,9 +79,9 @@ namespace dtn
 
 				virtual ~BundleFilter() {};
 
-				virtual dtn::data::Size limit() const throw () { return _entry.getFreeTransferSlots(); };
+				virtual dtn::data::Size limit() const noexcept { return _entry.getFreeTransferSlots(); };
 
-				virtual bool addIfSelected(dtn::storage::BundleResult &result, const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+				virtual bool addIfSelected(dtn::storage::BundleResult &result, const dtn::data::MetaBundle &meta) const noexcept (false)
 				{
 					// check if the considered bundle should get routed
 					std::pair<bool, dtn::core::Node::Protocol> ret = _extension.shouldRouteTo(meta, _entry, _plist);
@@ -94,12 +94,12 @@ namespace dtn
 				};
 
 #ifdef HAVE_SQLITE
-				const std::string getWhere() const throw ()
+				const std::string getWhere() const noexcept
 				{
 					return "destination LIKE ?";
 				};
 
-				int bind(sqlite3_stmt *st, int offset) const throw ()
+				int bind(sqlite3_stmt *st, int offset) const noexcept
 				{
 					const std::string d = _entry.eid.getNode().getString() + "%";
 					sqlite3_bind_text(st, offset, d.c_str(), static_cast<int>(d.size()), SQLITE_TRANSIENT);
@@ -283,13 +283,13 @@ namespace dtn
 			return make_pair(false, dtn::core::Node::CONN_UNDEFINED);
 		}
 
-		void NeighborRoutingExtension::eventDataChanged(const dtn::data::EID &peer) throw ()
+		void NeighborRoutingExtension::eventDataChanged(const dtn::data::EID &peer) noexcept
 		{
 			// transfer the next bundle to this destination
 			_taskqueue.push( new SearchNextBundleTask( peer ) );
 		}
 
-		void NeighborRoutingExtension::eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ()
+		void NeighborRoutingExtension::eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept
 		{
 			// try to deliver new bundles to all neighbors
 			const std::set<dtn::core::Node> nl = dtn::core::BundleCore::getInstance().getConnectionManager().getNeighbors();
@@ -305,12 +305,12 @@ namespace dtn
 			}
 		}
 
-		void NeighborRoutingExtension::componentUp() throw ()
+		void NeighborRoutingExtension::componentUp() noexcept
 		{
 			// reset the task queue
 			_taskqueue.reset();
 
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// run the thread
 				start();
@@ -319,9 +319,9 @@ namespace dtn
 			}
 		}
 
-		void NeighborRoutingExtension::componentDown() throw ()
+		void NeighborRoutingExtension::componentDown() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// stop the thread
 				stop();
@@ -331,7 +331,7 @@ namespace dtn
 			}
 		}
 
-		const std::string NeighborRoutingExtension::getTag() const throw ()
+		const std::string NeighborRoutingExtension::getTag() const noexcept
 		{
 			return "neighbor";
 		}

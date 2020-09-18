@@ -20,7 +20,7 @@ namespace dtn
 		public:
 			BundleResult();
 			virtual ~BundleResult() = 0;
-			virtual void put(const dtn::data::MetaBundle &bundle) throw () = 0;
+			virtual void put(const dtn::data::MetaBundle &bundle) noexcept = 0;
 		};
 
 		class BundleResultList : public BundleResult, public std::list<dtn::data::MetaBundle> {
@@ -28,7 +28,7 @@ namespace dtn
 			BundleResultList();
 			virtual ~BundleResultList();
 
-			virtual void put(const dtn::data::MetaBundle &bundle) throw ();
+			virtual void put(const dtn::data::MetaBundle &bundle) noexcept;
 		};
 
 		class BundleResultQueue : public BundleResult, public ibrcommon::Queue<dtn::data::MetaBundle> {
@@ -36,7 +36,7 @@ namespace dtn
 			BundleResultQueue();
 			virtual ~BundleResultQueue();
 
-			virtual void put(const dtn::data::MetaBundle &bundle) throw ();
+			virtual void put(const dtn::data::MetaBundle &bundle) noexcept;
 		};
 	} /* namespace storage */
 } /* namespace dtn */

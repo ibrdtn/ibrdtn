@@ -42,8 +42,8 @@ namespace ibrcommon
 	public:
 		virtual ~NetLinkManager();
 
-		void up() throw ();
-		void down() throw ();
+		void up() noexcept;
+		void down() noexcept;
 
 		const vinterface getInterface(int index) const;
 		const std::list<vaddress> getAddressList(const vinterface &iface, const std::string &scope = "");
@@ -56,8 +56,8 @@ namespace ibrcommon
 		};
 
 	protected:
-		void run() throw ();
-		void __cancellation() throw ();
+		void run() noexcept;
+		void __cancellation() noexcept;
 
 	private:
 		NetLinkManager();
@@ -68,15 +68,15 @@ namespace ibrcommon
 			netlinkcache(int protocol);
 			virtual ~netlinkcache();
 
-			virtual void up() throw (socket_exception);
-			virtual void down() throw (socket_exception);
+			virtual void up() noexcept (false);
+			virtual void down() noexcept (false);
 
-			virtual int fd() const throw (socket_exception);
+			virtual int fd() const noexcept (false);
 
-			void add(const std::string &cachename) throw (socket_exception);
-			struct nl_cache* get(const std::string &cachename) const throw (socket_exception);
+			void add(const std::string &cachename) noexcept (false);
+			struct nl_cache* get(const std::string &cachename) const noexcept (false);
 
-			void receive() throw (socket_exception);
+			void receive() noexcept (false);
 
 		private:
 			const int _protocol;

@@ -33,12 +33,12 @@ namespace ibrcommon
 		RWMutex();
 		virtual ~RWMutex();
 
-		virtual void trylock() throw (MutexException);
-		virtual void enter() throw (MutexException);
-		virtual void leave() throw (MutexException);
+		virtual void trylock() noexcept (false);
+		virtual void enter() noexcept (false);
+		virtual void leave() noexcept (false);
 
-		virtual void trylock_wr() throw (MutexException);
-		virtual void enter_wr() throw (MutexException);
+		virtual void trylock_wr() noexcept (false);
+		virtual void enter_wr() noexcept (false);
 
 	protected:
 		pthread_rwlock_t _rwlock;

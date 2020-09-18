@@ -56,7 +56,7 @@ namespace dtn
 			 * This method is called by the EventSwitch.
 			 * @param evt
 			 */
-			void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
+			void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
 
 			/**
 			 * This message is called by the discovery module.

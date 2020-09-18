@@ -72,7 +72,7 @@ void FakeDatagramService::genAck(const unsigned int seqno, const std::string &ad
 	_recv_queue.push(msg);
 }
 
-void FakeDatagramService::bind() throw (dtn::net::DatagramException) {
+void FakeDatagramService::bind() noexcept (false) {
 	_recv_queue.reset();
 }
 
@@ -80,7 +80,7 @@ void FakeDatagramService::shutdown() {
 	_recv_queue.abort();
 }
 
-void FakeDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const std::string &address, const char *buf, size_t length) throw (dtn::net::DatagramException) {
+void FakeDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const std::string &address, const char *buf, size_t length) noexcept (false) {
 	if (type == dtn::net::DatagramConvergenceLayer::HEADER_SEGMENT) {
 		// wait 50ms and queue an ack
 		ibrcommon::Thread::sleep(50);
@@ -89,11 +89,11 @@ void FakeDatagramService::send(const char &type, const char &flags, const unsign
 	}
 }
 
-void FakeDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const char *buf, size_t length) throw (dtn::net::DatagramException) {
+void FakeDatagramService::send(const char &type, const char &flags, const unsigned int &seqno, const char *buf, size_t length) noexcept (false) {
 	// no ack here!
 }
 
-size_t FakeDatagramService::recvfrom(char *buf, size_t length, char &type, char &flags, unsigned int &seqno, std::string &address) throw (dtn::net::DatagramException) {
+size_t FakeDatagramService::recvfrom(char *buf, size_t length, char &type, char &flags, unsigned int &seqno, std::string &address) noexcept (false) {
 	size_t ret = 0;
 
 	msg_queue::Locked lq = _recv_queue.exclusive();

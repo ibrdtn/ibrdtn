@@ -63,25 +63,25 @@ namespace dtn
 			/**
 			 * @see EventReceiver::raiseEvent()
 			 */
-			void raiseEvent(const dtn::net::P2PDialupEvent &evt) throw ();
+			void raiseEvent(const dtn::net::P2PDialupEvent &evt) noexcept;
 
 			/**
 			 * This method is called by the DiscoveryAgent every time a beacon is ready for advertisement
 			 */
-			void onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) throw ();
+			void onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) noexcept;
 
 		protected:
-			virtual void componentRun() throw ();
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
-			void __cancellation() throw ();
+			virtual void componentRun() noexcept;
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
+			void __cancellation() noexcept;
 
 		private:
-			void join(const ibrcommon::vinterface &iface) throw ();
-			void leave(const ibrcommon::vinterface &iface) throw ();
+			void join(const ibrcommon::vinterface &iface) noexcept;
+			void leave(const ibrcommon::vinterface &iface) noexcept;
 
-			void join(const ibrcommon::vinterface &iface, const ibrcommon::vaddress &addr) throw ();
-			void leave(const ibrcommon::vinterface &iface, const ibrcommon::vaddress &addr) throw ();
+			void join(const ibrcommon::vinterface &iface, const ibrcommon::vaddress &addr) noexcept;
+			void leave(const ibrcommon::vinterface &iface, const ibrcommon::vaddress &addr) noexcept;
 
 			void send(const DiscoveryBeacon &a, const ibrcommon::vinterface &iface, const ibrcommon::vaddress &addr);
 

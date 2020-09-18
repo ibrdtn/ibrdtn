@@ -598,7 +598,7 @@ namespace dtn
 			return _interfaces;
 		}
 
-		const std::set<ibrcommon::vaddress> Configuration::Discovery::address() const throw (ParameterNotFoundException)
+		const std::set<ibrcommon::vaddress> Configuration::Discovery::address() const noexcept (false)
 		{
 			std::set<ibrcommon::vaddress> ret;
 

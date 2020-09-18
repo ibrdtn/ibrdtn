@@ -67,14 +67,14 @@ namespace dtn
 
 			virtual ~NativeDaemonCallback() = 0;
 
-			virtual void levelChanged(DaemonRunLevel level) throw () = 0;
+			virtual void levelChanged(DaemonRunLevel level) noexcept = 0;
 		};
 
 		class NativeEventCallback {
 		public:
 			virtual ~NativeEventCallback() = 0;
 
-			virtual void eventRaised(const std::string &event, const std::string &action, const std::vector<std::string> &data) throw () = 0;
+			virtual void eventRaised(const std::string &event, const std::string &action, const std::vector<std::string> &data) noexcept = 0;
 		};
 
 		class NativeNode {
@@ -155,7 +155,7 @@ namespace dtn
 		class NativeDaemonException : public ibrcommon::Exception
 		{
 		public:
-			NativeDaemonException(std::string what = "An error happened.") throw() : ibrcommon::Exception(what)
+			NativeDaemonException(std::string what = "An error happened.") noexcept : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -191,37 +191,37 @@ namespace dtn
 			/**
 			 * Get the current runlevel
 			 */
-			DaemonRunLevel getRunLevel() const throw ();
+			DaemonRunLevel getRunLevel() const noexcept;
 
 			/**
 			 * Switch the runlevel of the daemon
 			 */
-			void init(DaemonRunLevel rl) throw (NativeDaemonException);
+			void init(DaemonRunLevel rl) noexcept (false);
 
 			/**
 			 * Wait until the runlevel is reached
 			 */
-			void wait(DaemonRunLevel rl) throw ();
+			void wait(DaemonRunLevel rl) noexcept;
 
 			/**
 			 * Generate a reload signal
 			 */
-			void reload() throw ();
+			void reload() noexcept;
 
 			/**
 			 * Enable / disable debugging at runtime
 			 */
-			void setDebug(int level) throw ();
+			void setDebug(int level) noexcept;
 
 			/**
 			 * Set the config file and enable default logging capabilities
 			 */
-			void setLogging(const std::string &defaultTag, int logLevel) const throw ();
+			void setLogging(const std::string &defaultTag, int logLevel) const noexcept;
 
 			/**
 			 * Set the path to the log file
 			 */
-			void setLogFile(const std::string &path, int logLevel) const throw ();
+			void setLogFile(const std::string &path, int logLevel) const noexcept;
 
 			/**
 			 * Set the daemon configuration
@@ -233,32 +233,32 @@ namespace dtn
 			/**
 			 * Get the local EID of this node
 			 */
-			std::string getLocalUri() const throw ();
+			std::string getLocalUri() const noexcept;
 
 			/**
 			 * Get the neighbors
 			 */
-			std::vector<std::string> getNeighbors() const throw ();
+			std::vector<std::string> getNeighbors() const noexcept;
 
 			/**
 			 * Get neighbor info
 			 */
-			NativeNode getInfo(const std::string &neighbor_eid) const throw (NativeDaemonException);
+			NativeNode getInfo(const std::string &neighbor_eid) const noexcept (false);
 
 			/**
 			 * Get statistical data
 			 */
-			NativeStats getStats() throw ();
+			NativeStats getStats() noexcept;
 
 			/**
 			 * Add a static connection to the neighbor with the given EID
 			 */
-			void addConnection(std::string eid, std::string protocol, std::string address, std::string service, bool local = false) const throw ();
+			void addConnection(std::string eid, std::string protocol, std::string address, std::string service, bool local = false) const noexcept;
 
 			/**
 			 * Remove a static connection of the neighbor with the given EID
 			 */
-			void removeConnection(std::string eid, std::string protocol, std::string address, std::string service, bool local = false) const throw ();
+			void removeConnection(std::string eid, std::string protocol, std::string address, std::string service, bool local = false) const noexcept;
 
 			/**
 			 * initiate a connection to a given neighbor
@@ -283,57 +283,57 @@ namespace dtn
 			/**
 			 * Returns security key data
 			 */
-			NativeKeyInfo getKeyInfo(std::string eid) const throw (NativeDaemonException);
+			NativeKeyInfo getKeyInfo(std::string eid) const noexcept (false);
 
 			/**
 			 * Remove an existing key
 			 */
-			void removeKey(std::string eid) const throw (NativeDaemonException);
+			void removeKey(std::string eid) const noexcept (false);
 
 			/**
 			 * @see dtn::core::EventReceiver::raiseEvent()
 			 */
-			virtual void raiseEvent(const dtn::core::NodeEvent &evt) throw ();
-			virtual void raiseEvent(const dtn::core::GlobalEvent &evt) throw ();
-			virtual void raiseEvent(const dtn::core::CustodyEvent &evt) throw ();
-			virtual void raiseEvent(const dtn::net::BundleReceivedEvent &evt) throw ();
-			virtual void raiseEvent(const dtn::net::TransferAbortedEvent &evt) throw ();
-			virtual void raiseEvent(const dtn::net::TransferCompletedEvent &evt) throw ();
-			virtual void raiseEvent(const dtn::net::ConnectionEvent &evt) throw ();
-			virtual void raiseEvent(const dtn::routing::QueueBundleEvent &evt) throw ();
+			virtual void raiseEvent(const dtn::core::NodeEvent &evt) noexcept;
+			virtual void raiseEvent(const dtn::core::GlobalEvent &evt) noexcept;
+			virtual void raiseEvent(const dtn::core::CustodyEvent &evt) noexcept;
+			virtual void raiseEvent(const dtn::net::BundleReceivedEvent &evt) noexcept;
+			virtual void raiseEvent(const dtn::net::TransferAbortedEvent &evt) noexcept;
+			virtual void raiseEvent(const dtn::net::TransferCompletedEvent &evt) noexcept;
+			virtual void raiseEvent(const dtn::net::ConnectionEvent &evt) noexcept;
+			virtual void raiseEvent(const dtn::routing::QueueBundleEvent &evt) noexcept;
 
 #ifdef IBRDTN_SUPPORT_BSP
-			virtual void raiseEvent(const dtn::security::KeyExchangeEvent &evt) throw ();
+			virtual void raiseEvent(const dtn::security::KeyExchangeEvent &evt) noexcept;
 #endif
 
 			/**
 			 * Returns version information about the native daemon
 			 */
-			std::vector<std::string> getVersion() const throw ();
+			std::vector<std::string> getVersion() const noexcept;
 
 			/**
 			 * Delete all bundles in the storage
 			 */
-			void clearStorage() const throw ();
+			void clearStorage() const noexcept;
 
 			/**
 			 * Enable discovery mechanisms IPND beacons
 			 */
-			void startDiscovery() const throw ();
+			void startDiscovery() const noexcept;
 
 			/**
 			 * Disable discovery mechanism like IPND beacons
 			 */
-			void stopDiscovery() const throw ();
+			void stopDiscovery() const noexcept;
 
 			/**
 			 * Control the Low-energy mode of the daemon
 			 */
-			void setLeMode(bool low_energy) const throw ();
+			void setLeMode(bool low_energy) const noexcept;
 
 		private:
-			void init_up(DaemonRunLevel rl) throw (NativeDaemonException);
-			void init_down(DaemonRunLevel rl) throw (NativeDaemonException);
+			void init_up(DaemonRunLevel rl) noexcept (false);
+			void init_down(DaemonRunLevel rl) noexcept (false);
 
 			void addEventData(const dtn::data::Bundle &b, std::vector<std::string> &data) const;
 			void addEventData(const dtn::data::MetaBundle &b, std::vector<std::string> &data) const;
@@ -345,39 +345,39 @@ namespace dtn
 			/**
 			 * routines to init/shutdown the daemon core
 			 */
-			void init_core() throw (NativeDaemonException);
-			void shutdown_core() throw (NativeDaemonException);
+			void init_core() noexcept (false);
+			void shutdown_core() noexcept (false);
 
 			/**
 			 * routines to init/shutdown the storage subsystem
 			 */
-			void init_storage() throw (NativeDaemonException);
-			void shutdown_storage() const throw (NativeDaemonException);
+			void init_storage() noexcept (false);
+			void shutdown_storage() const noexcept (false);
 
 			/**
 			 * routines to init/shutdown the base router
 			 */
-			void init_routing() throw (NativeDaemonException);
-			void shutdown_routing() const throw (NativeDaemonException);
+			void init_routing() noexcept (false);
+			void shutdown_routing() const noexcept (false);
 
 			/**
 			 * routines to init/shutdown the API modules and embedded
 			 * Apps
 			 */
-			void init_api() throw (NativeDaemonException);
-			void shutdown_api() throw (NativeDaemonException);
+			void init_api() noexcept (false);
+			void shutdown_api() noexcept (false);
 
 			/**
 			 * routines to init/shutdown the networking stack
 			 */
-			void init_network() throw (NativeDaemonException);
-			void shutdown_network() throw (NativeDaemonException);
+			void init_network() noexcept (false);
+			void shutdown_network() noexcept (false);
 
 			/**
 			 * routines to init/shutdown the extended routing modules
 			 */
-			void init_routing_extensions() throw (NativeDaemonException);
-			void shutdown_routing_extensions() const throw (NativeDaemonException);
+			void init_routing_extensions() noexcept (false);
+			void shutdown_routing_extensions() const noexcept (false);
 
 			// conditional
 			ibrcommon::Conditional _runlevel_cond;
@@ -404,8 +404,8 @@ namespace dtn
 		public:
 			NativeEventLoop(NativeDaemon &daemon);
 			~NativeEventLoop();
-			virtual void run(void) throw ();
-			virtual void __cancellation() throw ();
+			virtual void run(void) noexcept;
+			virtual void __cancellation() noexcept;
 
 		private:
 			NativeDaemon &_daemon;

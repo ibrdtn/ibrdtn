@@ -35,12 +35,12 @@ namespace ibrcommon
 		down();
 	}
 
-	void PosixLinkManager::up() throw()
+	void PosixLinkManager::up() noexcept
 	{
 		_lm.start();
 	}
 
-	void PosixLinkManager::down() throw()
+	void PosixLinkManager::down() noexcept
 	{
 		_lm.stop();
 		_lm.join();
@@ -179,7 +179,7 @@ namespace ibrcommon
 		return ret;
 	}
 
-	void PosixLinkManager::addEventListener(const vinterface &iface, LinkManager::EventCallback *cb) throw ()
+	void PosixLinkManager::addEventListener(const vinterface &iface, LinkManager::EventCallback *cb) noexcept
 	{
 		// initialize LinkManager with new listened interface
 		_lm.add(iface);
@@ -188,7 +188,7 @@ namespace ibrcommon
 		LinkManager::addEventListener(iface, cb);
 	}
 
-	void PosixLinkManager::removeEventListener(const vinterface &iface, LinkManager::EventCallback *cb) throw ()
+	void PosixLinkManager::removeEventListener(const vinterface &iface, LinkManager::EventCallback *cb) noexcept
 	{
 		// call super-method
 		LinkManager::removeEventListener(iface, cb);
@@ -197,7 +197,7 @@ namespace ibrcommon
 		_lm.remove();
 	}
 
-	void PosixLinkManager::removeEventListener(LinkManager::EventCallback *cb) throw ()
+	void PosixLinkManager::removeEventListener(LinkManager::EventCallback *cb) noexcept
 	{
 		// call super-method
 		LinkManager::removeEventListener(cb);

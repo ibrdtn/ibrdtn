@@ -32,7 +32,7 @@ namespace dtn
 			virtual void run();
 			virtual void finally();
 			virtual void setup();
-			virtual void __cancellation() throw ();
+			virtual void __cancellation() noexcept;
 
 			/**
 			 * Provides the extension tag used in the node URIs.

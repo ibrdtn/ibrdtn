@@ -53,7 +53,7 @@ namespace dtn
 		{
 		}
 
-		void SecurityKeyManager::onConfigurationChanged(const dtn::daemon::Configuration &conf) throw ()
+		void SecurityKeyManager::onConfigurationChanged(const dtn::daemon::Configuration &conf) noexcept
 		{
 			const dtn::daemon::Configuration::Security &sec = conf.getSecurity();
 
@@ -149,7 +149,7 @@ namespace dtn
 			store(key);
 		}
 
-		dtn::security::SecurityKey SecurityKeyManager::get(const std::string &prefix, const dtn::data::EID &ref, const dtn::security::SecurityKey::KeyType type) const throw (SecurityKey::KeyNotFoundException)
+		dtn::security::SecurityKey SecurityKeyManager::get(const std::string &prefix, const dtn::data::EID &ref, const dtn::security::SecurityKey::KeyType type) const noexcept (false)
 		{
 			dtn::security::SecurityKey keydata;
 			keydata.reference = ref.getNode();
@@ -162,7 +162,7 @@ namespace dtn
 			return keydata;
 		}
 
-		dtn::security::SecurityKey SecurityKeyManager::get(const dtn::data::EID &ref, const dtn::security::SecurityKey::KeyType type) const throw (SecurityKey::KeyNotFoundException)
+		dtn::security::SecurityKey SecurityKeyManager::get(const dtn::data::EID &ref, const dtn::security::SecurityKey::KeyType type) const noexcept (false)
 		{
 			dtn::security::SecurityKey keydata;
 			keydata.reference = ref.getNode();

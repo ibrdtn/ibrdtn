@@ -82,7 +82,7 @@ namespace dtn
 			_extensions.erase(extension);
 		}
 
-		ibrcommon::RWMutex& BaseRouter::getExtensionMutex() throw ()
+		ibrcommon::RWMutex& BaseRouter::getExtensionMutex() noexcept
 		{
 			return _extensions_mutex;
 		}
@@ -105,7 +105,7 @@ namespace dtn
 			_extensions.clear();
 		}
 
-		void BaseRouter::extensionsUp() throw ()
+		void BaseRouter::extensionsUp() noexcept
 		{
 			ibrcommon::MutexLock l(_extensions_mutex);
 
@@ -132,7 +132,7 @@ namespace dtn
 			}
 		}
 
-		void BaseRouter::extensionsDown() throw ()
+		void BaseRouter::extensionsDown() noexcept
 		{
 			ibrcommon::MutexLock l(_extensions_mutex);
 
@@ -209,9 +209,9 @@ namespace dtn
 			}
 		}
 
-		void BaseRouter::componentUp() throw ()
+		void BaseRouter::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			dtn::core::EventDispatcher<dtn::net::TransferAbortedEvent>::add(this);
 			dtn::core::EventDispatcher<dtn::net::TransferCompletedEvent>::add(this);
 			dtn::core::EventDispatcher<dtn::net::BundleReceivedEvent>::add(this);
@@ -222,9 +222,9 @@ namespace dtn
 			dtn::core::EventDispatcher<dtn::core::BundlePurgeEvent>::add(this);
 		}
 
-		void BaseRouter::componentDown() throw ()
+		void BaseRouter::componentDown() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			dtn::core::EventDispatcher<dtn::net::TransferAbortedEvent>::remove(this);
 			dtn::core::EventDispatcher<dtn::net::TransferCompletedEvent>::remove(this);
 			dtn::core::EventDispatcher<dtn::net::BundleReceivedEvent>::remove(this);
@@ -238,7 +238,7 @@ namespace dtn
 		/**
 		 * method to receive new events from the EventSwitch
 		 */
-		void BaseRouter::raiseEvent(const dtn::net::TransferCompletedEvent &event) throw ()
+		void BaseRouter::raiseEvent(const dtn::net::TransferCompletedEvent &event) noexcept
 		{
 			// if a transfer is completed, then release the transfer resource of the peer
 			try {
@@ -258,7 +258,7 @@ namespace dtn
 			__eventDataChanged(event.getPeer());
 		}
 
-		void BaseRouter::raiseEvent(const dtn::routing::QueueBundleEvent &event) throw ()
+		void BaseRouter::raiseEvent(const dtn::routing::QueueBundleEvent &event) noexcept
 		{
 			// check Scope Control Block - do not forward bundles with hop limit == 0
 			if (event.bundle.hopcount == 0) return;
@@ -275,7 +275,7 @@ namespace dtn
 			__eventBundleQueued(event.origin, event.bundle);
 		}
 
-		void BaseRouter::raiseEvent(const dtn::net::BundleReceivedEvent &event) throw ()
+		void BaseRouter::raiseEvent(const dtn::net::BundleReceivedEvent &event) noexcept
 		{
 			const dtn::data::MetaBundle m = dtn::data::MetaBundle::create(event.bundle);
 
@@ -353,7 +353,7 @@ namespace dtn
 			}
 		}
 
-		void BaseRouter::raiseEvent(const dtn::net::TransferAbortedEvent &event) throw ()
+		void BaseRouter::raiseEvent(const dtn::net::TransferAbortedEvent &event) noexcept
 		{
 			// if a transfer is aborted, then release the transfer resource of the peer
 			try {
@@ -383,7 +383,7 @@ namespace dtn
 			__eventDataChanged(event.getPeer());
 		}
 
-		void BaseRouter::raiseEvent(const dtn::core::NodeEvent &event) throw ()
+		void BaseRouter::raiseEvent(const dtn::core::NodeEvent &event) noexcept
 		{
 			// If a new neighbor comes available, send him a request for the summary vector
 			// If a neighbor went away we can free the stored database
@@ -422,7 +422,7 @@ namespace dtn
 			}
 		}
 
-		void BaseRouter::raiseEvent(const dtn::net::ConnectionEvent &event) throw ()
+		void BaseRouter::raiseEvent(const dtn::net::ConnectionEvent &event) noexcept
 		{
 			if (event.getState() == dtn::net::ConnectionEvent::CONNECTION_UP)
 			{
@@ -437,7 +437,7 @@ namespace dtn
 			}
 		}
 
-		void BaseRouter::raiseEvent(const dtn::core::BundlePurgeEvent &event) throw ()
+		void BaseRouter::raiseEvent(const dtn::core::BundlePurgeEvent &event) noexcept
 		{
 			if ((event.reason == dtn::core::BundlePurgeEvent::DELIVERED) ||
 				(event.reason == dtn::core::BundlePurgeEvent::ACK_RECIEVED))
@@ -447,7 +447,7 @@ namespace dtn
 			}
 		}
 
-		void BaseRouter::raiseEvent(const dtn::core::TimeEvent &event) throw ()
+		void BaseRouter::raiseEvent(const dtn::core::TimeEvent &event) noexcept
 		{
 			dtn::data::Timestamp expire_time = event.getTimestamp();
 
@@ -495,7 +495,7 @@ namespace dtn
 			}
 		}
 
-		void BaseRouter::__eventDataChanged(const dtn::data::EID &peer) throw ()
+		void BaseRouter::__eventDataChanged(const dtn::data::EID &peer) noexcept
 		{
 			// do not forward the event if the extensions are down
 			if (!_extension_state) return;
@@ -510,7 +510,7 @@ namespace dtn
 			}
 		}
 
-		void BaseRouter::__eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ()
+		void BaseRouter::__eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept
 		{
 			// do not forward the event if the extensions are down
 			if (!_extension_state) return;
@@ -525,7 +525,7 @@ namespace dtn
 			}
 		}
 
-		void BaseRouter::__eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ()
+		void BaseRouter::__eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept
 		{
 			// do not forward the event if the extensions are down
 			if (!_extension_state) return;

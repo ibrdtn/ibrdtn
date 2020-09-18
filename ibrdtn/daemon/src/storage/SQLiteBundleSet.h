@@ -49,18 +49,18 @@ namespace dtn
 					/**
 					 * creates an anonymous bundle-set and returns its ID
 					 */
-					static size_t create(SQLiteDatabase &db) throw (SQLiteDatabase::SQLiteQueryException);
+					static size_t create(SQLiteDatabase &db) noexcept (false);
 
 					/**
 					 * creates a named bundle-set or returns the ID of an existing bundle-set
 					 */
-					static size_t create(SQLiteDatabase &db, const std::string &name) throw (SQLiteDatabase::SQLiteQueryException);
-					static size_t __create(SQLiteDatabase &db, const std::string &name, bool persistent) throw (SQLiteDatabase::SQLiteQueryException);
+					static size_t create(SQLiteDatabase &db, const std::string &name) noexcept (false);
+					static size_t __create(SQLiteDatabase &db, const std::string &name, bool persistent) noexcept (false);
 
 					/*
 					 * returns true, if a specific bundle-set name exists
 					 */
-					static bool __exists(SQLiteDatabase &db, const std::string &name, bool persistent) throw (SQLiteDatabase::SQLiteQueryException);
+					static bool __exists(SQLiteDatabase &db, const std::string &name, bool persistent) noexcept (false);
 
 				private:
 					static ibrcommon::Mutex _create_lock;
@@ -86,33 +86,33 @@ namespace dtn
 			 */
 			virtual void assign(const refcnt_ptr<BundleSetImpl>&);
 
-			virtual void add(const dtn::data::MetaBundle &bundle) throw ();
+			virtual void add(const dtn::data::MetaBundle &bundle) noexcept;
 
-			virtual void clear() throw ();
+			virtual void clear() noexcept;
 
-			virtual bool has(const dtn::data::BundleID &bundle) const throw ();
+			virtual bool has(const dtn::data::BundleID &bundle) const noexcept;
 
-			virtual void expire(const dtn::data::Timestamp timestamp) throw ();
+			virtual void expire(const dtn::data::Timestamp timestamp) noexcept;
 
 			/**
 			 * Returns the number of elements in this set
 			 */
-			virtual dtn::data::Size size() const throw();
+			virtual dtn::data::Size size() const noexcept;
 
 			/**
 			 * Returns the data length of the serialized BundleSet
 			 */
-			dtn::data::Length getLength() const throw();
+			dtn::data::Length getLength() const noexcept;
 
-			const ibrcommon::BloomFilter& getBloomFilter() const throw();
+			const ibrcommon::BloomFilter& getBloomFilter() const noexcept;
 
-			std::set<dtn::data::MetaBundle> getNotIn(const ibrcommon::BloomFilter &filter) const throw();
+			std::set<dtn::data::MetaBundle> getNotIn(const ibrcommon::BloomFilter &filter) const noexcept;
 
 			virtual std::ostream &serialize(std::ostream &stream) const;
 			virtual std::istream &deserialize(std::istream &stream);
 
 		private:
-			void get_bundleid(SQLiteDatabase::Statement &st, dtn::data::BundleID &id, int offset = 0) const throw (SQLiteDatabase::SQLiteQueryException);
+			void get_bundleid(SQLiteDatabase::Statement &st, dtn::data::BundleID &id, int offset = 0) const noexcept (false);
 
 			// remove this bundle-set from the database
 			void destroy();
@@ -135,7 +135,7 @@ namespace dtn
 
 			dtn::data::Timestamp _next_expiration;
 
-			void new_expire_time(const dtn::data::Timestamp &ttl) throw();
+			void new_expire_time(const dtn::data::Timestamp &ttl) noexcept;
 
 			void rebuild_bloom_filter();
 

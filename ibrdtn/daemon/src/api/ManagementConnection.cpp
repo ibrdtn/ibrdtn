@@ -108,7 +108,7 @@ namespace dtn
 		{
 		}
 
-		void ManagementConnection::__cancellation() throw ()
+		void ManagementConnection::__cancellation() noexcept
 		{
 		}
 
@@ -122,9 +122,9 @@ namespace dtn
 
 				virtual ~BundleFilter() {};
 
-				virtual dtn::data::Size limit() const throw () { return 0; };
+				virtual dtn::data::Size limit() const noexcept { return 0; };
 
-				virtual bool shouldAdd(const dtn::data::MetaBundle&) const throw (dtn::storage::BundleSelectorException)
+				virtual bool shouldAdd(const dtn::data::MetaBundle&) const noexcept (false)
 				{
 					return true;
 				}

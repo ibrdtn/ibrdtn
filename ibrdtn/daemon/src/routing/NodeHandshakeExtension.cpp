@@ -125,9 +125,9 @@ namespace dtn
 
 					virtual ~BundleFilter() {};
 
-					virtual dtn::data::Size limit() const throw () { return 100; };
+					virtual dtn::data::Size limit() const noexcept { return 100; };
 
-					virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+					virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const noexcept (false)
 					{
 						// do not select locally addressed bundles
 						if (meta.destination.getNode() == dtn::core::BundleCore::local)
@@ -184,17 +184,17 @@ namespace dtn
 			_endpoint.push(id);
 		}
 
-		void NodeHandshakeExtension::componentUp() throw ()
+		void NodeHandshakeExtension::componentUp() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::core::NodeEvent>::add(this);
 		}
 
-		void NodeHandshakeExtension::componentDown() throw ()
+		void NodeHandshakeExtension::componentDown() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::core::NodeEvent>::remove(this);
 		}
 
-		void NodeHandshakeExtension::raiseEvent(const dtn::core::NodeEvent &nodeevent) throw ()
+		void NodeHandshakeExtension::raiseEvent(const dtn::core::NodeEvent &nodeevent) noexcept
 		{
 			// If a new neighbor comes available, send him a request for the summary vector
 			// If a neighbor went away we can free the stored summary vector

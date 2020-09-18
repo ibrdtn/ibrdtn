@@ -44,15 +44,15 @@ namespace ibrcommon
 
 		virtual ~LinkManager() {};
 
-		virtual void up() throw () { };
-		virtual void down() throw () { };
+		virtual void up() noexcept { };
+		virtual void down() noexcept { };
 
 		virtual const ibrcommon::vinterface getInterface(int index) const = 0;
 		virtual const std::list<vaddress> getAddressList(const vinterface &iface, const std::string &scope = "") = 0;
 
-		virtual void addEventListener(const vinterface&, LinkManager::EventCallback*) throw ();
-		virtual void removeEventListener(const vinterface&, LinkManager::EventCallback*) throw ();
-		virtual void removeEventListener(LinkManager::EventCallback*) throw ();
+		virtual void addEventListener(const vinterface&, LinkManager::EventCallback*) noexcept;
+		virtual void removeEventListener(const vinterface&, LinkManager::EventCallback*) noexcept;
+		virtual void removeEventListener(LinkManager::EventCallback*) noexcept;
 
 		void raiseEvent(const LinkEvent &lme);
 

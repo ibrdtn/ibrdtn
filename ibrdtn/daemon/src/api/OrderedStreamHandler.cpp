@@ -109,7 +109,7 @@ namespace dtn
 			return bundle;
 		}
 
-		void OrderedStreamHandler::__cancellation() throw ()
+		void OrderedStreamHandler::__cancellation() noexcept
 		{
 			// close the stream
 			_stream.close();
@@ -242,18 +242,18 @@ namespace dtn
 			ibrcommon::JoinableThread::join();
 		}
 
-		void OrderedStreamHandler::Sender::__cancellation() throw ()
+		void OrderedStreamHandler::Sender::__cancellation() noexcept
 		{
 			// cancel the main thread in here
 			_handler._client.getRegistration().abort();
 		}
 
-		void OrderedStreamHandler::Sender::finally() throw ()
+		void OrderedStreamHandler::Sender::finally() noexcept
 		{
 			_handler._client.getRegistration().abort();
 		}
 
-		void OrderedStreamHandler::Sender::run() throw ()
+		void OrderedStreamHandler::Sender::run() noexcept
 		{
 			try {
 				_handler._stream << _handler._bundlestream.rdbuf() << std::flush;

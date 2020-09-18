@@ -62,13 +62,13 @@ namespace dtn
 			join();
 		}
 
-		void FloodRoutingExtension::eventDataChanged(const dtn::data::EID &peer) throw ()
+		void FloodRoutingExtension::eventDataChanged(const dtn::data::EID &peer) noexcept
 		{
 			// transfer the next bundle to this destination
 			_taskqueue.push( new SearchNextBundleTask( peer ) );
 		}
 
-		void FloodRoutingExtension::eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ()
+		void FloodRoutingExtension::eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept
 		{
 			// new bundles trigger a recheck for all neighbors
 			const std::set<dtn::core::Node> nl = dtn::core::BundleCore::getInstance().getConnectionManager().getNeighbors();
@@ -85,12 +85,12 @@ namespace dtn
 			}
 		}
 
-		void FloodRoutingExtension::componentUp() throw ()
+		void FloodRoutingExtension::componentUp() noexcept
 		{
 			// reset the task queue
 			_taskqueue.reset();
 
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// run the thread
 				start();
@@ -99,7 +99,7 @@ namespace dtn
 			}
 		}
 
-		void FloodRoutingExtension::componentDown() throw ()
+		void FloodRoutingExtension::componentDown() noexcept
 		{
 			try {
 				// stop the thread
@@ -110,17 +110,17 @@ namespace dtn
 			}
 		}
 
-		const std::string FloodRoutingExtension::getTag() const throw ()
+		const std::string FloodRoutingExtension::getTag() const noexcept
 		{
 			return "flooding";
 		}
 
-		void FloodRoutingExtension::__cancellation() throw ()
+		void FloodRoutingExtension::__cancellation() noexcept
 		{
 			_taskqueue.abort();
 		}
 
-		void FloodRoutingExtension::run() throw ()
+		void FloodRoutingExtension::run() noexcept
 		{
 			class BundleFilter : public dtn::storage::BundleSelector
 			{
@@ -131,9 +131,9 @@ namespace dtn
 
 				virtual ~BundleFilter() {};
 
-				virtual dtn::data::Size limit() const throw () { return _entry.getFreeTransferSlots(); };
+				virtual dtn::data::Size limit() const noexcept { return _entry.getFreeTransferSlots(); };
 
-				virtual bool addIfSelected(dtn::storage::BundleResult &result, const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+				virtual bool addIfSelected(dtn::storage::BundleResult &result, const dtn::data::MetaBundle &meta) const noexcept (false)
 				{
 					// check Scope Control Block - do not forward bundles with hop limit == 0
 					if (meta.hopcount == 0)

@@ -44,8 +44,8 @@ namespace dtn
 				 * @param job Reference to the job conatining EID and bundle
 				 */
 				void queue(const dtn::net::BundleTransfer &job);
-				void run() throw ();
-				void __cancellation() throw ();
+				void run() noexcept;
+				void __cancellation() noexcept;
 
 			private:
 				ibrcommon::lowpanstream &_stream;
@@ -76,10 +76,10 @@ namespace dtn
 			 */
 			ibrcommon::lowpanstream& getStream();
 
-			void run() throw ();
-			void setup() throw ();
-			void finally() throw ();
-			void __cancellation() throw ();
+			void run() noexcept;
+			void setup() noexcept;
+			void finally() noexcept;
+			void __cancellation() noexcept;
 
 			/**
 			 * Instance of the LOWPANConnectionSender

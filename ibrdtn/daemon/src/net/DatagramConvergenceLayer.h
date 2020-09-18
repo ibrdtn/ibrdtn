@@ -57,7 +57,7 @@ namespace dtn
 			/**
 			 * method to receive global events
 			 */
-			void raiseEvent(const dtn::core::NodeEvent &evt) throw ();
+			void raiseEvent(const dtn::core::NodeEvent &evt) noexcept;
 
 			/**
 			 * Returns the protocol identifier
@@ -82,13 +82,13 @@ namespace dtn
 
 			virtual void getStats(ConvergenceLayer::stats_data &data) const;
 
-			void onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) throw ();
+			void onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) noexcept;
 
 		protected:
-			virtual void componentUp() throw ();
-			virtual void componentRun() throw ();
-			virtual void componentDown() throw ();
-			void __cancellation() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentRun() noexcept;
+			virtual void componentDown() noexcept;
+			void __cancellation() noexcept;
 			/**
 			 * callback send for connections
 			 * @param connection
@@ -96,11 +96,11 @@ namespace dtn
 			 * @param buf
 			 * @param len
 			 */
-			void callback_send(DatagramConnection &connection, const char &flags, const unsigned int &seqno, const std::string &destination, const char *buf, const dtn::data::Length &len) throw (DatagramException);
+			void callback_send(DatagramConnection &connection, const char &flags, const unsigned int &seqno, const std::string &destination, const char *buf, const dtn::data::Length &len) noexcept (false);
 
-			void callback_ack(DatagramConnection &connection, const unsigned int &seqno, const std::string &destination) throw (DatagramException);
+			void callback_ack(DatagramConnection &connection, const unsigned int &seqno, const std::string &destination) noexcept (false);
 
-			void callback_nack(DatagramConnection &connection, const unsigned int &seqno, const std::string &destination) throw (DatagramException);
+			void callback_nack(DatagramConnection &connection, const unsigned int &seqno, const std::string &destination) noexcept (false);
 
 			void connectionUp(const DatagramConnection *conn);
 			void connectionDown(const DatagramConnection *conn);
@@ -108,7 +108,7 @@ namespace dtn
 			void reportSuccess(size_t retries, double rtt);
 			void reportFailure();
 
-			void receive() throw ();
+			void receive() noexcept;
 
 		private:
 			class ConnectionNotAvailableException : public ibrcommon::Exception {
@@ -117,7 +117,7 @@ namespace dtn
 				 : ibrcommon::Exception(what) {
 				}
 
-				virtual ~ConnectionNotAvailableException() throw () {
+				virtual ~ConnectionNotAvailableException() noexcept {
 				}
 			};
 
@@ -130,10 +130,10 @@ namespace dtn
 				Receiver(DatagramConvergenceLayer &cl);
 				virtual ~Receiver();
 
-				void init() throw ();
+				void init() noexcept;
 
-				void run() throw ();
-				void __cancellation() throw ();
+				void run() noexcept;
+				void __cancellation() noexcept;
 
 			private:
 				DatagramConvergenceLayer &_cl;
@@ -223,7 +223,7 @@ namespace dtn
 			 * @param identifier The identifier of the connection.
 			 * @param create If this parameter is set to true a new connection is created if it does not exists.
 			 */
-			DatagramConnection& getConnection(const std::string &identifier, bool create) throw (ConnectionNotAvailableException);
+			DatagramConnection& getConnection(const std::string &identifier, bool create) noexcept (false);
 
 			// associated datagram service
 			DatagramService *_service;

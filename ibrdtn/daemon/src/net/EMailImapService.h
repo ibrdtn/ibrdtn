@@ -44,12 +44,12 @@ namespace dtn
 			/**
 			 * The run method of the thread
 			 */
-			void run() throw ();
+			void run() noexcept;
 
 			/**
 			 * The cancellation method of the thread
 			 */
-			void __cancellation() throw ();
+			void __cancellation() noexcept;
 
 			/**
 			 * Stores the given tasks in a list. After each fetch this list will

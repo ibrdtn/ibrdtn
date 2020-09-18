@@ -55,7 +55,7 @@ namespace dtn
 
 			virtual void run();
 			virtual void finally();
-			virtual void __cancellation() throw ();
+			virtual void __cancellation() noexcept;
 
 			bool good() const;
 
@@ -67,9 +67,9 @@ namespace dtn
 				virtual ~Sender();
 
 			protected:
-				void run() throw ();
-				void finally() throw ();
-				void __cancellation() throw ();
+				void run() noexcept;
+				void finally() noexcept;
+				void __cancellation() noexcept;
 
 			private:
 				ExtendedApiHandler &_handler;

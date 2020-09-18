@@ -47,9 +47,9 @@ namespace dtn
 			}
 		}
 
-		void WallClock::componentUp() throw ()
+		void WallClock::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			if(_timer.isRunning())
 			{
 				_timer.reset();
@@ -64,7 +64,7 @@ namespace dtn
 			}
 		}
 
-		void WallClock::componentDown() throw ()
+		void WallClock::componentDown() noexcept
 		{
 			_timer.pause();
 		}

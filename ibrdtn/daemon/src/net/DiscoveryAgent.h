@@ -50,8 +50,8 @@ namespace dtn
 			/**
 			 * method to receive global events
 			 */
-			void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
-			void raiseEvent(const dtn::core::GlobalEvent &evt) throw ();
+			void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::GlobalEvent &evt) noexcept;
 
 			void onBeaconReceived(const DiscoveryBeacon &beacon);
 
@@ -64,8 +64,8 @@ namespace dtn
 			DiscoveryBeacon obtainBeacon() const;
 
 		protected:
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
 
 			virtual const std::string getName() const;
 

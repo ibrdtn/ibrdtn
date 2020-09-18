@@ -45,7 +45,7 @@ namespace dtn
 				PathNotFoundException(std::string what = "No security path configured.") : ibrcommon::Exception(what)
 				{};
 
-				virtual ~PathNotFoundException() throw() {};
+				virtual ~PathNotFoundException() noexcept {};
 			};
 
 			static SecurityKeyManager& getInstance();
@@ -55,7 +55,7 @@ namespace dtn
 			/**
 			 * Listen for changes of the configuration
 			 */
-			virtual void onConfigurationChanged(const dtn::daemon::Configuration &conf) throw ();
+			virtual void onConfigurationChanged(const dtn::daemon::Configuration &conf) noexcept;
 
 			/**
 			 * Checks if a security key exists
@@ -65,12 +65,12 @@ namespace dtn
 			/**
 			 * Get a security key from the standard key path
 			 */
-			dtn::security::SecurityKey get(const dtn::data::EID &ref, const dtn::security::SecurityKey::KeyType type = dtn::security::SecurityKey::KEY_UNSPEC) const throw (SecurityKey::KeyNotFoundException);
+			dtn::security::SecurityKey get(const dtn::data::EID &ref, const dtn::security::SecurityKey::KeyType type = dtn::security::SecurityKey::KEY_UNSPEC) const noexcept (false);
 
 			/**
 			 * Get a security key from the prefixed path
 			 */
-			dtn::security::SecurityKey get(const std::string &prefix, const dtn::data::EID &ref, const dtn::security::SecurityKey::KeyType type = dtn::security::SecurityKey::KEY_UNSPEC) const throw (SecurityKey::KeyNotFoundException);
+			dtn::security::SecurityKey get(const std::string &prefix, const dtn::data::EID &ref, const dtn::security::SecurityKey::KeyType type = dtn::security::SecurityKey::KEY_UNSPEC) const noexcept (false);
 
 			/**
 			 * Store a security key in the standard key path

@@ -27,17 +27,17 @@ namespace ibrcommon
 		Win32LinkManager();
 		virtual ~Win32LinkManager();
 
-		void up() throw();
-		void down() throw();
+		void up() noexcept;
+		void down() noexcept;
 
 		const vinterface getInterface(int index) const;
 		const std::list<vaddress> getAddressList(const vinterface &iface, const std::string &scope = "");
 
 		std::set<ibrcommon::vinterface> getInterfaces() const;
 
-		virtual void addEventListener(const vinterface &iface, LinkManager::EventCallback *cb) throw ();
-		virtual void removeEventListener(const vinterface&, LinkManager::EventCallback*) throw ();
-		virtual void removeEventListener(LinkManager::EventCallback*) throw ();
+		virtual void addEventListener(const vinterface &iface, LinkManager::EventCallback *cb) noexcept;
+		virtual void removeEventListener(const vinterface&, LinkManager::EventCallback*) noexcept;
+		virtual void removeEventListener(LinkManager::EventCallback*) noexcept;
 
 	private:
 		void freeAdapterInfo(IP_ADAPTER_ADDRESSES *pAddresses) const;

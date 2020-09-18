@@ -37,16 +37,16 @@ namespace ibrcommon
 	public:
 		lowpansocket(const uint16_t &panid, const vinterface &iface);
 		~lowpansocket();
-		void up() throw (socket_exception);
-		void down() throw (socket_exception);
+		void up() noexcept (false);
+		void down() noexcept (false);
 
 		/**
 		 * If set to true, the auto-ack request is set on each message
 		 */
-		void setAutoAck(bool enable) throw (socket_exception);
+		void setAutoAck(bool enable) noexcept (false);
 
-		virtual ssize_t recvfrom(char *buf, size_t buflen, int flags, ibrcommon::vaddress &addr) throw (socket_exception);
-		virtual void sendto(const char *buf, size_t buflen, int flags, const ibrcommon::vaddress &addr) throw (socket_exception);
+		virtual ssize_t recvfrom(char *buf, size_t buflen, int flags, ibrcommon::vaddress &addr) noexcept (false);
+		virtual void sendto(const char *buf, size_t buflen, int flags, const ibrcommon::vaddress &addr) noexcept (false);
 
 		static void getAddress(const vinterface &iface, const std::string &panid, ibrcommon::vaddress &addr);
 		static void getAddress(struct ieee802154_addr *ret, const vinterface &iface);

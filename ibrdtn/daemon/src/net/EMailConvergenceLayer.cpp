@@ -47,7 +47,7 @@ namespace dtn
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::remove(this);
 		}
 
-		void EMailConvergenceLayer::raiseEvent(const dtn::core::TimeEvent &time) throw ()
+		void EMailConvergenceLayer::raiseEvent(const dtn::core::TimeEvent &time) noexcept
 		{
 			if (time.getAction() == dtn::core::TIME_SECOND_TICK)
 			{
@@ -68,7 +68,7 @@ namespace dtn
 		}
 
 		void EMailConvergenceLayer::onUpdateBeacon(const ibrcommon::vinterface&, DiscoveryBeacon &beacon)
-			throw (DiscoveryBeaconHandler::NoServiceHereException)
+			noexcept (false)
 		{
 			beacon.addService(DiscoveryService(getDiscoveryProtocol(), "email=" + _config.getOwnAddress()));
 		}
@@ -113,15 +113,15 @@ namespace dtn
 			return "EMailConvergenceLayer";
 		}
 
-		void EMailConvergenceLayer::__cancellation() throw () {}
+		void EMailConvergenceLayer::__cancellation() noexcept {}
 
-		void EMailConvergenceLayer::componentUp() throw ()
+		void EMailConvergenceLayer::componentUp() noexcept
 		{
 			// register as discovery beacon handler
 			dtn::core::BundleCore::getInstance().getDiscoveryAgent().registerService(this);
 		}
 
-		void EMailConvergenceLayer::componentDown() throw ()
+		void EMailConvergenceLayer::componentDown() noexcept
 		{
 			// un-register as discovery beacon handler
 			dtn::core::BundleCore::getInstance().getDiscoveryAgent().unregisterService(this);

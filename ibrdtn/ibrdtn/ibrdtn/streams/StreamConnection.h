@@ -56,12 +56,12 @@ namespace dtn
 			class TransmissionInterruptedException : public ibrcommon::IOException
 			{
 				public:
-					TransmissionInterruptedException(const dtn::data::Bundle &bundle, const dtn::data::Length &position) throw()
+					TransmissionInterruptedException(const dtn::data::Bundle &bundle, const dtn::data::Length &position) noexcept
 					 : ibrcommon::IOException("Transmission was interrupted."), _bundle(bundle), _position(position)
 					{
 					};
 
-					virtual ~TransmissionInterruptedException() throw ()
+					virtual ~TransmissionInterruptedException() noexcept
 					{
 					};
 
@@ -72,7 +72,7 @@ namespace dtn
 			class StreamClosedException : public ibrcommon::IOException
 			{
 			public:
-				StreamClosedException(string what = "The stream has been closed.") throw() : IOException(what)
+				StreamClosedException(string what = "The stream has been closed.") noexcept : IOException(what)
 				{
 				};
 			};
@@ -80,7 +80,7 @@ namespace dtn
 			class StreamErrorException : public ibrcommon::IOException
 			{
 			public:
-				StreamErrorException(string what = "StreamError") throw() : IOException(what)
+				StreamErrorException(string what = "StreamError") noexcept : IOException(what)
 				{
 				};
 			};
@@ -88,7 +88,7 @@ namespace dtn
 			class StreamShutdownException : public ibrcommon::IOException
 			{
 			public:
-				StreamShutdownException(string what = "Shutdown message received.") throw() : IOException(what)
+				StreamShutdownException(string what = "Shutdown message received.") noexcept : IOException(what)
 				{
 				};
 			};
@@ -100,52 +100,52 @@ namespace dtn
 				 * This method is called if a SHUTDOWN message is
 				 * received.
 				 */
-				virtual void eventShutdown(StreamConnection::ConnectionShutdownCases csc) throw () = 0;
+				virtual void eventShutdown(StreamConnection::ConnectionShutdownCases csc) noexcept = 0;
 
 				/**
 				 * This method is called if the stream is closed
 				 * by a TIMEOUT.
 				 */
-				virtual void eventTimeout() throw () = 0;
+				virtual void eventTimeout() noexcept = 0;
 
 				/**
 				 * This method is called if a error occured in the stream.
 				 */
-				virtual void eventError() throw () = 0;
+				virtual void eventError() noexcept = 0;
 
 				/**
 				 * This method is called if a bundle is refused by the peer.
 				 */
-				virtual void eventBundleRefused() throw () = 0;
+				virtual void eventBundleRefused() noexcept = 0;
 				/**
 				 * This method is called if a bundle is refused by the peer.
 				 */
-				virtual void eventBundleForwarded() throw () = 0;
+				virtual void eventBundleForwarded() noexcept = 0;
 				/**
 				 * This method is called if a ACK is received.
 				 */
-				virtual void eventBundleAck(const dtn::data::Length &ack) throw () = 0;
+				virtual void eventBundleAck(const dtn::data::Length &ack) noexcept = 0;
 
 				/**
 				 * This method is called if a handshake was successful.
 				 * @param header
 				 */
-				virtual void eventConnectionUp(const StreamContactHeader &header) throw () = 0;
+				virtual void eventConnectionUp(const StreamContactHeader &header) noexcept = 0;
 
 				/**
 				 * This method is called if a connection went down.
 				 */
-				virtual void eventConnectionDown() throw () = 0;
+				virtual void eventConnectionDown() noexcept = 0;
 
 				/**
 				 * Reports inbound traffic amount
 				 */
-				virtual void addTrafficIn(size_t) throw () { };
+				virtual void addTrafficIn(size_t) noexcept { };
 
 				/**
 				 * Reports outbound traffic amount
 				 */
-				virtual void addTrafficOut(size_t) throw () { };
+				virtual void addTrafficOut(size_t) noexcept { };
 			};
 
 			/**

@@ -72,13 +72,13 @@ namespace dtn
 			request.addRequest(BloomFilterSummaryVector::identifier);
 		}
 
-		void EpidemicRoutingExtension::eventDataChanged(const dtn::data::EID &peer) throw ()
+		void EpidemicRoutingExtension::eventDataChanged(const dtn::data::EID &peer) noexcept
 		{
 			// transfer the next bundle to this destination
 			_taskqueue.push( new SearchNextBundleTask( peer ) );
 		}
 
-		void EpidemicRoutingExtension::eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ()
+		void EpidemicRoutingExtension::eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept
 		{
 			// new bundles trigger a recheck for all neighbors
 			const std::set<dtn::core::Node> nl = dtn::core::BundleCore::getInstance().getConnectionManager().getNeighbors();
@@ -95,7 +95,7 @@ namespace dtn
 			}
 		}
 
-		void EpidemicRoutingExtension::raiseEvent(const NodeHandshakeEvent &handshake) throw ()
+		void EpidemicRoutingExtension::raiseEvent(const NodeHandshakeEvent &handshake) noexcept
 		{
 			if (handshake.state == NodeHandshakeEvent::HANDSHAKE_COMPLETED)
 			{
@@ -104,14 +104,14 @@ namespace dtn
 			}
 		}
 
-		void EpidemicRoutingExtension::componentUp() throw ()
+		void EpidemicRoutingExtension::componentUp() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::routing::NodeHandshakeEvent>::add(this);
 
 			// reset the task queue
 			_taskqueue.reset();
 
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// run the thread
 				start();
@@ -120,7 +120,7 @@ namespace dtn
 			}
 		}
 
-		void EpidemicRoutingExtension::componentDown() throw ()
+		void EpidemicRoutingExtension::componentDown() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::routing::NodeHandshakeEvent>::remove(this);
 
@@ -133,17 +133,17 @@ namespace dtn
 			}
 		}
 
-		const std::string EpidemicRoutingExtension::getTag() const throw ()
+		const std::string EpidemicRoutingExtension::getTag() const noexcept
 		{
 			return "epidemic";
 		}
 
-		void EpidemicRoutingExtension::__cancellation() throw ()
+		void EpidemicRoutingExtension::__cancellation() noexcept
 		{
 			_taskqueue.abort();
 		}
 
-		void EpidemicRoutingExtension::run() throw ()
+		void EpidemicRoutingExtension::run() noexcept
 		{
 			class BundleFilter : public dtn::storage::BundleSelector
 			{
@@ -154,9 +154,9 @@ namespace dtn
 
 				virtual ~BundleFilter() {};
 
-				virtual dtn::data::Size limit() const throw () { return _entry.getFreeTransferSlots(); };
+				virtual dtn::data::Size limit() const noexcept { return _entry.getFreeTransferSlots(); };
 
-				virtual bool addIfSelected(dtn::storage::BundleResult &result, const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+				virtual bool addIfSelected(dtn::storage::BundleResult &result, const dtn::data::MetaBundle &meta) const noexcept (false)
 				{
 					// check Scope Control Block - do not forward bundles with hop limit == 0
 					if (meta.hopcount == 0)

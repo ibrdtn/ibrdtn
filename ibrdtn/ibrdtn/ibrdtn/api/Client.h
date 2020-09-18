@@ -41,7 +41,7 @@ namespace dtn
 		class ConnectionException : public ibrcommon::Exception
 		{
 		public:
-			ConnectionException(string what = "A connection error occurred.") throw() : ibrcommon::Exception(what)
+			ConnectionException(string what = "A connection error occurred.") noexcept : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -52,7 +52,7 @@ namespace dtn
 		class ConnectionTimeoutException : public ConnectionException
 		{
 		public:
-			ConnectionTimeoutException(string what = "Timeout.") throw() : ConnectionException(what)
+			ConnectionTimeoutException(string what = "Timeout.") noexcept : ConnectionException(what)
 			{
 			};
 		};
@@ -63,7 +63,7 @@ namespace dtn
 		class ConnectionAbortedException : public ConnectionException
 		{
 		public:
-			ConnectionAbortedException(string what = "Aborted.") throw() : ConnectionException(what)
+			ConnectionAbortedException(string what = "Aborted.") noexcept : ConnectionException(what)
 			{
 			};
 		};
@@ -109,13 +109,13 @@ namespace dtn
 				 * It aborts if the stream of the client went bad or an error occurred during
 				 * the deserialization.
 				 */
-				void run() throw ();
+				void run() noexcept;
 
 				/**
 				 * Aborts the receiver thread
 				 * @return
 				 */
-				void __cancellation() throw ();
+				void __cancellation() noexcept;
 
 			private:
 				// member variable for the reference to the client object
@@ -174,51 +174,51 @@ namespace dtn
 			 * aborts the blocking getBundle() method. If a client is working synchonous
 			 * this method should not be overloaded!
 			 */
-			virtual void eventConnectionDown() throw ();
+			virtual void eventConnectionDown() noexcept;
 
 			/**
 			 * The bundle ack event is called by the StreamConnection object and stores
 			 * the last ACK'd bundle size in the lastack variable.
 			 * @param ack ACK'd bundle size
 			 */
-			virtual void eventBundleAck(const dtn::data::Length &ack) throw ();
+			virtual void eventBundleAck(const dtn::data::Length &ack) noexcept;
 
 			/**
 			 * The shutdown event callback method can overloaded to handle shutdown
 			 * events.
 			 */
-			virtual void eventShutdown(StreamConnection::ConnectionShutdownCases) throw () {};
+			virtual void eventShutdown(StreamConnection::ConnectionShutdownCases) noexcept {};
 
 			/**
 			 * The timeout event callback method can overloaded to handle timeouts
 			 * occurring in the API protocol.
 			 */
-			virtual void eventTimeout() throw () {};
+			virtual void eventTimeout() noexcept {};
 
 			/**
 			 * The error event callback method can overloaded to handle errors
 			 * occurring in the API protocol.
 			 */
-			virtual void eventError() throw () {};
+			virtual void eventError() noexcept {};
 
 			/**
 			 * The connection up event callback method can overloaded to handle
 			 * a successful connection handshake. In this call the header of the
 			 * corresponding daemon is available.
 			 */
-			virtual void eventConnectionUp(const dtn::streams::StreamContactHeader&) throw () {};
+			virtual void eventConnectionUp(const dtn::streams::StreamContactHeader&) noexcept {};
 
 			/**
 			 * The bundle refused event callback method can overloaded to handle
 			 * a bundle refused by the porresponding daemon.
 			 */
-			virtual void eventBundleRefused() throw () {};
+			virtual void eventBundleRefused() noexcept {};
 
 			/**
 			 * The bundle forwarded event callback method can overloaded to determine
 			 * when a bundle is forwarded to the daemon.
 			 */
-			virtual void eventBundleForwarded() throw () {};
+			virtual void eventBundleForwarded() noexcept {};
 
 			/**
 			 * Send a bundle to the daemon
@@ -232,7 +232,7 @@ namespace dtn
 			 * @param timeout
 			 * @return
 			 */
-			dtn::data::Bundle getBundle(const dtn::data::Timeout timeout = 0) throw (ConnectionException);
+			dtn::data::Bundle getBundle(const dtn::data::Timeout timeout = 0) noexcept (false);
 
 			// public variable
 			dtn::data::Length lastack;

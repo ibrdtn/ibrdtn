@@ -39,7 +39,7 @@ namespace dtn
 		class NoAddressFoundException : public ibrcommon::Exception
 		{
 		public:
-			NoAddressFoundException(std::string what = "There is no address available for this peer.") throw() : ibrcommon::Exception(what)
+			NoAddressFoundException(std::string what = "There is no address available for this peer.") noexcept : ibrcommon::Exception(what)
 			{
 			};
 		};

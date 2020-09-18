@@ -76,14 +76,14 @@ namespace dtn
 			const_iterator begin() const { return _priority_index.begin(); }
 			const_iterator end() const { return _priority_index.end(); }
 
-			bool empty() throw ();
-			size_t size() throw ();
+			bool empty() noexcept;
+			size_t size() noexcept;
 
-			bool contains(const dtn::data::BundleID &id) const throw ();
-			void expire(const dtn::data::Timestamp &timestamp) throw ();
+			bool contains(const dtn::data::BundleID &id) const noexcept;
+			void expire(const dtn::data::Timestamp &timestamp) noexcept;
 
 			template<class T>
-			const dtn::data::MetaBundle& find(const T &id) const throw (NoBundleFoundException)
+			const dtn::data::MetaBundle& find(const T &id) const noexcept (false)
 			{
 				dtn::data::BundleList::const_iterator it = _list.find(id);
 				if (it == _list.end())
@@ -92,33 +92,33 @@ namespace dtn
 				return (*it);
 			}
 
-			const dtn::data::MetaBundle& find(const ibrcommon::BloomFilter &filter) const throw (NoBundleFoundException);
+			const dtn::data::MetaBundle& find(const ibrcommon::BloomFilter &filter) const noexcept (false);
 
-			std::set<dtn::data::EID> getDistinctDestinations() const throw ();
+			std::set<dtn::data::EID> getDistinctDestinations() const noexcept;
 
-			void store(const dtn::data::MetaBundle &meta, const dtn::data::Length &space) throw ();
+			void store(const dtn::data::MetaBundle &meta, const dtn::data::Length &space) noexcept;
 
 			/**
 			 * Remove a data entry completely and returns the number of
 			 * released bytes.
 			 */
-			dtn::data::Length remove(const dtn::data::MetaBundle &meta) throw ();
+			dtn::data::Length remove(const dtn::data::MetaBundle &meta) noexcept;
 
 			/**
 			 * Mark a bundle as removed. Such a bundle is still reachable
 			 * using find(id) and getSize()
 			 */
-			void markRemoved(const dtn::data::MetaBundle &meta) throw ();
+			void markRemoved(const dtn::data::MetaBundle &meta) noexcept;
 
 			/**
 			 * Return true, if the bundle is already marked as removed
 			 */
-			bool isRemoved(const dtn::data::MetaBundle &meta) const throw ();
+			bool isRemoved(const dtn::data::MetaBundle &meta) const noexcept;
 
 			/**
 			 * Delete all bundles
 			 */
-			void clear() throw ();
+			void clear() noexcept;
 		};
 	} /* namespace storage */
 } /* namespace dtn */

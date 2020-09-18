@@ -93,7 +93,7 @@ namespace dtn
 			return dtn::core::Node::CONN_UDPIP;
 		}
 
-		void UDPConvergenceLayer::onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &announcement) throw (dtn::net::DiscoveryBeaconHandler::NoServiceHereException)
+		void UDPConvergenceLayer::onUpdateBeacon(const ibrcommon::vinterface &iface, DiscoveryBeacon &announcement) noexcept (false)
 		{
 			// announce port only if we are bound to any interface
 			if (_net.isAny()) {
@@ -275,7 +275,7 @@ namespace dtn
 			}
 		}
 
-		void UDPConvergenceLayer::send(const ibrcommon::vaddress &addr, const std::string &data) throw (ibrcommon::socket_exception, NoAddressFoundException)
+		void UDPConvergenceLayer::send(const ibrcommon::vaddress &addr, const std::string &data) noexcept (false)
 		{
 			// set write lock
 			ibrcommon::MutexLock l(m_writelock);
@@ -299,7 +299,7 @@ namespace dtn
 			throw NoAddressFoundException("no valid address found");
 		}
 
-		void UDPConvergenceLayer::receive(dtn::data::Bundle &bundle, dtn::data::EID &sender) throw (ibrcommon::socket_exception, dtn::InvalidDataException)
+		void UDPConvergenceLayer::receive(dtn::data::Bundle &bundle, dtn::data::EID &sender) noexcept (false)
 		{
 			ibrcommon::MutexLock l(m_readlock);
 
@@ -389,9 +389,9 @@ namespace dtn
 			}
 		}
 
-		void UDPConvergenceLayer::componentUp() throw ()
+		void UDPConvergenceLayer::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// create sockets for all addresses on the interface
 				std::list<ibrcommon::vaddress> addrs = _net.getAddresses();
@@ -430,7 +430,7 @@ namespace dtn
 			}
 		}
 
-		void UDPConvergenceLayer::componentDown() throw ()
+		void UDPConvergenceLayer::componentDown() noexcept
 		{
 			// unsubscribe to NetLink events
 			ibrcommon::LinkManager::getInstance().removeEventListener(this);
@@ -443,7 +443,7 @@ namespace dtn
 			join();
 		}
 
-		void UDPConvergenceLayer::componentRun() throw ()
+		void UDPConvergenceLayer::componentRun() noexcept
 		{
 			_running = true;
 
@@ -483,7 +483,7 @@ namespace dtn
 			}
 		}
 
-		void UDPConvergenceLayer::__cancellation() throw ()
+		void UDPConvergenceLayer::__cancellation() noexcept
 		{
 			_running = false;
 			_vsocket.down();

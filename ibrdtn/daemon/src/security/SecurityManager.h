@@ -47,7 +47,7 @@ namespace dtn
 					KeyMissingException(std::string what = "Key for this operation is not available.") : SecurityException(what)
 					{};
 
-					virtual ~KeyMissingException() throw() {};
+					virtual ~KeyMissingException() noexcept {};
 				};
 
 				/**
@@ -61,23 +61,23 @@ namespace dtn
 				 * available a KeyMissingException is thrown.
 				 * @param bundle A bundle to sign.
 				 */
-				void sign(dtn::data::Bundle &bundle) const throw (KeyMissingException);
-				void auth(dtn::data::Bundle &bundle) const throw (KeyMissingException);
+				void sign(dtn::data::Bundle &bundle) const noexcept (false);
+				void auth(dtn::data::Bundle &bundle) const noexcept (false);
 
 				/**
 				 * This method verifies the bundle and removes all auth or integrity block
 				 * if they could validated.
 				 * @param bundle The bundle to verify.
 				 */
-				void verifyAuthentication(dtn::data::Bundle &bundle) const throw (VerificationFailedException);
-				void verifyIntegrity(dtn::data::Bundle &bundle) const throw (VerificationFailedException);
+				void verifyAuthentication(dtn::data::Bundle &bundle) const noexcept (false);
+				void verifyIntegrity(dtn::data::Bundle &bundle) const noexcept (false);
 
 				/**
 				 * This method decrypts encrypted payload of a bundle. It is necessary to
 				 * remove all integrity or auth block before the payload can decrypted.
 				 * @param bundle
 				 */
-				void decrypt(dtn::data::Bundle &bundle) const throw (DecryptException, KeyMissingException);
+				void decrypt(dtn::data::Bundle &bundle) const noexcept (false);
 
 				/**
 				 * This method encrypts the payload of a given bundle.
@@ -85,7 +85,7 @@ namespace dtn
 				 * is thrown.
 				 * @param bundle
 				 */
-				void encrypt(dtn::data::Bundle &bundle) const throw (EncryptException, KeyMissingException);
+				void encrypt(dtn::data::Bundle &bundle) const noexcept (false);
 
 			protected:
 				/**

@@ -42,20 +42,20 @@ namespace ibrcommon
 	class Exception : public std::exception
 	{
 		public:
-			Exception() throw()
+			Exception() noexcept
 			{};
 
-			Exception(const exception&) throw()
+			Exception(const exception&) noexcept
 			{};
 
-			virtual ~Exception() throw()
+			virtual ~Exception() noexcept
 			{};
 
 			/**
 			 * Get the explaining reason as string value.
 			 * @return The reason as string value.
 			 */
-			virtual const char* what() const throw()
+			virtual const char* what() const noexcept
 			{
 				return _what.c_str();
 			}
@@ -64,7 +64,7 @@ namespace ibrcommon
 			 * constructor with attached string value as reason.
 			 * @param what The detailed reason for this exception.
 			 */
-			Exception(string what) throw()
+			Exception(string what) noexcept
 			{
 				_what = what;
 			};
@@ -79,7 +79,7 @@ namespace ibrcommon
 	class NotImplementedException : public Exception
 	{
 	public:
-		NotImplementedException(string what = "This method isn't implemented.") throw() : Exception(what)
+		NotImplementedException(string what = "This method isn't implemented.") noexcept : Exception(what)
 		{
 		};
 	};
@@ -90,7 +90,7 @@ namespace ibrcommon
 	class IOException : public Exception
 	{
 	public:
-		IOException(string what = "Input/Output error.") throw() : Exception(what)
+		IOException(string what = "Input/Output error.") noexcept : Exception(what)
 		{
 		};
 	};

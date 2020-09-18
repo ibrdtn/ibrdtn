@@ -43,9 +43,9 @@ namespace dtn
 			NodeHandshakeExtension();
 			virtual ~NodeHandshakeExtension();
 
-			void raiseEvent(const dtn::core::NodeEvent &evt) throw ();
-			void componentUp() throw ();
-			void componentDown() throw ();
+			void raiseEvent(const dtn::core::NodeEvent &evt) noexcept;
+			void componentUp() noexcept;
+			void componentDown() noexcept;
 
 			void doHandshake(const dtn::data::EID &eid);
 

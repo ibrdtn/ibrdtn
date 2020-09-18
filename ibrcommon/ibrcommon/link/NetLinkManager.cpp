@@ -47,7 +47,7 @@
 #else
 // netlink API header for < 3.2.21
 #include <netlink/object-api.h>
-#include <netlink/cache-api.h>
+#include <netlink/cache.h>
 #endif
 
 #include <netlink/route/link.h>
@@ -255,7 +255,7 @@ namespace ibrcommon
 	{
 	}
 
-	void NetLinkManager::netlinkcache::up() throw (socket_exception)
+	void NetLinkManager::netlinkcache::up() noexcept (false)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
@@ -304,7 +304,7 @@ namespace ibrcommon
 		_state = SOCKET_UP;
 	}
 
-	void NetLinkManager::netlinkcache::down() throw (socket_exception)
+	void NetLinkManager::netlinkcache::down() noexcept (false)
 	{
 		if ((_state == SOCKET_DOWN) || (_state == SOCKET_DESTROYED))
 			throw socket_exception("socket is not up");
@@ -324,13 +324,13 @@ namespace ibrcommon
 			_state = SOCKET_DOWN;
 	}
 
-	int NetLinkManager::netlinkcache::fd() const throw (socket_exception)
+	int NetLinkManager::netlinkcache::fd() const noexcept (false)
 	{
 		if (_state == SOCKET_DOWN) throw socket_exception("fd not available");
 		return nl_cache_mngr_get_fd(_mngr);
 	}
 
-	void NetLinkManager::netlinkcache::receive() throw (socket_exception)
+	void NetLinkManager::netlinkcache::receive() noexcept (false)
 	{
 		if (_state == SOCKET_DOWN) throw socket_exception("socket not connected");
 		nl_cache_mngr_data_ready(_mngr);
@@ -347,7 +347,7 @@ namespace ibrcommon
 #endif
 	}
 
-	void NetLinkManager::netlinkcache::add(const std::string &cachename) throw (socket_exception)
+	void NetLinkManager::netlinkcache::add(const std::string &cachename) noexcept (false)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up; adding not possible");
@@ -359,7 +359,7 @@ namespace ibrcommon
 		_caches[cachename] = NULL;
 	}
 
-	struct nl_cache* NetLinkManager::netlinkcache::get(const std::string &cachename) const throw (socket_exception)
+	struct nl_cache* NetLinkManager::netlinkcache::get(const std::string &cachename) const noexcept (false)
 	{
 		if (_state == SOCKET_DOWN) throw socket_exception("socket not available");
 
@@ -393,7 +393,7 @@ namespace ibrcommon
 		}
 	}
 
-	void NetLinkManager::up() throw ()
+	void NetLinkManager::up() noexcept
 	{
 		// add netlink fd to vsocket
 		_sock.add(&_route_cache);
@@ -402,7 +402,7 @@ namespace ibrcommon
 		this->start();
 	}
 
-	void NetLinkManager::down() throw ()
+	void NetLinkManager::down() noexcept
 	{
 		_sock.down();
 		_sock.clear();
@@ -411,13 +411,13 @@ namespace ibrcommon
 		this->join();
 	}
 
-	void NetLinkManager::__cancellation() throw ()
+	void NetLinkManager::__cancellation() noexcept
 	{
 		_running = false;
 		_sock.down();
 	}
 
-	void NetLinkManager::run() throw ()
+	void NetLinkManager::run() noexcept
 	{
 		try {
 			while (_running)

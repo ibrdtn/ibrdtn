@@ -24,7 +24,7 @@ namespace dtn
 		{
 		}
 
-		void AcknowledgementSet::add(const dtn::data::MetaBundle &bundle) throw ()
+		void AcknowledgementSet::add(const dtn::data::MetaBundle &bundle) noexcept
 		{
 			try {
 				// check if the bundle is valid
@@ -37,12 +37,12 @@ namespace dtn
 			}
 		}
 
-		void AcknowledgementSet::expire(const dtn::data::Timestamp &timestamp) throw ()
+		void AcknowledgementSet::expire(const dtn::data::Timestamp &timestamp) noexcept
 		{
 			_bundles.expire(timestamp);
 		}
 
-		void AcknowledgementSet::merge(const AcknowledgementSet &other) throw ()
+		void AcknowledgementSet::merge(const AcknowledgementSet &other) noexcept
 		{
 			for(dtn::data::BundleList::const_iterator it = other._bundles.begin(); it != other._bundles.end(); ++it)
 			{
@@ -51,7 +51,7 @@ namespace dtn
 			}
 		}
 
-		bool AcknowledgementSet::has(const dtn::data::BundleID &id) const throw ()
+		bool AcknowledgementSet::has(const dtn::data::BundleID &id) const noexcept
 		{
 			dtn::data::BundleList::const_iterator iter = _bundles.find(dtn::data::MetaBundle::create(id));
 			return !(iter == _bundles.end());

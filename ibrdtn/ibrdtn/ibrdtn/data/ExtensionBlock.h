@@ -39,7 +39,7 @@ namespace dtn
 			public:
 				virtual dtn::data::Block* create() = 0;
 
-				static Factory& get(block_t type) throw (ibrcommon::Exception);
+				static Factory& get(block_t type) noexcept (false);
 
 			protected:
 				Factory(block_t type);
@@ -68,8 +68,8 @@ namespace dtn
 				FactoryList();
 				virtual ~FactoryList();
 
-				Factory& get(block_t type) throw (ibrcommon::Exception);
-				void add(block_t type, Factory *f) throw (ibrcommon::Exception);
+				Factory& get(block_t type) noexcept (false);
+				void add(block_t type, Factory *f) noexcept (false);
 				void remove(block_t type);
 
 				static void initialize();

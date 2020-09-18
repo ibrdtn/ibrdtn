@@ -101,7 +101,7 @@ namespace dtn
 			/**
 			 * @see BundleSeeker::get(BundleSelector &cb, BundleResult &result)
 			 */
-			virtual void get(const BundleSelector &cb, BundleResult &result) throw (NoBundleFoundException, BundleSelectorException);
+			virtual void get(const BundleSelector &cb, BundleResult &result) noexcept (false);
 
 			/**
 			 * @see BundleSeeker::getDistinctDestinations()
@@ -139,13 +139,13 @@ namespace dtn
 			 * This method is used to receive events.
 			 * @param evt
 			 */
-			void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
-			void raiseEvent(const dtn::core::GlobalEvent &evt) throw ();
+			void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::GlobalEvent &evt) noexcept;
 
 			/**
 			 * callbacks for the sqlite database
 			 */
-			void eventBundleExpired(const dtn::data::BundleID &id, const dtn::data::Length size) throw ();
+			void eventBundleExpired(const dtn::data::BundleID &id, const dtn::data::Length size) noexcept;
 			void iterateDatabase(const dtn::data::MetaBundle &bundle, const dtn::data::Length size);
 
 
@@ -166,10 +166,10 @@ namespace dtn
 
 
 		protected:
-			virtual void componentRun() throw ();
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
-			void __cancellation() throw ();
+			virtual void componentRun() noexcept;
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
+			void __cancellation() noexcept;
 
 		private:
 //			enum Position

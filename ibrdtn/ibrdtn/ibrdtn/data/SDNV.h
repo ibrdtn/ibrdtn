@@ -60,7 +60,7 @@ namespace dtn
 		class ValueOutOfRangeException : public dtn::InvalidDataException
 		{
 		public:
-			ValueOutOfRangeException(const std::string &what = "The value is out of range.") throw() : dtn::InvalidDataException(what)
+			ValueOutOfRangeException(const std::string &what = "The value is out of range.") noexcept : dtn::InvalidDataException(what)
 			{
 			};
 		};

@@ -94,7 +94,7 @@ namespace dtn
 			return _session_key;
 		}
 
-		dtn::security::SecurityKey KeyExchangeSession::getKey(const dtn::security::SecurityKey::KeyType type) const throw (SecurityKey::KeyNotFoundException)
+		dtn::security::SecurityKey KeyExchangeSession::getKey(const dtn::security::SecurityKey::KeyType type) const noexcept (false)
 		{
 			unsigned int id = getUniqueId();
 			std::string prefix((char*)&id, sizeof id);

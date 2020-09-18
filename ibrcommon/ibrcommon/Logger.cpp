@@ -632,7 +632,7 @@ namespace ibrcommon
 		}
 	}
 
-	void LogWriter::run() throw ()
+	void LogWriter::run() noexcept
 	{
 		try {
 			while (true)
@@ -671,7 +671,7 @@ namespace ibrcommon
 		}
 	}
 
-	void LogWriter::__cancellation() throw ()
+	void LogWriter::__cancellation() noexcept
 	{
 		// cancel the main thread in here
 		_queue.abort();

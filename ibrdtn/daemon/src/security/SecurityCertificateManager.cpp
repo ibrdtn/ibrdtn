@@ -61,7 +61,7 @@ namespace dtn
 			return _trustedCAPath;
 		}
 
-		void SecurityCertificateManager::onConfigurationChanged(const dtn::daemon::Configuration &conf) throw ()
+		void SecurityCertificateManager::onConfigurationChanged(const dtn::daemon::Configuration &conf) noexcept
 		{
 			ibrcommon::File certificate = conf.getSecurity().getCertificate();
 			ibrcommon::File privateKey = conf.getSecurity().getKey();
@@ -109,7 +109,7 @@ namespace dtn
 			}
 		}
 
-		void SecurityCertificateManager::componentUp() throw ()
+		void SecurityCertificateManager::componentUp() noexcept
 		{
 			ibrcommon::MutexLock l(_initialization_lock);
 
@@ -127,7 +127,7 @@ namespace dtn
 			}
 		}
 
-		void SecurityCertificateManager::componentDown() throw ()
+		void SecurityCertificateManager::componentDown() noexcept
 		{
 			/* nothing to do */
 		}
@@ -139,7 +139,7 @@ namespace dtn
 		}
 
 		void
-		SecurityCertificateManager::validateSubject(X509 *certificate, const std::string &cn) throw (SecurityCertificateException)
+		SecurityCertificateManager::validateSubject(X509 *certificate, const std::string &cn) noexcept (false)
 		{
 			if(!certificate || cn.empty()){
 				throw SecurityCertificateException("certificate or common-name is empty");

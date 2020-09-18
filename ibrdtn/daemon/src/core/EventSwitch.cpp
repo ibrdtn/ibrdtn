@@ -45,9 +45,9 @@ namespace dtn
 			componentDown();
 		}
 
-		void EventSwitch::componentUp() throw ()
+		void EventSwitch::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 
 			// clear all queues
 			_queue = std::queue<Task*>();
@@ -62,7 +62,7 @@ namespace dtn
 			_queue_cond.reset();
 		}
 
-		void EventSwitch::componentDown() throw ()
+		void EventSwitch::componentDown() noexcept
 		{
 			try {
 				ibrcommon::MutexLock l(_queue_cond);
@@ -284,7 +284,7 @@ namespace dtn
 			return (_tm.getMilliseconds() > 5000);
 		}
 
-		void EventSwitch::Worker::run() throw ()
+		void EventSwitch::Worker::run() noexcept
 		{
 			try {
 				while (_running)
@@ -292,7 +292,7 @@ namespace dtn
 			} catch (const ibrcommon::Conditional::ConditionalAbortException&) { };
 		}
 
-		void EventSwitch::Worker::__cancellation() throw ()
+		void EventSwitch::Worker::__cancellation() noexcept
 		{
 			_running = false;
 		}
@@ -321,7 +321,7 @@ namespace dtn
 			JoinableThread::stop();
 		}
 
-		void EventSwitch::WatchDog::run() throw ()
+		void EventSwitch::WatchDog::run() noexcept
 		{
 			try {
 				ibrcommon::MutexLock l(_cond);
@@ -352,7 +352,7 @@ namespace dtn
 			} catch (const ibrcommon::Conditional::ConditionalAbortException&) { };
 		}
 
-		void EventSwitch::WatchDog::__cancellation() throw ()
+		void EventSwitch::WatchDog::__cancellation() noexcept
 		{
 			ibrcommon::MutexLock l(_cond);
 			_running = false;

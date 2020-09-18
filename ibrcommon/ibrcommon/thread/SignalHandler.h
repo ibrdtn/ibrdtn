@@ -47,13 +47,13 @@ namespace ibrcommon
 		/**
 		 * Abstract interface for thread context run method.
 		 */
-		virtual void run(void) throw ();
+		virtual void run(void) noexcept;
 
 	protected:
 		/**
 		 * This method is call when the thread is stopped.
 		 */
-		virtual void __cancellation() throw ();
+		virtual void __cancellation() noexcept;
 
 	private:
 		static void _proxy_handler(int signal);

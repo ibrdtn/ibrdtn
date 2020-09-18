@@ -116,13 +116,13 @@ namespace ibrcommon
 #endif
 	}
 
-	int basesocket::fd() const throw (socket_exception)
+	int basesocket::fd() const noexcept (false)
 	{
 		if ((_state == SOCKET_DOWN) || (_state == SOCKET_DESTROYED) || (_fd == -1)) throw socket_exception("fd not available");
 		return _fd;
 	}
 
-	int basesocket::release() throw (socket_exception)
+	int basesocket::release() noexcept (false)
 	{
 		if ((_state == SOCKET_DOWN) || (_state == SOCKET_DESTROYED)) throw socket_exception("fd not available");
 		int fd = _fd;
@@ -136,7 +136,7 @@ namespace ibrcommon
 		return fd;
 	}
 
-	void basesocket::close() throw (socket_exception)
+	void basesocket::close() noexcept (false)
 	{
 		int ret = __close(this->fd());
 		if (ret == -1)
@@ -150,7 +150,7 @@ namespace ibrcommon
 			_state = SOCKET_DOWN;
 	}
 
-	void basesocket::shutdown(int how) throw (socket_exception)
+	void basesocket::shutdown(int how) noexcept (false)
 	{
 		int ret = ::shutdown(this->fd(), how);
 		if (ret == -1)
@@ -167,7 +167,7 @@ namespace ibrcommon
 		return ((_state == SOCKET_UP) || (_state == SOCKET_UNMANAGED));
 	}
 
-	void basesocket::set_blocking_mode(bool val, int fd) const throw (socket_exception)
+	void basesocket::set_blocking_mode(bool val, int fd) const noexcept (false)
 	{
 #ifdef __WIN32__
 		// set blocking mode - the win32 way
@@ -191,7 +191,7 @@ namespace ibrcommon
 #endif
 	}
 
-	void basesocket::set_keepalive(bool val, int fd) const throw (socket_exception)
+	void basesocket::set_keepalive(bool val, int fd) const noexcept (false)
 	{
 		/* Set the option active */
 		int optval = (val ? 1 : 0);
@@ -200,7 +200,7 @@ namespace ibrcommon
 		}
 	}
 
-	void basesocket::set_linger(bool val, int l, int fd) const throw (socket_exception)
+	void basesocket::set_linger(bool val, int l, int fd) const noexcept (false)
 	{
 		// set linger option to the socket
 		struct linger linger;
@@ -212,7 +212,7 @@ namespace ibrcommon
 		}
 	}
 
-	void basesocket::set_reuseaddr(bool val, int fd) const throw (socket_exception)
+	void basesocket::set_reuseaddr(bool val, int fd) const noexcept (false)
 	{
 		int on = (val ? 1: 0);
 		if (__compat_setsockopt((fd == -1) ? _fd : fd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) < 0)
@@ -221,7 +221,7 @@ namespace ibrcommon
 		}
 	}
 
-	void basesocket::set_nodelay(bool val, int fd) const throw (socket_exception)
+	void basesocket::set_nodelay(bool val, int fd) const noexcept (false)
 	{
 		int set = (val ? 1 : 0);
 		if (__compat_setsockopt((fd == -1) ? _fd : fd, IPPROTO_TCP, TCP_NODELAY, &set, sizeof(set)) < 0) {
@@ -229,12 +229,12 @@ namespace ibrcommon
 		}
 	}
 
-	sa_family_t basesocket::get_family() const throw (socket_exception)
+	sa_family_t basesocket::get_family() const noexcept (false)
 	{
 		return _family;
 	}
 
-	sa_family_t basesocket::get_family(int fd) throw (socket_exception)
+	sa_family_t basesocket::get_family(int fd) noexcept (false)
 	{
 		struct sockaddr_storage bound_addr;
 		socklen_t bound_len = sizeof(bound_addr);
@@ -249,7 +249,7 @@ namespace ibrcommon
 		return bound_addr.ss_family;
 	}
 
-	bool basesocket::hasSupport(const sa_family_t family, const int type, const int protocol) throw ()
+	bool basesocket::hasSupport(const sa_family_t family, const int type, const int protocol) noexcept
 	{
 		int fd = 0;
 		if ((fd = ::socket(family, type, protocol)) < 0) {
@@ -259,7 +259,7 @@ namespace ibrcommon
 		return true;
 	}
 
-	void basesocket::init_socket(const vaddress &addr, int type, int protocol) throw (socket_exception)
+	void basesocket::init_socket(const vaddress &addr, int type, int protocol) noexcept (false)
 	{
 		try {
 			_family = addr.family();
@@ -285,7 +285,7 @@ namespace ibrcommon
 		}
 	}
 
-	void basesocket::init_socket(int domain, int type, int protocol) throw (socket_exception)
+	void basesocket::init_socket(int domain, int type, int protocol) noexcept (false)
 	{
 		_family = static_cast<sa_family_t>(domain);
 		if ((_fd = ::socket(domain, type, protocol)) < 0) {
@@ -293,7 +293,7 @@ namespace ibrcommon
 		}
 	}
 
-	void basesocket::bind(int fd, struct sockaddr *addr, socklen_t len) throw (socket_exception)
+	void basesocket::bind(int fd, struct sockaddr *addr, socklen_t len) noexcept (false)
 	{
 		int ret = ::bind(fd, addr, len);
 
@@ -328,7 +328,7 @@ namespace ibrcommon
 		} catch (const socket_exception&) { }
 	}
 
-	void clientsocket::up() throw (socket_exception)
+	void clientsocket::up() noexcept (false)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
@@ -336,7 +336,7 @@ namespace ibrcommon
 		_state = SOCKET_UP;
 	}
 
-	void clientsocket::down() throw (socket_exception)
+	void clientsocket::down() noexcept (false)
 	{
 		if ((_state == SOCKET_DOWN) || (_state == SOCKET_DESTROYED))
 			throw socket_exception("socket is not up");
@@ -344,7 +344,7 @@ namespace ibrcommon
 		this->close();
 	}
 
-	ssize_t clientsocket::send(const char *data, size_t len, int flags) throw (socket_exception)
+	ssize_t clientsocket::send(const char *data, size_t len, int flags) noexcept (false)
 	{
 		ssize_t ret = ::send(this->fd(), data, len, flags);
 		if (ret == -1) {
@@ -369,7 +369,7 @@ namespace ibrcommon
 		return ret;
 	}
 
-	ssize_t clientsocket::recv(char *data, size_t len, int flags) throw (socket_exception)
+	ssize_t clientsocket::recv(char *data, size_t len, int flags) noexcept (false)
 	{
 		ssize_t ret = ::recv(this->fd(), data, len, flags);
 		if (ret == -1) {
@@ -387,7 +387,7 @@ namespace ibrcommon
 		return ret;
 	}
 
-	void clientsocket::set(CLIENT_OPTION opt, bool val) throw (socket_exception)
+	void clientsocket::set(CLIENT_OPTION opt, bool val) noexcept (false)
 	{
 		switch (opt) {
 		case NO_DELAY:
@@ -414,14 +414,14 @@ namespace ibrcommon
 	{
 	}
 
-	void serversocket::listen(int connections) throw (socket_exception)
+	void serversocket::listen(int connections) noexcept (false)
 	{
 		int ret = ::listen(_fd, connections);
 		if (ret == -1)
 			throw socket_exception("listen failed");
 	}
 
-	int serversocket::_accept_fd(ibrcommon::vaddress &addr) throw (socket_exception)
+	int serversocket::_accept_fd(ibrcommon::vaddress &addr) noexcept (false)
 	{
 		struct sockaddr_storage cliaddr;
 		socklen_t len = sizeof(cliaddr);
@@ -465,7 +465,7 @@ namespace ibrcommon
 	{
 	}
 
-	ssize_t datagramsocket::recvfrom(char *buf, size_t buflen, int flags, ibrcommon::vaddress &addr) throw (socket_exception)
+	ssize_t datagramsocket::recvfrom(char *buf, size_t buflen, int flags, ibrcommon::vaddress &addr) noexcept (false)
 	{
 		struct sockaddr_storage clientAddress;
 		socklen_t clientAddressLength = sizeof(clientAddress);
@@ -487,7 +487,7 @@ namespace ibrcommon
 		return ret;
 	}
 
-	void datagramsocket::sendto(const char *buf, size_t buflen, int flags, const ibrcommon::vaddress &addr) throw (socket_exception)
+	void datagramsocket::sendto(const char *buf, size_t buflen, int flags, const ibrcommon::vaddress &addr) noexcept (false)
 	{
 		int ret = 0;
 		struct addrinfo hints, *res;
@@ -543,7 +543,7 @@ namespace ibrcommon
 		} catch (const socket_exception&) { }
 	}
 
-	void filesocket::up() throw (socket_exception)
+	void filesocket::up() noexcept (false)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
@@ -588,7 +588,7 @@ namespace ibrcommon
 		_state = SOCKET_UP;
 	}
 
-	void filesocket::down() throw (socket_exception)
+	void filesocket::down() noexcept (false)
 	{
 		if ((_state == SOCKET_DOWN) || (_state == SOCKET_DESTROYED))
 			throw socket_exception("socket is not up");
@@ -608,7 +608,7 @@ namespace ibrcommon
 		} catch (const socket_exception&) { }
 	}
 
-	void fileserversocket::up() throw (socket_exception)
+	void fileserversocket::up() noexcept (false)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
@@ -633,7 +633,7 @@ namespace ibrcommon
 		_state = SOCKET_UP;
 	}
 
-	void fileserversocket::down() throw (socket_exception)
+	void fileserversocket::down() noexcept (false)
 	{
 		if ((_state == SOCKET_DOWN) || (_state == SOCKET_DESTROYED))
 			throw socket_exception("socket is not up");
@@ -641,12 +641,12 @@ namespace ibrcommon
 		this->close();
 	}
 
-	clientsocket* fileserversocket::accept(ibrcommon::vaddress &addr) throw (socket_exception)
+	clientsocket* fileserversocket::accept(ibrcommon::vaddress &addr) noexcept (false)
 	{
 		return new filesocket(_accept_fd(addr));
 	}
 
-	void fileserversocket::bind(const File &file) throw (socket_exception)
+	void fileserversocket::bind(const File &file) noexcept (false)
 	{
 #ifndef __WIN32__
 		// remove old sockets
@@ -681,7 +681,7 @@ namespace ibrcommon
 		} catch (const socket_exception&) { }
 	}
 
-	void tcpserversocket::up() throw (socket_exception)
+	void tcpserversocket::up() noexcept (false)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
@@ -705,7 +705,7 @@ namespace ibrcommon
 		_state = SOCKET_UP;
 	}
 
-	void tcpserversocket::down() throw (socket_exception)
+	void tcpserversocket::down() noexcept (false)
 	{
 		if ((_state == SOCKET_DOWN) || (_state == SOCKET_DESTROYED))
 			throw socket_exception("socket is not up");
@@ -713,7 +713,7 @@ namespace ibrcommon
 		this->close();
 	}
 
-	void tcpserversocket::bind(const vaddress &addr) throw (socket_exception)
+	void tcpserversocket::bind(const vaddress &addr) noexcept (false)
 	{
 		struct addrinfo hints, *res;
 		memset(&hints, 0, sizeof hints);
@@ -753,7 +753,7 @@ namespace ibrcommon
 		}
 	}
 
-	clientsocket* tcpserversocket::accept(ibrcommon::vaddress &addr) throw (socket_exception)
+	clientsocket* tcpserversocket::accept(ibrcommon::vaddress &addr) noexcept (false)
 	{
 		return new tcpsocket(_accept_fd(addr));
 	}
@@ -786,7 +786,7 @@ namespace ibrcommon
 		} catch (const socket_exception&) { }
 	}
 
-	void tcpsocket::up() throw (socket_exception)
+	void tcpsocket::up() noexcept (false)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
@@ -961,7 +961,7 @@ namespace ibrcommon
 		probesocket.destroy();
 	}
 
-	void tcpsocket::down() throw (socket_exception)
+	void tcpsocket::down() noexcept (false)
 	{
 		if ((_state == SOCKET_DOWN) || (_state == SOCKET_DESTROYED))
 			throw socket_exception("socket is not up");
@@ -990,7 +990,7 @@ namespace ibrcommon
 		return _address;
 	}
 
-	void udpsocket::up() throw (socket_exception)
+	void udpsocket::up() noexcept (false)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
@@ -1018,7 +1018,7 @@ namespace ibrcommon
 		_state = SOCKET_UP;
 	}
 
-	void udpsocket::down() throw (socket_exception)
+	void udpsocket::down() noexcept (false)
 	{
 		if ((_state == SOCKET_DOWN) || (_state == SOCKET_DESTROYED))
 			throw socket_exception("socket is not up");
@@ -1026,7 +1026,7 @@ namespace ibrcommon
 		this->close();
 	}
 
-	void udpsocket::bind(const vaddress &addr) throw (socket_exception)
+	void udpsocket::bind(const vaddress &addr) noexcept (false)
 	{
 		struct addrinfo hints, *res;
 		memset(&hints, 0, sizeof hints);
@@ -1075,7 +1075,7 @@ namespace ibrcommon
 	{
 	}
 
-	void multicastsocket::up() throw (socket_exception)
+	void multicastsocket::up() noexcept (false)
 	{
 		udpsocket::up();
 
@@ -1132,7 +1132,7 @@ namespace ibrcommon
 		}
 	}
 
-	void multicastsocket::down() throw (socket_exception)
+	void multicastsocket::down() noexcept (false)
 	{
 		switch (get_family()) {
 		case AF_INET: {
@@ -1161,7 +1161,7 @@ namespace ibrcommon
 		udpsocket::down();
 	}
 
-	void multicastsocket::join(const vaddress &group, const vinterface &iface) throw (socket_exception)
+	void multicastsocket::join(const vaddress &group, const vinterface &iface) noexcept (false)
 	{
 #ifndef MCAST_JOIN_GROUP
 		if (group.family() == AF_INET6) {
@@ -1174,7 +1174,7 @@ namespace ibrcommon
 #endif
 	}
 
-	void multicastsocket::leave(const vaddress &group, const vinterface &iface) throw (socket_exception)
+	void multicastsocket::leave(const vaddress &group, const vinterface &iface) noexcept (false)
 	{
 #ifndef MCAST_LEAVE_GROUP
 		if (group.family() == AF_INET6) {
@@ -1217,7 +1217,7 @@ namespace ibrcommon
 	}
 #endif
 
-	void multicastsocket::mcast_op(int optname, const vaddress &group, const vinterface &iface) throw (socket_exception)
+	void multicastsocket::mcast_op(int optname, const vaddress &group, const vinterface &iface) noexcept (false)
 	{
 		struct sockaddr_storage mcast_addr;
 		::memset(&mcast_addr, 0, sizeof(mcast_addr));
@@ -1311,7 +1311,7 @@ namespace ibrcommon
 		IBRCOMMON_LOGGER_DEBUG_TAG("multicastsocket", 70) << "multicast operation (" << optname << ") successful with " << group.toString() << " on " << iface.toString() << IBRCOMMON_LOGGER_ENDL;
 	}
 
-	void basesocket::check_socket_error(const int err) const throw (socket_exception)
+	void basesocket::check_socket_error(const int err) const noexcept (false)
 	{
 		switch (err)
 		{
@@ -1342,7 +1342,7 @@ namespace ibrcommon
 		}
 	}
 
-	void basesocket::check_bind_error(const int err, const std::string &msg) const throw (socket_exception)
+	void basesocket::check_bind_error(const int err, const std::string &msg) const noexcept (false)
 	{
 		switch ( err )
 		{

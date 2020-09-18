@@ -55,16 +55,16 @@ namespace dtn
 			void run();
 			void finally();
 			void setup();
-			void __cancellation() throw ();
+			void __cancellation() noexcept;
 
-			void raiseEvent(const dtn::core::NodeEvent &evt) throw ();
-			void raiseEvent(const dtn::core::GlobalEvent &evt) throw ();
-			void raiseEvent(const dtn::core::CustodyEvent &evt) throw ();
-			void raiseEvent(const dtn::net::BundleReceivedEvent &evt) throw ();
-			void raiseEvent(const dtn::net::TransferAbortedEvent &evt) throw ();
-			void raiseEvent(const dtn::net::TransferCompletedEvent &evt) throw ();
-			void raiseEvent(const dtn::net::ConnectionEvent &evt) throw ();
-			void raiseEvent(const dtn::routing::QueueBundleEvent &evt) throw ();
+			void raiseEvent(const dtn::core::NodeEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::GlobalEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::CustodyEvent &evt) noexcept;
+			void raiseEvent(const dtn::net::BundleReceivedEvent &evt) noexcept;
+			void raiseEvent(const dtn::net::TransferAbortedEvent &evt) noexcept;
+			void raiseEvent(const dtn::net::TransferCompletedEvent &evt) noexcept;
+			void raiseEvent(const dtn::net::ConnectionEvent &evt) noexcept;
+			void raiseEvent(const dtn::routing::QueueBundleEvent &evt) noexcept;
 
 		private:
 			ibrcommon::Mutex _mutex;

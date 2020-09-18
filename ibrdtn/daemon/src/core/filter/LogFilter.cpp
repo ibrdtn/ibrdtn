@@ -41,7 +41,7 @@ namespace dtn
 		{
 		}
 
-		void LogFilter::log(const FilterContext &context) const throw ()
+		void LogFilter::log(const FilterContext &context) const noexcept
 		{
 			try {
 				switch (_level)
@@ -83,7 +83,7 @@ namespace dtn
 			}
 		}
 
-		BundleFilter::ACTION LogFilter::evaluate(const FilterContext &context) const throw ()
+		BundleFilter::ACTION LogFilter::evaluate(const FilterContext &context) const noexcept
 		{
 			// print logging
 			log(context);
@@ -92,7 +92,7 @@ namespace dtn
 			return BundleFilter::evaluate(context);
 		}
 
-		BundleFilter::ACTION LogFilter::filter(const FilterContext &context, dtn::data::Bundle &bundle) const throw ()
+		BundleFilter::ACTION LogFilter::filter(const FilterContext &context, dtn::data::Bundle &bundle) const noexcept
 		{
 			// print logging
 			log(context);

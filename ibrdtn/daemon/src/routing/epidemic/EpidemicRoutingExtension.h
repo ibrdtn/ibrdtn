@@ -53,15 +53,15 @@ namespace dtn
 			EpidemicRoutingExtension();
 			virtual ~EpidemicRoutingExtension();
 
-			virtual const std::string getTag() const throw ();
+			virtual const std::string getTag() const noexcept;
 
-			virtual void eventDataChanged(const dtn::data::EID &peer) throw ();
+			virtual void eventDataChanged(const dtn::data::EID &peer) noexcept;
 
-			virtual void eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ();
+			virtual void eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept;
 
-			void raiseEvent(const dtn::routing::NodeHandshakeEvent &evt) throw ();
-			void componentUp() throw ();
-			void componentDown() throw ();
+			void raiseEvent(const dtn::routing::NodeHandshakeEvent &evt) noexcept;
+			void componentUp() noexcept;
+			void componentDown() noexcept;
 
 			/**
 			 * @see BaseRouter::requestHandshake()
@@ -69,8 +69,8 @@ namespace dtn
 			virtual void requestHandshake(const dtn::data::EID&, NodeHandshake&) const;
 
 		protected:
-			void run() throw ();
-			void __cancellation() throw ();
+			void run() noexcept;
+			void __cancellation() noexcept;
 
 		private:
 			class Task

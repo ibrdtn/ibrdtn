@@ -54,9 +54,9 @@ namespace dtn
 		{
 		}
 
-		void ConnectionManager::componentUp() throw ()
+		void ConnectionManager::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::add(this);
 			dtn::core::EventDispatcher<dtn::core::NodeEvent>::add(this);
 			dtn::core::EventDispatcher<dtn::net::ConnectionEvent>::add(this);
@@ -70,7 +70,7 @@ namespace dtn
 			}
 		}
 
-		void ConnectionManager::componentDown() throw ()
+		void ConnectionManager::componentDown() noexcept
 		{
 			{
 				ibrcommon::MutexLock l(_cl_lock);
@@ -93,7 +93,7 @@ namespace dtn
 			dtn::core::EventDispatcher<GlobalEvent>::remove(this);
 		}
 
-		void ConnectionManager::raiseEvent(const dtn::core::NodeEvent &nodeevent) throw ()
+		void ConnectionManager::raiseEvent(const dtn::core::NodeEvent &nodeevent) noexcept
 		{
 			ibrcommon::MutexLock l(_node_lock);
 			const Node &n = nodeevent.getNode();
@@ -117,7 +117,7 @@ namespace dtn
 			}
 		}
 
-		void ConnectionManager::raiseEvent(const dtn::core::TimeEvent &timeevent) throw ()
+		void ConnectionManager::raiseEvent(const dtn::core::TimeEvent &timeevent) noexcept
 		{
 			if (timeevent.getAction() == TIME_SECOND_TICK)
 			{
@@ -126,7 +126,7 @@ namespace dtn
 			}
 		}
 
-		void ConnectionManager::raiseEvent(const dtn::net::ConnectionEvent &connection) throw ()
+		void ConnectionManager::raiseEvent(const dtn::net::ConnectionEvent &connection) noexcept
 		{
 			switch (connection.getState())
 			{
@@ -147,7 +147,7 @@ namespace dtn
 			}
 		}
 
-		void ConnectionManager::raiseEvent(const dtn::core::GlobalEvent &global) throw ()
+		void ConnectionManager::raiseEvent(const dtn::core::GlobalEvent &global) noexcept
 		{
 			switch (global.getAction()) {
 			case GlobalEvent::GLOBAL_INTERNET_AVAILABLE:
@@ -163,7 +163,7 @@ namespace dtn
 			}
 		}
 
-		void ConnectionManager::add(const dtn::core::Node &n) throw ()
+		void ConnectionManager::add(const dtn::core::Node &n) noexcept
 		{
 			// If node contains MCL
 			if(n.has(Node::CONN_EMAIL) && !n.getEID().getScheme().compare("mail") == 0)
@@ -225,7 +225,7 @@ namespace dtn
 			}
 		}
 
-		void ConnectionManager::remove(const dtn::core::Node &n) throw ()
+		void ConnectionManager::remove(const dtn::core::Node &n) noexcept
 		{
 			ibrcommon::MutexLock l(_node_lock);
 			try {
@@ -307,7 +307,7 @@ namespace dtn
 			add(node);
 		}
 
-		bool ConnectionManager::isReachable(const dtn::core::Node &node) throw ()
+		bool ConnectionManager::isReachable(const dtn::core::Node &node) noexcept
 		{
 			const std::list<Node::URI> urilist = node.getAll();
 
@@ -446,7 +446,7 @@ namespace dtn
 			}
 		}
 
-		void ConnectionManager::open(const dtn::core::Node &node) throw (ibrcommon::Exception)
+		void ConnectionManager::open(const dtn::core::Node &node) noexcept (false)
 		{
 			const std::list<Node::URI> urilist = node.getAll();
 
@@ -557,14 +557,14 @@ namespace dtn
 			}
 		}
 
-		const ConnectionManager::protocol_set ConnectionManager::getSupportedProtocols() throw ()
+		const ConnectionManager::protocol_set ConnectionManager::getSupportedProtocols() noexcept
 		{
 			// lock convergence layers
 			ibrcommon::MutexLock l(_cl_lock);
 			return _cl_protocols;
 		}
 
-		const ConnectionManager::protocol_list ConnectionManager::getSupportedProtocols(const dtn::data::EID &peer) throw (NodeNotAvailableException)
+		const ConnectionManager::protocol_list ConnectionManager::getSupportedProtocols(const dtn::data::EID &peer) noexcept (false)
 		{
 			protocol_list ret;
 
@@ -601,7 +601,7 @@ namespace dtn
 			return ret;
 		}
 
-		const dtn::core::Node ConnectionManager::getNeighbor(const dtn::data::EID &eid) throw (NodeNotAvailableException)
+		const dtn::core::Node ConnectionManager::getNeighbor(const dtn::data::EID &eid) noexcept (false)
 		{
 			ibrcommon::MutexLock l(_node_lock);
 			const Node &n = getNode(eid);
@@ -610,7 +610,7 @@ namespace dtn
 			throw dtn::net::NodeNotAvailableException("Node is not reachable or not available.");
 		}
 
-		bool ConnectionManager::isNeighbor(const dtn::core::Node &node) throw ()
+		bool ConnectionManager::isNeighbor(const dtn::core::Node &node) noexcept
 		{
 			try {
 				ibrcommon::MutexLock l(_node_lock);
@@ -631,7 +631,7 @@ namespace dtn
 			return "ConnectionManager";
 		}
 
-		dtn::core::Node& ConnectionManager::getNode(const dtn::data::EID &eid) throw (NodeNotAvailableException)
+		dtn::core::Node& ConnectionManager::getNode(const dtn::data::EID &eid) noexcept (false)
 		{
 			nodemap::iterator iter = _nodes.find(eid);
 			if (iter == _nodes.end()) throw NodeNotAvailableException("node not found");

@@ -82,14 +82,14 @@ namespace dtn
 
 			std::string getString() const;
 
-			void setApplication(const dtn::data::Number &app) throw ();
-			void setApplication(const std::string &app) throw ();
-			std::string getApplication() const throw ();
+			void setApplication(const dtn::data::Number &app) noexcept;
+			void setApplication(const std::string &app) noexcept;
+			std::string getApplication() const noexcept;
 
-			bool isApplication(const dtn::data::Number &app) const throw ();
-			bool isApplication(const std::string &app) const throw ();
+			bool isApplication(const dtn::data::Number &app) const noexcept;
+			bool isApplication(const std::string &app) const noexcept;
 
-			std::string getHost() const throw ();
+			std::string getHost() const noexcept;
 			const std::string getScheme() const;
 			const std::string getSSP() const;
 
@@ -99,7 +99,7 @@ namespace dtn
 			 * Return the EID with stripped application part
 			 * @return The EID without any application specific part
 			 */
-			EID getNode() const throw ();
+			EID getNode() const noexcept;
 
 			bool hasApplication() const;
 

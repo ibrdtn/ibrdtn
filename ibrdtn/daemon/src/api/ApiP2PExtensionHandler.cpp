@@ -65,7 +65,7 @@ namespace dtn
 			dtn::core::BundleCore::getInstance().getConnectionManager().add(this);
 		}
 
-		void ApiP2PExtensionHandler::__cancellation() throw ()
+		void ApiP2PExtensionHandler::__cancellation() noexcept
 		{
 		}
 

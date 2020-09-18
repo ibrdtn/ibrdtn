@@ -51,7 +51,7 @@ namespace dtn
 				BloomfilterNotAvailableException(const dtn::data::EID &host)
 				: ibrcommon::Exception("Bloom filter is not available for this node."), eid(host) { };
 
-				virtual ~BloomfilterNotAvailableException() throw () { };
+				virtual ~BloomfilterNotAvailableException() noexcept { };
 
 				const dtn::data::EID eid;
 			};
@@ -60,35 +60,35 @@ namespace dtn
 			{
 			public:
 				NoRouteKnownException() : ibrcommon::Exception("No route known.") { };
-				virtual ~NoRouteKnownException() throw () { };
+				virtual ~NoRouteKnownException() noexcept { };
 			};
 
 			class NoMoreTransfersAvailable : public ibrcommon::Exception
 			{
 			public:
 				NoMoreTransfersAvailable() : ibrcommon::Exception("No more transfers allowed.") { };
-				virtual ~NoMoreTransfersAvailable() throw () { };
+				virtual ~NoMoreTransfersAvailable() noexcept { };
 			};
 
 			class AlreadyInTransitException : public ibrcommon::Exception
 			{
 			public:
 				AlreadyInTransitException() : ibrcommon::Exception("This bundle is already in transit.") { };
-				virtual ~AlreadyInTransitException() throw () { };
+				virtual ~AlreadyInTransitException() noexcept { };
 			};
 
 			class EntryNotFoundException : public ibrcommon::Exception
 			{
 			public:
 				EntryNotFoundException() : ibrcommon::Exception("Entry for this neighbor not found.") { };
-				virtual ~EntryNotFoundException() throw () { };
+				virtual ~EntryNotFoundException() noexcept { };
 			};
 
 			class DatasetNotAvailableException : public ibrcommon::Exception
 			{
 			public:
 				DatasetNotAvailableException() : ibrcommon::Exception("Dataset not found.") { };
-				virtual ~DatasetNotAvailableException() throw () { };
+				virtual ~DatasetNotAvailableException() noexcept { };
 			};
 
 			class NeighborEntry
@@ -115,7 +115,7 @@ namespace dtn
 				 * Acquire transfer resources. If no resources is left,
 				 * an exception is thrown.
 				 */
-				void acquireTransfer(const dtn::data::BundleID &id) throw (NoMoreTransfersAvailable, AlreadyInTransitException);
+				void acquireTransfer(const dtn::data::BundleID &id) noexcept (false);
 
 				/**
 				 * @return the number of free transfer slots
@@ -167,7 +167,7 @@ namespace dtn
 				 * Retrieve a specific data-set.
 				 */
 				template <class T>
-				const T& getDataset() const throw (DatasetNotAvailableException)
+				const T& getDataset() const noexcept (false)
 				{
 					NeighborDataset item(T::identifier);
 					data_set::const_iterator iter = _datasets.find(item);
@@ -237,7 +237,7 @@ namespace dtn
 			 * @param noCached Only returns an entry if the neighbor is available
 			 * @return The neighbor entry reference.
 			 */
-			NeighborDatabase::NeighborEntry& get(const dtn::data::EID &eid, bool noCached = false) throw (EntryNotFoundException);
+			NeighborDatabase::NeighborEntry& get(const dtn::data::EID &eid, bool noCached = false) noexcept (false);
 
 			/**
 			 * Query a neighbor entry of the database. If the entry does not
@@ -245,7 +245,7 @@ namespace dtn
 			 * @param eid The EID of the neighbor.
 			 * @return The neighbor entry reference.
 			 */
-			NeighborDatabase::NeighborEntry& create(const dtn::data::EID &eid) throw ();
+			NeighborDatabase::NeighborEntry& create(const dtn::data::EID &eid) noexcept;
 
 			/**
 			 * Remove an entry of the database.

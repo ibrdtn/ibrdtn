@@ -33,7 +33,7 @@ namespace io
 	{
 	}
 
-	FatImageReader::FatImageException::~FatImageException() throw ()
+	FatImageReader::FatImageException::~FatImageException() noexcept
 	{
 	}
 
@@ -58,7 +58,7 @@ namespace io
 	{
 	}
 
-	bool FatImageReader::isDirectory(const FATFile &file) const throw ()
+	bool FatImageReader::isDirectory(const FATFile &file) const noexcept
 	{
 		try {
 			if (file.isRoot()) return true;
@@ -71,7 +71,7 @@ namespace io
 		}
 	}
 
-	size_t FatImageReader::size(const FATFile &file) const throw ()
+	size_t FatImageReader::size(const FATFile &file) const noexcept
 	{
 		try {
 			if (file.isRoot()) return 0;
@@ -84,7 +84,7 @@ namespace io
 		}
 	}
 
-	time_t FatImageReader::lastaccess(const FATFile &file) const throw ()
+	time_t FatImageReader::lastaccess(const FATFile &file) const noexcept
 	{
 		try {
 			if (file.isRoot()) return 0;
@@ -105,7 +105,7 @@ namespace io
 		}
 	}
 
-	bool FatImageReader::exists(const FATFile &file) const throw ()
+	bool FatImageReader::exists(const FATFile &file) const noexcept
 	{
 		try {
 			dirent_t d;
@@ -116,7 +116,7 @@ namespace io
 		}
 	}
 
-	void FatImageReader::update(const FATFile &path, dirent_t &d) const throw (ibrcommon::IOException)
+	void FatImageReader::update(const FATFile &path, dirent_t &d) const noexcept (false)
 	{
 		int ret = 0;
 		tdir_handle_t hdir;
@@ -173,13 +173,13 @@ namespace io
 		}
 	}
 
-	void FatImageReader::list(filelist &files) const throw (FatImageException)
+	void FatImageReader::list(filelist &files) const noexcept (false)
 	{
 		FATFile root(*this, "/");
 		list(root, files);
 	}
 
-	void FatImageReader::list(const FATFile &directory, filelist &files) const throw (FatImageException)
+	void FatImageReader::list(const FATFile &directory, filelist &files) const noexcept (false)
 	{
 		int ret = 0;
 		tdir_handle_t hdir;

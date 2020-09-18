@@ -31,7 +31,7 @@ namespace dtn
 			 * @param cb The instance of the callback filter class.
 			 * @return A list of bundles.
 			 */
-			virtual void get(const dtn::storage::BundleSelector &cb, dtn::storage::BundleResult &result) throw (dtn::storage::NoBundleFoundException, dtn::storage::BundleSelectorException);
+			virtual void get(const dtn::storage::BundleSelector &cb, dtn::storage::BundleResult &result) noexcept (false);
 
 			/**
 			 * Return a set of distinct destinations for all bundles in the storage.

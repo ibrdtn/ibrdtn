@@ -52,7 +52,7 @@ namespace dtn
 		{
 		}
 
-		void SecurityManager::auth(dtn::data::Bundle &bundle) const throw (KeyMissingException)
+		void SecurityManager::auth(dtn::data::Bundle &bundle) const noexcept (false)
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG("SecurityManager", 10) << "auth bundle: " << bundle.toString() << IBRCOMMON_LOGGER_ENDL;
 
@@ -67,7 +67,7 @@ namespace dtn
 			}
 		}
 
-		void SecurityManager::sign(dtn::data::Bundle &bundle) const throw (KeyMissingException)
+		void SecurityManager::sign(dtn::data::Bundle &bundle) const noexcept (false)
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG("SecurityManager", 10) << "sign bundle: " << bundle.toString() << IBRCOMMON_LOGGER_ENDL;
 
@@ -82,7 +82,7 @@ namespace dtn
 			}
 		}
 
-		void SecurityManager::verifyIntegrity(dtn::data::Bundle &bundle) const throw (VerificationFailedException)
+		void SecurityManager::verifyIntegrity(dtn::data::Bundle &bundle) const noexcept (false)
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG("SecurityManager", 10) << "verify signed bundle: " << bundle.toString() << IBRCOMMON_LOGGER_ENDL;
 
@@ -131,7 +131,7 @@ namespace dtn
 			}
 		}
 
-		void SecurityManager::verifyAuthentication(dtn::data::Bundle &bundle) const throw (VerificationFailedException)
+		void SecurityManager::verifyAuthentication(dtn::data::Bundle &bundle) const noexcept (false)
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG("SecurityManager", 10) << "verify authenticated bundle: " << bundle.toString() << IBRCOMMON_LOGGER_ENDL;
 
@@ -165,7 +165,7 @@ namespace dtn
 			}
 		}
 
-		void SecurityManager::decrypt(dtn::data::Bundle &bundle) const throw (DecryptException, KeyMissingException)
+		void SecurityManager::decrypt(dtn::data::Bundle &bundle) const noexcept (false)
 		{
 			// check if the bundle has to be decrypted, return when not
 			if (std::count(bundle.begin(), bundle.end(), dtn::security::PayloadConfidentialBlock::BLOCK_TYPE) <= 0) return;
@@ -186,7 +186,7 @@ namespace dtn
 			}
 		}
 
-		void SecurityManager::encrypt(dtn::data::Bundle &bundle) const throw (EncryptException, KeyMissingException)
+		void SecurityManager::encrypt(dtn::data::Bundle &bundle) const noexcept (false)
 		{
 			try {
 				IBRCOMMON_LOGGER_DEBUG_TAG("SecurityManager", 10) << "encrypt bundle: " << bundle.toString() << IBRCOMMON_LOGGER_ENDL;

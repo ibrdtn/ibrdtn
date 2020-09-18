@@ -56,7 +56,7 @@ namespace dtn
 
 			void freeRegistration(Registration &reg);
 
-			void raiseEvent(const dtn::routing::QueueBundleEvent &evt) throw ();
+			void raiseEvent(const dtn::routing::QueueBundleEvent &evt) noexcept;
 
 			/**
 			 * retrieve a registration for a given handle from the ApiServers registration list
@@ -77,14 +77,14 @@ namespace dtn
 			virtual size_t timeout(ibrcommon::Timer*);
 
 		protected:
-			void __cancellation() throw ();
+			void __cancellation() noexcept;
 
 			virtual void connectionUp(ClientHandler *conn);
 			virtual void connectionDown(ClientHandler *conn);
 
-			void componentUp() throw ();
-			void componentRun() throw ();
-			void componentDown() throw ();
+			void componentUp() noexcept;
+			void componentRun() noexcept;
+			void componentDown() noexcept;
 
 		private:
 

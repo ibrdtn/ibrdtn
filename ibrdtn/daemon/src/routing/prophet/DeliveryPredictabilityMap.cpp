@@ -135,7 +135,7 @@ namespace dtn
 			return stream;
 		}
 
-		float DeliveryPredictabilityMap::get(const dtn::data::EID &neighbor) const throw (ValueNotFoundException)
+		float DeliveryPredictabilityMap::get(const dtn::data::EID &neighbor) const noexcept (false)
 		{
 			predictmap::const_iterator it;
 			if ((it = _predictmap.find(neighbor)) != _predictmap.end())

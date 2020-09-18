@@ -82,10 +82,10 @@ namespace dtn
 
 
 		protected:
-			virtual void componentUp() throw ();
-			virtual void componentRun() throw ();
-			virtual void componentDown() throw ();
-			void __cancellation() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentRun() noexcept;
+			virtual void componentDown() noexcept;
+			void __cancellation() noexcept;
 
 		private:
 			/** Variable contains Tomcat-Server URL, which is specified
@@ -109,8 +109,8 @@ namespace dtn
 			virtual ~DownloadThread();
 
 		protected:
-			void run() throw ();
-			void __cancellation() throw ();
+			void run() noexcept;
+			void __cancellation() noexcept;
 
 		private:
 			/** istream variable is using for reading from iobuffer */

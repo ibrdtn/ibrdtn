@@ -168,7 +168,7 @@ namespace dtn
 			/**
 			 * Get the number of entries (URI + Attributes)
 			 */
-			dtn::data::Size size() const throw ();
+			dtn::data::Size size() const noexcept;
 
 			/**
 			 * Returns a list of URIs matching the given protocol
@@ -200,7 +200,7 @@ namespace dtn
 			 * Return the EID of this node.
 			 * @return The EID of this node.
 			 */
-			const dtn::data::EID& getEID() const throw ();
+			const dtn::data::EID& getEID() const noexcept;
 
 			/**
 			 * remove expired service descriptors
@@ -229,22 +229,22 @@ namespace dtn
 			/**
 			 * @return true, if at least one connection is available
 			 */
-			bool isAvailable() const throw ();
+			bool isAvailable() const noexcept;
 
 			/**
 			 * @return true, if this node has been announced before
 			 */
-			bool isAnnounced() const throw ();
+			bool isAnnounced() const noexcept;
 
 			/**
 			 * Mark this node as announced or not
 			 */
-			void setAnnounced(bool val) throw ();
+			void setAnnounced(bool val) noexcept;
 
 			friend std::ostream& operator<<(std::ostream&, const Node&);
 
 		private:
-			bool isAvailable(const Node::URI &uri) const throw ();
+			bool isAvailable(const Node::URI &uri) const noexcept;
 
 			bool _connect_immediately;
 			dtn::data::EID _id;

@@ -30,22 +30,22 @@ namespace dtn
 			/**
 			 * Add a bundle to the set
 			 */
-			void add(const dtn::data::MetaBundle &bundle) throw ();
+			void add(const dtn::data::MetaBundle &bundle) noexcept;
 
 			/**
 			 * Expire outdated entries
 			 */
-			void expire(const dtn::data::Timestamp &timestamp) throw ();
+			void expire(const dtn::data::Timestamp &timestamp) noexcept;
 
 			/**
 			 * merge the set with a second AcknowledgementSet
 			 */
-			void merge(const AcknowledgementSet&) throw ();
+			void merge(const AcknowledgementSet&) noexcept;
 
 			/**
 			 * Returns true if the given bundleId is in the bundle list
 			 */
-			bool has(const dtn::data::BundleID &id) const throw ();
+			bool has(const dtn::data::BundleID &id) const noexcept;
 
 			/* virtual methods from NodeHandshakeItem */
 			virtual const dtn::data::Number& getIdentifier() const; ///< \see NodeHandshakeItem::getIdentifier

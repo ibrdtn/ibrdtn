@@ -72,7 +72,7 @@ namespace dtn
 			/**
 			 * @see BundleSeeker::get(BundleSelector &cb, BundleResult &result)
 			 */
-			virtual void get(const BundleSelector &cb, BundleResult &result) throw (NoBundleFoundException, BundleSelectorException);
+			virtual void get(const BundleSelector &cb, BundleResult &result) noexcept (false);
 
 			/**
 			 * @see BundleSeeker::getDistinctDestinations()
@@ -110,7 +110,7 @@ namespace dtn
 			 * This method is used to receive events.
 			 * @param evt
 			 */
-			void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
+			void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
 
 			/**
 			 * @see Component::getName()
@@ -118,10 +118,10 @@ namespace dtn
 			virtual const std::string getName() const;
 
 		protected:
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
 
-			virtual void eventBundleExpired(const dtn::data::MetaBundle &b) throw ();
+			virtual void eventBundleExpired(const dtn::data::MetaBundle &b) noexcept;
 
 		private:
 			ibrcommon::Mutex _bundleslock;

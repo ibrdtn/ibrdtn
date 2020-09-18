@@ -42,7 +42,7 @@ namespace dtn
 		class NativeSessionException : public ibrcommon::Exception
 		{
 		public:
-			NativeSessionException(string what = "An error happened.") throw() : ibrcommon::Exception(what)
+			NativeSessionException(string what = "An error happened.") noexcept : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -50,7 +50,7 @@ namespace dtn
 		class BundleNotFoundException : public ibrcommon::Exception
 		{
 		public:
-			BundleNotFoundException(string what = "Bundle not found.") throw() : ibrcommon::Exception(what)
+			BundleNotFoundException(string what = "Bundle not found.") noexcept : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -67,19 +67,19 @@ namespace dtn
 			 * in the registration. Then this bundle may loaded into the
 			 * local register using the load() method.
 			 */
-			virtual void notifyBundle(const dtn::data::BundleID &id) throw () = 0;
+			virtual void notifyBundle(const dtn::data::BundleID &id) noexcept = 0;
 
 			/**
 			 * Notifies the session callback if a new status report has
 			 * been received.
 			 */
-			virtual void notifyStatusReport(const dtn::data::EID &source, const dtn::data::StatusReportBlock &report) throw () = 0;
+			virtual void notifyStatusReport(const dtn::data::EID &source, const dtn::data::StatusReportBlock &report) noexcept = 0;
 
 			/**
 			 * Notifies the session callback if a new custody signal has
 			 * been received.
 			 */
-			virtual void notifyCustodySignal(const dtn::data::EID &source, const dtn::data::CustodySignalBlock &custody) throw () = 0;
+			virtual void notifyCustodySignal(const dtn::data::EID &source, const dtn::data::CustodySignalBlock &custody) noexcept = 0;
 		};
 
 		class NativeSession {
@@ -112,106 +112,106 @@ namespace dtn
 			 * Destroy this session and block until
 			 * this process is done
 			 */
-			void destroy() throw ();
+			void destroy() noexcept;
 
 			/**
 			 * Returns the node EID of this device
 			 */
-			const dtn::data::EID& getNodeEID() const throw ();
+			const dtn::data::EID& getNodeEID() const noexcept;
 
 			/**
 			 * Set the default application endpoint suffix of this
 			 * registration
 			 */
-			void setEndpoint(const std::string &suffix) throw (NativeSessionException);
+			void setEndpoint(const std::string &suffix) noexcept (false);
 
 			/**
 			 * Resets the default endpoint to the unique registration
 			 * identifier
 			 */
-			void resetEndpoint() throw ();
+			void resetEndpoint() noexcept;
 
 			/**
 			 * Add an application endpoint suffix to the registration
 			 */
-			void addEndpoint(const std::string &suffix) throw (NativeSessionException);
+			void addEndpoint(const std::string &suffix) noexcept (false);
 
 			/**
 			 * Remove an application endpoint suffix from the registration
 			 */
-			void removeEndpoint(const std::string &suffix) throw (NativeSessionException);
+			void removeEndpoint(const std::string &suffix) noexcept (false);
 
 			/**
 			 * Add an endpoint identifier to the registration
 			 * (commonly used for group endpoints)
 			 */
-			void addRegistration(const dtn::data::EID &eid) throw (NativeSessionException);
+			void addRegistration(const dtn::data::EID &eid) noexcept (false);
 
 			/**
 			 * Remove an endpoint identifier from the registration
 			 */
-			void removeRegistration(const dtn::data::EID &eid) throw (NativeSessionException);
+			void removeRegistration(const dtn::data::EID &eid) noexcept (false);
 
 			/**
 			 * Removes all registrations and reset the default endpoint to the unique registration identifier
 			 */
-			void clearRegistration() throw ();
+			void clearRegistration() noexcept;
 
 			/**
 			 * Retrieve all registered endpoints
 			 */
-			std::vector<std::string> getSubscriptions() throw ();
+			std::vector<std::string> getSubscriptions() noexcept;
 
 			/**
 			 * Loads the next bundle in the queue into the local
 			 * register
 			 */
-			void next(RegisterIndex ri) throw (BundleNotFoundException);
+			void next(RegisterIndex ri) noexcept (false);
 
 			/**
 			 * Load a bundle into the local register
 			 */
-			void load(RegisterIndex ri, const dtn::data::BundleID &id) throw (BundleNotFoundException);
+			void load(RegisterIndex ri, const dtn::data::BundleID &id) noexcept (false);
 
 			/**
 			 * Return the bundle in the register using the given callback
 			 */
-			void get(RegisterIndex ri) throw ();
+			void get(RegisterIndex ri) noexcept;
 
 			/**
 			 * Return the bundle skeleton in the register using the given callback
 			 */
-			void getInfo(RegisterIndex ri) throw ();
+			void getInfo(RegisterIndex ri) noexcept;
 
 			/**
 			 * Delete the bundle in the local register from the storage
 			 */
-			void free(RegisterIndex ri) throw (BundleNotFoundException);
+			void free(RegisterIndex ri) noexcept (false);
 
 			/**
 			 * Clear the local register
 			 */
-			void clear(RegisterIndex ri) throw ();
+			void clear(RegisterIndex ri) noexcept;
 
 			/**
 			 * Mark the bundle with the given ID as delivered.
 			 */
-			void delivered(const dtn::data::BundleID &id) const throw (BundleNotFoundException);
+			void delivered(const dtn::data::BundleID &id) const noexcept (false);
 
 			/**
 			 * Send the bundle in the local register
 			 */
-			dtn::data::BundleID send(RegisterIndex ri) throw ();
+			dtn::data::BundleID send(RegisterIndex ri) noexcept;
 
 			/**
 			 * Copy the given bundle into the local register
 			 */
-			void put(RegisterIndex ri, const dtn::data::Bundle &b) throw ();
+			void put(RegisterIndex ri, const dtn::data::Bundle &b) noexcept;
 
 			/**
 			 * Copy the PrimaryBlock into the local register
 			 */
-			void put(RegisterIndex ri, const dtn::data::PrimaryBlock &b) throw ();
+			void put(RegisterIndex ri, const dtn::data::PrimaryBlock &b) noexcept;
 
 			/**
 			 * Write byte into the payload block of the bundle in the
@@ -222,7 +222,7 @@ namespace dtn
 			 * @param len The number of bytes to copy.
 			 * @param offset Start here to write.
 			 */
-			void write(RegisterIndex ri, const char *buf, const size_t len, const size_t offset = std::string::npos) throw ();
+			void write(RegisterIndex ri, const char *buf, const size_t len, const size_t offset = std::string::npos) noexcept;
 
 			/**
 			 * Read max. <len> bytes from the payload block in the bundle. If there
@@ -233,13 +233,13 @@ namespace dtn
 			 * @param len The size of the buf array. After the call it contains the number of bytes in the buffer.
 			 * @param offset Start here to read.
 			 */
-			void read(RegisterIndex ri, char *buf, size_t &len, const size_t offset = 0) throw ();
+			void read(RegisterIndex ri, char *buf, size_t &len, const size_t offset = 0) noexcept;
 
 			/**
 			 * Receives one bundle and returns. If there is no bundle this call will
 			 * block until a bundle is available or destroy() has been called.
 			 */
-			void receive() throw (NativeSessionException);
+			void receive() noexcept (false);
 
 			/**
 			 * Return the handle of this session
@@ -256,7 +256,7 @@ namespace dtn
 				BundleReceiver(NativeSession &session);
 				virtual ~BundleReceiver();
 
-				void raiseEvent(const dtn::routing::QueueBundleEvent &evt) throw ();
+				void raiseEvent(const dtn::routing::QueueBundleEvent &evt) noexcept;
 
 			private:
 				NativeSession &_session;
@@ -265,7 +265,7 @@ namespace dtn
 			/**
 			 * Push out an notification to the native session callback.
 			 */
-			void fireNotificationBundle(const dtn::data::BundleID &id) throw ();
+			void fireNotificationBundle(const dtn::data::BundleID &id) noexcept;
 
 			/**
 			 * Push out an notification to the native session callback.
@@ -275,12 +275,12 @@ namespace dtn
 			/**
 			 * Push out an notification to the native session callback.
 			 */
-			void fireNotificationStatusReport(const dtn::data::EID &source, const dtn::data::StatusReportBlock &report) throw ();
+			void fireNotificationStatusReport(const dtn::data::EID &source, const dtn::data::StatusReportBlock &report) noexcept;
 
 			/**
 			 * Push out an notification to the native session callback.
 			 */
-			void fireNotificationCustodySignal(const dtn::data::EID &source, const dtn::data::CustodySignalBlock &custody) throw ();
+			void fireNotificationCustodySignal(const dtn::data::EID &source, const dtn::data::CustodySignalBlock &custody) noexcept;
 
 			// callback
 			ibrcommon::RWMutex _cb_mutex;

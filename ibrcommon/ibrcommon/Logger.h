@@ -382,8 +382,8 @@ namespace ibrcommon
 
 	protected:
 		void flush();
-		void run() throw ();
-		void __cancellation() throw ();
+		void run() noexcept;
+		void __cancellation() noexcept;
 
 	private:
 		class LoggerOutput

@@ -40,7 +40,7 @@ namespace dtn
 
 			virtual void run();
 			virtual void finally();
-			virtual void __cancellation() throw ();
+			virtual void __cancellation() noexcept;
 
 			virtual void put(dtn::data::Bundle &b);
 			virtual dtn::data::MetaBundle get(const dtn::data::Timeout timeout = 0);
@@ -54,9 +54,9 @@ namespace dtn
 				virtual ~Sender();
 
 			protected:
-				void run() throw ();
-				void finally() throw ();
-				void __cancellation() throw ();
+				void run() noexcept;
+				void finally() noexcept;
+				void __cancellation() noexcept;
 
 			private:
 				OrderedStreamHandler &_handler;

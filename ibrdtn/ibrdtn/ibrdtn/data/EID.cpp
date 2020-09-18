@@ -400,7 +400,7 @@ namespace dtn
 			return ss.str();
 		}
 
-		void EID::setApplication(const Number &app) throw ()
+		void EID::setApplication(const Number &app) noexcept
 		{
 			switch (_scheme_type) {
 			case SCHEME_CBHE:
@@ -417,7 +417,7 @@ namespace dtn
 			}
 		}
 
-		void EID::setApplication(const std::string &app) throw ()
+		void EID::setApplication(const std::string &app) noexcept
 		{
 			switch (_scheme_type) {
 			case SCHEME_CBHE:
@@ -435,7 +435,7 @@ namespace dtn
 			}
 		}
 
-		std::string EID::getApplication() const throw ()
+		std::string EID::getApplication() const noexcept
 		{
 			switch (_scheme_type) {
 			case SCHEME_CBHE:
@@ -452,13 +452,13 @@ namespace dtn
 			}
 		}
 
-		bool EID::isApplication(const dtn::data::Number &app) const throw ()
+		bool EID::isApplication(const dtn::data::Number &app) const noexcept
 		{
 			if (_scheme_type != SCHEME_CBHE) return false;
 			return (_cbhe_application == app);
 		}
 
-		bool EID::isApplication(const std::string &app) const throw ()
+		bool EID::isApplication(const std::string &app) const noexcept
 		{
 			switch (_scheme_type) {
 			case SCHEME_CBHE:
@@ -472,7 +472,7 @@ namespace dtn
 			}
 		}
 
-		std::string EID::getHost() const throw ()
+		std::string EID::getHost() const noexcept
 		{
 			switch (_scheme_type) {
 			case SCHEME_CBHE:
@@ -525,7 +525,7 @@ namespace dtn
 			}
 		}
 
-		EID EID::getNode() const throw ()
+		EID EID::getNode() const noexcept
 		{
 			switch (_scheme_type) {
 			case SCHEME_CBHE:

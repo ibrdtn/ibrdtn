@@ -49,8 +49,8 @@ protected:
 		TestThread(ibrcommon::Mutex &m, bool &var, const bool value);
 		~TestThread();
 
-		void run() throw ();
-		void __cancellation() throw ();
+		void run() noexcept;
+		void __cancellation() noexcept;
 
 	private:
 		ibrcommon::Mutex &_m;

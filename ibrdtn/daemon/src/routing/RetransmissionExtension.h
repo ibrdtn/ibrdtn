@@ -53,15 +53,15 @@ namespace dtn
 			/**
 			 * This method is called every time a bundle has been completed successfully
 			 */
-			virtual void eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ();
+			virtual void eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept;
 
-			void raiseEvent(const dtn::net::TransferAbortedEvent &evt) throw ();
-			void raiseEvent(const dtn::routing::RequeueBundleEvent &evt) throw ();
-			void raiseEvent(const dtn::core::BundleExpiredEvent &evt) throw ();
-			void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
+			void raiseEvent(const dtn::net::TransferAbortedEvent &evt) noexcept;
+			void raiseEvent(const dtn::routing::RequeueBundleEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::BundleExpiredEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
 
-			void componentUp() throw ();
-			void componentDown() throw ();
+			void componentUp() noexcept;
+			void componentDown() noexcept;
 
 		private:
 			class RetransmissionData : public dtn::data::BundleID

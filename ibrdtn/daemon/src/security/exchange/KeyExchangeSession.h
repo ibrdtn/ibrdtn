@@ -86,7 +86,7 @@ namespace dtn
 				/**
 				 * Return the key stored within this session
 				 */
-				dtn::security::SecurityKey getKey(const dtn::security::SecurityKey::KeyType type = dtn::security::SecurityKey::KEY_UNSPEC) const throw (SecurityKey::KeyNotFoundException);
+				dtn::security::SecurityKey getKey(const dtn::security::SecurityKey::KeyType type = dtn::security::SecurityKey::KEY_UNSPEC) const noexcept (false);
 
 				/**
 				 * Stores a key in the session

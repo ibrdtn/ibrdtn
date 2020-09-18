@@ -58,7 +58,7 @@ namespace dtn
 			void setMatch(const dtn::data::Bundle& other);
 			bool match(const dtn::data::Bundle& other) const;
 
-			virtual void read(const dtn::data::PayloadBlock &p) throw (WrongRecordException);
+			virtual void read(const dtn::data::PayloadBlock &p) noexcept (false);
 			virtual void write(dtn::data::PayloadBlock &p) const;
 
 			bool custody_accepted;

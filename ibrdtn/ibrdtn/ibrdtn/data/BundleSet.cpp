@@ -92,47 +92,47 @@ namespace dtn
 			return (*this);
 		}
 
-		void BundleSet::add(const dtn::data::MetaBundle &bundle) throw ()
+		void BundleSet::add(const dtn::data::MetaBundle &bundle) noexcept
 		{
 			_set_impl->add(bundle);
 		}
 
-		void BundleSet::clear() throw ()
+		void BundleSet::clear() noexcept
 		{
 			_set_impl->clear();
 		}
 
-		bool BundleSet::has(const dtn::data::BundleID &bundle) const throw ()
+		bool BundleSet::has(const dtn::data::BundleID &bundle) const noexcept
 		{
 			return _set_impl->has(bundle);
 		}
 
-		Size BundleSet::size() const throw ()
+		Size BundleSet::size() const noexcept
 		{
 			return _set_impl->size();
 		}
 
-		void BundleSet::expire(const Timestamp timestamp) throw ()
+		void BundleSet::expire(const Timestamp timestamp) noexcept
 		{
 			_set_impl->expire(timestamp);
 		}
 
-		const ibrcommon::BloomFilter& BundleSet::getBloomFilter() const throw ()
+		const ibrcommon::BloomFilter& BundleSet::getBloomFilter() const noexcept
 		{
 			return _set_impl->getBloomFilter();
 		}
 
-		std::set<dtn::data::MetaBundle> BundleSet::getNotIn(const ibrcommon::BloomFilter &filter) const throw ()
+		std::set<dtn::data::MetaBundle> BundleSet::getNotIn(const ibrcommon::BloomFilter &filter) const noexcept
 		{
 			return _set_impl->getNotIn(filter);
 		}
 
-		void BundleSet::sync() throw ()
+		void BundleSet::sync() noexcept
 		{
 			return _set_impl->sync();
 		}
 
-		Length BundleSet::getLength() const throw ()
+		Length BundleSet::getLength() const noexcept
 		{
 			return _set_impl->getLength();
 		}

@@ -180,7 +180,7 @@ namespace dtn
 			}
 		}
 
-		void LOWPANConvergenceLayer::componentUp() throw ()
+		void LOWPANConvergenceLayer::componentUp() noexcept
 		{
 			try {
 				_vsocket.add(new ibrcommon::lowpansocket(_panid, _net));
@@ -196,7 +196,7 @@ namespace dtn
 			_running = true;
 		}
 
-		void LOWPANConvergenceLayer::componentDown() throw ()
+		void LOWPANConvergenceLayer::componentDown() noexcept
 		{
 			dtn::net::DiscoveryAgent &agent = dtn::core::BundleCore::getInstance().getDiscoveryAgent();
 			agent.unregisterService(_net, this);
@@ -206,7 +206,7 @@ namespace dtn
 			join();
 		}
 
-		void LOWPANConvergenceLayer::onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) throw ()
+		void LOWPANConvergenceLayer::onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) noexcept
 		{
 			if (_net != iface) return;
 
@@ -234,7 +234,7 @@ namespace dtn
 			send_cb(&ipnd_buf[0], len + 2, _addr_broadcast);
 		}
 
-		void LOWPANConvergenceLayer::componentRun() throw ()
+		void LOWPANConvergenceLayer::componentRun() noexcept
 		{
 			dtn::net::DiscoveryAgent &agent = dtn::core::BundleCore::getInstance().getDiscoveryAgent();
 
@@ -300,7 +300,7 @@ namespace dtn
 			}
 		}
 
-		void LOWPANConvergenceLayer::__cancellation() throw ()
+		void LOWPANConvergenceLayer::__cancellation() noexcept
 		{
 			_running = false;
 			_vsocket.down();

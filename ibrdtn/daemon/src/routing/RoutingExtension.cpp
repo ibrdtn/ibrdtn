@@ -38,12 +38,12 @@ namespace dtn
 		{
 		}
 
-		void RoutingResult::put(const dtn::data::MetaBundle &bundle) throw ()
+		void RoutingResult::put(const dtn::data::MetaBundle &bundle) noexcept
 		{
 			put(bundle, dtn::core::Node::CONN_UNDEFINED);
 		}
 
-		void RoutingResult::put(const dtn::data::MetaBundle &bundle, const dtn::core::Node::Protocol p) throw ()
+		void RoutingResult::put(const dtn::data::MetaBundle &bundle, const dtn::core::Node::Protocol p) noexcept
 		{
 			push_back(make_pair(bundle, p));
 		}

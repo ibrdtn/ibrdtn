@@ -67,12 +67,12 @@ namespace dtn
 			}
 		}
 
-		void StaticRoutingExtension::__cancellation() throw ()
+		void StaticRoutingExtension::__cancellation() noexcept
 		{
 			_taskqueue.abort();
 		}
 
-		void StaticRoutingExtension::run() throw ()
+		void StaticRoutingExtension::run() noexcept
 		{
 			class BundleFilter : public dtn::storage::BundleSelector
 			{
@@ -83,9 +83,9 @@ namespace dtn
 
 				virtual ~BundleFilter() {};
 
-				virtual dtn::data::Size limit() const throw () { return _entry.getFreeTransferSlots(); };
+				virtual dtn::data::Size limit() const noexcept { return _entry.getFreeTransferSlots(); };
 
-				virtual bool addIfSelected(dtn::storage::BundleResult &result, const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+				virtual bool addIfSelected(dtn::storage::BundleResult &result, const dtn::data::MetaBundle &meta) const noexcept (false)
 				{
 					// check Scope Control Block - do not forward bundles with hop limit == 0
 					if (meta.hopcount == 0)
@@ -412,17 +412,17 @@ namespace dtn
 			}
 		}
 
-		void StaticRoutingExtension::eventDataChanged(const dtn::data::EID &peer) throw ()
+		void StaticRoutingExtension::eventDataChanged(const dtn::data::EID &peer) noexcept
 		{
 			_taskqueue.push( new SearchNextBundleTask(peer) );
 		}
 
-		void StaticRoutingExtension::eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ()
+		void StaticRoutingExtension::eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept
 		{
 			_taskqueue.push( new ProcessBundleTask(meta, peer) );
 		}
 
-		void StaticRoutingExtension::raiseEvent(const dtn::core::TimeEvent&) throw ()
+		void StaticRoutingExtension::raiseEvent(const dtn::core::TimeEvent&) noexcept
 		{
 			// each second, look for expired routes
 			const dtn::data::Timestamp monotonic = dtn::utils::Clock::getMonotonicTimestamp();
@@ -434,7 +434,7 @@ namespace dtn
 			}
 		}
 
-		void StaticRoutingExtension::raiseEvent(const dtn::routing::StaticRouteChangeEvent &route) throw ()
+		void StaticRoutingExtension::raiseEvent(const dtn::routing::StaticRouteChangeEvent &route) noexcept
 		{
 			// on route change, generate a task
 			if (route.type == dtn::routing::StaticRouteChangeEvent::ROUTE_CLEAR)
@@ -475,7 +475,7 @@ namespace dtn
 			}
 		}
 
-		void StaticRoutingExtension::componentUp() throw ()
+		void StaticRoutingExtension::componentUp() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::add(this);
 			dtn::core::EventDispatcher<dtn::routing::StaticRouteChangeEvent>::add(this);
@@ -483,7 +483,7 @@ namespace dtn
 			// reset the task queue
 			_taskqueue.reset();
 
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// run the thread
 				start();
@@ -492,12 +492,12 @@ namespace dtn
 			}
 		}
 
-		void StaticRoutingExtension::componentDown() throw ()
+		void StaticRoutingExtension::componentDown() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::remove(this);
 			dtn::core::EventDispatcher<dtn::routing::StaticRouteChangeEvent>::remove(this);
 
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				// stop the thread
 				stop();
@@ -507,7 +507,7 @@ namespace dtn
 			}
 		}
 
-		const std::string StaticRoutingExtension::getTag() const throw ()
+		const std::string StaticRoutingExtension::getTag() const noexcept
 		{
 			return "neighbor";
 		}

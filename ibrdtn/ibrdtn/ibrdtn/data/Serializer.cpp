@@ -804,21 +804,21 @@ namespace dtn
 		{
 		}
 
-		void AcceptValidator::validate(const dtn::data::PrimaryBlock&) const throw (RejectedException)
+		void AcceptValidator::validate(const dtn::data::PrimaryBlock&) const noexcept (false)
 		{
 		}
 
-		void AcceptValidator::validate(const dtn::data::Block&, const dtn::data::Number&) const throw (RejectedException)
-		{
-
-		}
-
-		void AcceptValidator::validate(const dtn::data::PrimaryBlock&, const dtn::data::Block&, const dtn::data::Number&) const throw (RejectedException)
+		void AcceptValidator::validate(const dtn::data::Block&, const dtn::data::Number&) const noexcept (false)
 		{
 
 		}
 
-		void AcceptValidator::validate(const dtn::data::Bundle&) const throw (RejectedException)
+		void AcceptValidator::validate(const dtn::data::PrimaryBlock&, const dtn::data::Block&, const dtn::data::Number&) const noexcept (false)
+		{
+
+		}
+
+		void AcceptValidator::validate(const dtn::data::Bundle&) const noexcept (false)
 		{
 
 		}

@@ -106,7 +106,7 @@ namespace dtn
 			}
 		}
 
-		void MemoryBundleSet::add(const dtn::data::MetaBundle &bundle) throw ()
+		void MemoryBundleSet::add(const dtn::data::MetaBundle &bundle) noexcept
 		{
 			// insert bundle id to the private list
 			pair<bundle_set::iterator,bool> ret = _bundles.insert(bundle);
@@ -118,7 +118,7 @@ namespace dtn
 			bundle.addTo(_bf);
 		}
 
-		void MemoryBundleSet::clear() throw ()
+		void MemoryBundleSet::clear() noexcept
 		{
 			_consistent = true;
 			_bundles.clear();
@@ -126,7 +126,7 @@ namespace dtn
 			_bf.clear();
 		}
 
-		bool MemoryBundleSet::has(const dtn::data::BundleID &bundle) const throw ()
+		bool MemoryBundleSet::has(const dtn::data::BundleID &bundle) const noexcept
 		{
 			// check bloom-filter first
 			if (bundle.isIn(_bf)) {
@@ -141,12 +141,12 @@ namespace dtn
 			return false;
 		}
 
-		Size MemoryBundleSet::size() const throw ()
+		Size MemoryBundleSet::size() const noexcept
 		{
 			return _bundles.size();
 		}
 
-		void MemoryBundleSet::expire(const Timestamp timestamp) throw ()
+		void MemoryBundleSet::expire(const Timestamp timestamp) noexcept
 		{
 			bool commit = false;
 
@@ -186,12 +186,12 @@ namespace dtn
 			}
 		}
 
-		const ibrcommon::BloomFilter& MemoryBundleSet::getBloomFilter() const throw ()
+		const ibrcommon::BloomFilter& MemoryBundleSet::getBloomFilter() const noexcept
 		{
 			return _bf;
 		}
 
-		MemoryBundleSet::bundle_set MemoryBundleSet::getNotIn(const ibrcommon::BloomFilter &filter) const throw ()
+		MemoryBundleSet::bundle_set MemoryBundleSet::getNotIn(const ibrcommon::BloomFilter &filter) const noexcept
 		{
 			bundle_set ret;
 
@@ -210,7 +210,7 @@ namespace dtn
 			return ret;
 		}
 
-		Length MemoryBundleSet::getLength() const throw ()
+		Length MemoryBundleSet::getLength() const noexcept
 		{
 			return dtn::data::Number(_bf.size()).getLength() + _bf.size();
 		}
@@ -258,7 +258,7 @@ namespace dtn
 			}
 		}
 
-		void MemoryBundleSet::sync() throw ()
+		void MemoryBundleSet::sync() noexcept
 		{
 			// store the bundle set to disk
 			store();

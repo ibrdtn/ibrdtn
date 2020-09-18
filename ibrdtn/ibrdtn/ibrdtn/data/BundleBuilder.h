@@ -23,7 +23,7 @@ namespace dtn
 			class DiscardBlockException : public dtn::SerializationFailedException
 			{
 			public:
-				DiscardBlockException(string what = "Block has been discarded.") throw() : dtn::SerializationFailedException(what)
+				DiscardBlockException(string what = "Block has been discarded.") noexcept : dtn::SerializationFailedException(what)
 				{
 				};
 			};

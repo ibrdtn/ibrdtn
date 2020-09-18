@@ -61,7 +61,7 @@ namespace dtn
 				KeyNotFoundException(std::string what = "Requested key not found.") : ibrcommon::Exception(what)
 				{};
 
-				virtual ~KeyNotFoundException() throw() {};
+				virtual ~KeyNotFoundException() noexcept {};
 			};
 
 			SecurityKey();

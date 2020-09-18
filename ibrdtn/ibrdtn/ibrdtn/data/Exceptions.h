@@ -38,7 +38,7 @@ namespace dtn
 		class InvalidDataException : public ibrcommon::Exception
 		{
 			public:
-				InvalidDataException(string what = "Invalid input data.") throw() : Exception(what)
+				InvalidDataException(string what = "Invalid input data.") noexcept : Exception(what)
 				{
 				};
 		};
@@ -46,7 +46,7 @@ namespace dtn
 		class InvalidProtocolException : public dtn::InvalidDataException
 		{
 		public:
-			InvalidProtocolException(string what = "The received data does not match the protocol.") throw() : dtn::InvalidDataException(what)
+			InvalidProtocolException(string what = "The received data does not match the protocol.") noexcept : dtn::InvalidDataException(what)
 			{
 			};
 		};
@@ -54,7 +54,7 @@ namespace dtn
 		class SerializationFailedException : public dtn::InvalidDataException
 		{
 		public:
-			SerializationFailedException(string what = "The serialization failed.") throw() : dtn::InvalidDataException(what)
+			SerializationFailedException(string what = "The serialization failed.") noexcept : dtn::InvalidDataException(what)
 			{
 			};
 		};
@@ -63,7 +63,7 @@ namespace dtn
 		{
 		public:
 			const size_t length;
-			PayloadReceptionInterrupted(const size_t l, string what = "The payload reception has been interrupted.") throw() : dtn::SerializationFailedException(what), length(l)
+			PayloadReceptionInterrupted(const size_t l, string what = "The payload reception has been interrupted.") noexcept : dtn::SerializationFailedException(what), length(l)
 			{
 			};
 		};
@@ -71,7 +71,7 @@ namespace dtn
 		class MissingObjectException : public ibrcommon::Exception
 		{
 		public:
-			MissingObjectException(string what = "Object not available.") throw() : Exception(what)
+			MissingObjectException(string what = "Object not available.") noexcept : Exception(what)
 			{
 			};
 		};

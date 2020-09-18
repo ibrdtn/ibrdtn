@@ -44,7 +44,7 @@ namespace dtn
 			virtual void run() = 0;
 			virtual void finally() = 0;
 			virtual void setup() {};
-			virtual void __cancellation() throw () = 0;
+			virtual void __cancellation() noexcept = 0;
 
 		protected:
 			ProtocolHandler(ClientHandler &client, ibrcommon::socketstream &stream);
@@ -88,10 +88,10 @@ namespace dtn
 			void switchRegistration(Registration &reg);
 
 		protected:
-			void run() throw ();
-			void finally() throw ();
-			void setup() throw ();
-			void __cancellation() throw ();
+			void run() noexcept;
+			void finally() noexcept;
+			void setup() noexcept;
+			void __cancellation() noexcept;
 
 		private:
 			void error(STATUS_CODES code, const std::string &msg);

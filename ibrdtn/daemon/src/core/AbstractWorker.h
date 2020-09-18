@@ -52,11 +52,11 @@ namespace dtn
 				void initialize();
 				void shutdown();
 
-				virtual void raiseEvent(const dtn::routing::QueueBundleEvent &evt) throw ();
+				virtual void raiseEvent(const dtn::routing::QueueBundleEvent &evt) noexcept;
 
 			protected:
-				void run() throw ();
-				void __cancellation() throw ();
+				void run() noexcept;
+				void __cancellation() noexcept;
 
 			private:
 				AbstractWorker &_worker;

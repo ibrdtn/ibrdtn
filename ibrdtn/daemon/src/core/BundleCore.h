@@ -61,7 +61,7 @@ namespace dtn
 		class P2PDialupException : public ibrcommon::Exception
 		{
 			public:
-				P2PDialupException(string what = "No path known except of dial-up connections.") throw() : Exception(what)
+				P2PDialupException(string what = "No path known except of dial-up connections.") noexcept : Exception(what)
 				{
 				};
 		};
@@ -82,7 +82,7 @@ namespace dtn
 
 			WallClock& getClock();
 
-			virtual void onConfigurationChanged(const dtn::daemon::Configuration &conf) throw ();
+			virtual void onConfigurationChanged(const dtn::daemon::Configuration &conf) noexcept;
 
 			void setStorage(dtn::storage::BundleStorage *storage);
 			dtn::storage::BundleStorage& getStorage();
@@ -125,16 +125,16 @@ namespace dtn
 			 */
 			bool isGloballyConnected() const;
 
-			void raiseEvent(const dtn::routing::QueueBundleEvent &evt) throw ();
-			void raiseEvent(const dtn::core::BundlePurgeEvent &evt) throw ();
-			void raiseEvent(const dtn::net::TransferCompletedEvent &evt) throw ();
-			void raiseEvent(const dtn::net::TransferAbortedEvent &evt) throw ();
+			void raiseEvent(const dtn::routing::QueueBundleEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::BundlePurgeEvent &evt) noexcept;
+			void raiseEvent(const dtn::net::TransferCompletedEvent &evt) noexcept;
+			void raiseEvent(const dtn::net::TransferAbortedEvent &evt) noexcept;
 
-			virtual void validate(const dtn::data::PrimaryBlock &obj) const throw (RejectedException);
-			virtual void validate(const dtn::data::Block &obj, const dtn::data::Number&) const throw (RejectedException);
-			virtual void validate(const dtn::data::PrimaryBlock &bundle, const dtn::data::Block &obj, const dtn::data::Number&) const throw (RejectedException);
-			virtual void validate(const dtn::data::Bundle &obj) const throw (RejectedException);
-			virtual void validate(const dtn::data::MetaBundle &obj) const throw (RejectedException);
+			virtual void validate(const dtn::data::PrimaryBlock &obj) const noexcept (false);
+			virtual void validate(const dtn::data::Block &obj, const dtn::data::Number&) const noexcept (false);
+			virtual void validate(const dtn::data::PrimaryBlock &bundle, const dtn::data::Block &obj, const dtn::data::Number&) const noexcept (false);
+			virtual void validate(const dtn::data::Bundle &obj) const noexcept (false);
+			virtual void validate(const dtn::data::MetaBundle &obj) const noexcept (false);
 
 			/**
 			 * Pass a bundle with a context through the desired table. The bundle may be modified during
@@ -195,8 +195,8 @@ namespace dtn
 			static void inject(const dtn::data::EID &source, dtn::data::Bundle &bundle);
 
 		protected:
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
 
 		private:
 			/**
@@ -212,12 +212,12 @@ namespace dtn
 			/**
 			 * Check if we are connected to the internet.
 			 */
-			void check_connection_state() throw ();
+			void check_connection_state() noexcept;
 
 			/**
 			 * reload filtering tables
 			 */
-			void reload_filter_tables() throw ();
+			void reload_filter_tables() noexcept;
 
 			/**
 			 * Forbidden copy constructor

@@ -60,7 +60,7 @@ namespace dtn
 			delete _service;
 		}
 
-		void DatagramConvergenceLayer::raiseEvent(const dtn::core::NodeEvent &event) throw ()
+		void DatagramConvergenceLayer::raiseEvent(const dtn::core::NodeEvent &event) noexcept
 		{
 			if (event.getAction() == NODE_UNAVAILABLE)
 			{
@@ -115,7 +115,7 @@ namespace dtn
 			return _service->getProtocol();
 		}
 
-		void DatagramConvergenceLayer::callback_send(DatagramConnection&, const char &flags, const unsigned int &seqno, const std::string &destination, const char *buf, const dtn::data::Length &len) throw (DatagramException)
+		void DatagramConvergenceLayer::callback_send(DatagramConnection&, const char &flags, const unsigned int &seqno, const std::string &destination, const char *buf, const dtn::data::Length &len) noexcept (false)
 		{
 			// only on sender at once
 			ibrcommon::MutexLock l(_send_lock);
@@ -127,7 +127,7 @@ namespace dtn
 			_stats_out += len;
 		}
 
-		void DatagramConvergenceLayer::callback_ack(DatagramConnection&, const unsigned int &seqno, const std::string &destination) throw (DatagramException)
+		void DatagramConvergenceLayer::callback_ack(DatagramConnection&, const unsigned int &seqno, const std::string &destination) noexcept (false)
 		{
 			// only on sender at once
 			ibrcommon::MutexLock l(_send_lock);
@@ -136,7 +136,7 @@ namespace dtn
 			_service->send(HEADER_ACK, 0, seqno, destination, NULL, 0);
 		}
 
-		void DatagramConvergenceLayer::callback_nack(DatagramConnection&, const unsigned int &seqno, const std::string &destination) throw (DatagramException)
+		void DatagramConvergenceLayer::callback_nack(DatagramConnection&, const unsigned int &seqno, const std::string &destination) noexcept (false)
 		{
 			// only on sender at once
 			ibrcommon::MutexLock l(_send_lock);
@@ -165,7 +165,7 @@ namespace dtn
 			_action_queue.push( queue );
 		}
 
-		DatagramConnection& DatagramConvergenceLayer::getConnection(const std::string &identifier, bool create) throw (ConnectionNotAvailableException)
+		DatagramConnection& DatagramConvergenceLayer::getConnection(const std::string &identifier, bool create) noexcept (false)
 		{
 			DatagramConnection *connection = NULL;
 
@@ -221,9 +221,9 @@ namespace dtn
 			_action_queue.push(cd);
 		}
 
-		void DatagramConvergenceLayer::componentUp() throw ()
+		void DatagramConvergenceLayer::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			try {
 				_service->bind();
 			} catch (const std::exception &e) {
@@ -240,7 +240,7 @@ namespace dtn
 			_running = true;
 		}
 
-		void DatagramConvergenceLayer::componentDown() throw ()
+		void DatagramConvergenceLayer::componentDown() noexcept
 		{
 			// un-register for discovery beacon handling
 			dtn::core::BundleCore::getInstance().getDiscoveryAgent().unregisterService(_service->getInterface(), this);
@@ -251,7 +251,7 @@ namespace dtn
 			_action_queue.push(new Shutdown());
 		}
 
-		void DatagramConvergenceLayer::onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) throw ()
+		void DatagramConvergenceLayer::onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) noexcept
 		{
 			// only handler beacons for this interface
 			if (iface != _service->getInterface()) return;
@@ -273,7 +273,7 @@ namespace dtn
 			};
 		}
 
-		void DatagramConvergenceLayer::receive() throw ()
+		void DatagramConvergenceLayer::receive() noexcept
 		{
 			size_t maxlen = _service->getParameter().max_msg_length;
 			std::string address;
@@ -366,7 +366,7 @@ namespace dtn
 			}
 		}
 
-		void DatagramConvergenceLayer::componentRun() throw ()
+		void DatagramConvergenceLayer::componentRun() noexcept
 		{
 			// start receiver
 			_receiver.init();
@@ -512,7 +512,7 @@ namespace dtn
 			_receiver.join();
 		}
 
-		void DatagramConvergenceLayer::__cancellation() throw ()
+		void DatagramConvergenceLayer::__cancellation() noexcept
 		{
 			_service->shutdown();
 		}
@@ -531,18 +531,18 @@ namespace dtn
 		{
 		}
 
-		void DatagramConvergenceLayer::Receiver::init() throw ()
+		void DatagramConvergenceLayer::Receiver::init() noexcept
 		{
 			// reset receiver is necessary
 			if (JoinableThread::isFinalized()) JoinableThread::reset();
 		}
 
-		void DatagramConvergenceLayer::Receiver::run() throw ()
+		void DatagramConvergenceLayer::Receiver::run() noexcept
 		{
 			_cl.receive();
 		}
 
-		void DatagramConvergenceLayer::Receiver::__cancellation() throw ()
+		void DatagramConvergenceLayer::Receiver::__cancellation() noexcept
 		{
 		}
 	} /* namespace data */

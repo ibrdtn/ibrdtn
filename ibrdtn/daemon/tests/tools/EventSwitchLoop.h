@@ -46,13 +46,13 @@ namespace ibrtest
 		};
 
 	protected:
-		virtual void run() throw ()
+		virtual void run() noexcept
 		{
 			dtn::core::EventSwitch &es = dtn::core::EventSwitch::getInstance();
 			es.loop(0);
 		}
 
-		virtual void __cancellation() throw ()
+		virtual void __cancellation() noexcept
 		{
 			dtn::core::EventSwitch &es = dtn::core::EventSwitch::getInstance();
 			es.shutdown();

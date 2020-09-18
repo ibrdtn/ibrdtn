@@ -74,7 +74,7 @@ namespace dtn
 			class RoutingException : public ibrcommon::Exception
 			{
 				public:
-					RoutingException(string what = "An error occured during routing.") throw() : Exception(what)
+					RoutingException(string what = "An error occured during routing.") noexcept : Exception(what)
 					{
 					};
 			};
@@ -85,7 +85,7 @@ namespace dtn
 			class NoNeighbourFoundException : public RoutingException
 			{
 				public:
-					NoNeighbourFoundException(string what = "No neighbour was found.") throw() : RoutingException(what)
+					NoNeighbourFoundException(string what = "No neighbour was found.") noexcept : RoutingException(what)
 					{
 					};
 			};
@@ -96,7 +96,7 @@ namespace dtn
 			class NoRouteFoundException : public RoutingException
 			{
 				public:
-					NoRouteFoundException(string what = "No route found.") throw() : RoutingException(what)
+					NoRouteFoundException(string what = "No route found.") noexcept : RoutingException(what)
 					{
 					};
 			};
@@ -126,7 +126,7 @@ namespace dtn
 			/**
 			 * Give access to the mutex for the extension list
 			 */
-			ibrcommon::RWMutex& getExtensionMutex() throw ();
+			ibrcommon::RWMutex& getExtensionMutex() noexcept;
 
 			/**
 			 * Delete all extensions
@@ -136,14 +136,14 @@ namespace dtn
 			/**
 			 * method to receive new events from the EventSwitch
 			 */
-			void raiseEvent(const dtn::net::TransferAbortedEvent &evt) throw ();
-			void raiseEvent(const dtn::net::TransferCompletedEvent &evt) throw ();
-			void raiseEvent(const dtn::net::BundleReceivedEvent &evt) throw ();
-			void raiseEvent(const dtn::routing::QueueBundleEvent &evt) throw ();
-			void raiseEvent(const dtn::core::NodeEvent &evt) throw ();
-			void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
-			void raiseEvent(const dtn::net::ConnectionEvent &evt) throw ();
-			void raiseEvent(const dtn::core::BundlePurgeEvent &evt) throw ();
+			void raiseEvent(const dtn::net::TransferAbortedEvent &evt) noexcept;
+			void raiseEvent(const dtn::net::TransferCompletedEvent &evt) noexcept;
+			void raiseEvent(const dtn::net::BundleReceivedEvent &evt) noexcept;
+			void raiseEvent(const dtn::routing::QueueBundleEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::NodeEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
+			void raiseEvent(const dtn::net::ConnectionEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::BundlePurgeEvent &evt) noexcept;
 
 			/**
 			 * provides direct access to the bundle storage
@@ -226,12 +226,12 @@ namespace dtn
 			/**
 			 * enable all extensions
 			 */
-			void extensionsUp() throw ();
+			void extensionsUp() noexcept;
 
 			/**
 			 * disable all extensions
 			 */
-			void extensionsDown() throw ();
+			void extensionsDown() noexcept;
 
 			/**
 			 * Process a completed handshake
@@ -256,13 +256,13 @@ namespace dtn
 
 
 		protected:
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
 
 		private:
-			void __eventDataChanged(const dtn::data::EID &peer) throw ();
-			void __eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ();
-			void __eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) throw ();
+			void __eventDataChanged(const dtn::data::EID &peer) noexcept;
+			void __eventTransferCompleted(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept;
+			void __eventBundleQueued(const dtn::data::EID &peer, const dtn::data::MetaBundle &meta) noexcept;
 
 			ibrcommon::Mutex _known_bundles_lock;
 			dtn::data::BundleSet _known_bundles;

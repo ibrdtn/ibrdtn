@@ -74,11 +74,11 @@ namespace dtn
 			_registration = &reg;
 		}
 
-		void ClientHandler::setup() throw ()
+		void ClientHandler::setup() noexcept
 		{
 		}
 
-		void ClientHandler::run() throw ()
+		void ClientHandler::run() noexcept
 		{
 			try {
 				// signal the active connection to the server
@@ -191,13 +191,13 @@ namespace dtn
 			(*_stream) << code << " " << msg << std::endl;
 		}
 
-		void ClientHandler::__cancellation() throw ()
+		void ClientHandler::__cancellation() noexcept
 		{
 			// close the stream
 			(*_stream).close();
 		}
 
-		void ClientHandler::finally() throw ()
+		void ClientHandler::finally() noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG("ClientHandler", 60) << "ApiConnection down" << IBRCOMMON_LOGGER_ENDL;
 
@@ -221,9 +221,9 @@ namespace dtn
 
 				virtual ~BundleFilter() {};
 
-				virtual dtn::data::Size limit() const throw () { return 0; };
+				virtual dtn::data::Size limit() const noexcept { return 0; };
 
-				virtual bool shouldAdd(const dtn::data::MetaBundle&) const throw (dtn::storage::BundleSelectorException)
+				virtual bool shouldAdd(const dtn::data::MetaBundle&) const noexcept (false)
 				{
 					return true;
 				}

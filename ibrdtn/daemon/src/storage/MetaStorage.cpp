@@ -34,17 +34,17 @@ namespace dtn
 		{
 		}
 
-		bool MetaStorage::contains(const dtn::data::BundleID &id) const throw ()
+		bool MetaStorage::contains(const dtn::data::BundleID &id) const noexcept
 		{
 			return (_bundle_lengths.find(id) != _bundle_lengths.end());
 		}
 
-		void MetaStorage::expire(const dtn::data::Timestamp &timestamp) throw ()
+		void MetaStorage::expire(const dtn::data::Timestamp &timestamp) noexcept
 		{
 			_list.expire(timestamp);
 		}
 
-		const dtn::data::MetaBundle& MetaStorage::find(const ibrcommon::BloomFilter &filter) const throw (NoBundleFoundException)
+		const dtn::data::MetaBundle& MetaStorage::find(const ibrcommon::BloomFilter &filter) const noexcept (false)
 		{
 			for (const_iterator iter = begin(); iter != end(); ++iter)
 			{
@@ -62,7 +62,7 @@ namespace dtn
 			throw NoBundleFoundException();
 		}
 
-		std::set<dtn::data::EID> MetaStorage::getDistinctDestinations() const throw ()
+		std::set<dtn::data::EID> MetaStorage::getDistinctDestinations() const noexcept
 		{
 			std::set<dtn::data::EID> ret;
 
@@ -79,7 +79,7 @@ namespace dtn
 			return ret;
 		}
 
-		void MetaStorage::store(const dtn::data::MetaBundle &meta, const dtn::data::Length &space) throw ()
+		void MetaStorage::store(const dtn::data::MetaBundle &meta, const dtn::data::Length &space) noexcept
 		{
 			// increment the storage size
 			_bundle_lengths[meta] = space;
@@ -91,7 +91,7 @@ namespace dtn
 			_priority_index.insert(meta);
 		}
 
-		dtn::data::Length MetaStorage::remove(const dtn::data::MetaBundle &meta) throw ()
+		dtn::data::Length MetaStorage::remove(const dtn::data::MetaBundle &meta) noexcept
 		{
 			// get length of the stored bundle
 			size_map::iterator it = _bundle_lengths.find(meta);
@@ -118,19 +118,19 @@ namespace dtn
 			return ret;
 		}
 
-		void MetaStorage::markRemoved(const dtn::data::MetaBundle &meta) throw ()
+		void MetaStorage::markRemoved(const dtn::data::MetaBundle &meta) noexcept
 		{
 			if (contains(meta)) {
 				_removal_set.insert(meta);
 			}
 		}
 
-		bool MetaStorage::isRemoved(const dtn::data::MetaBundle &meta) const throw ()
+		bool MetaStorage::isRemoved(const dtn::data::MetaBundle &meta) const noexcept
 		{
 			return (_removal_set.find(meta) != _removal_set.end());
 		}
 
-		bool MetaStorage::empty() throw ()
+		bool MetaStorage::empty() noexcept
 		{
 			if ( _priority_index.empty() )
 			{
@@ -140,12 +140,12 @@ namespace dtn
 			return size() == 0;
 		}
 
-		dtn::data::Size MetaStorage::size() throw ()
+		dtn::data::Size MetaStorage::size() noexcept
 		{
 			return _priority_index.size() - _removal_set.size();
 		}
 
-		void MetaStorage::clear() throw ()
+		void MetaStorage::clear() noexcept
 		{
 			_priority_index.clear();
 			_list.clear();

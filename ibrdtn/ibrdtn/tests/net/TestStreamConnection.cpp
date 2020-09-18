@@ -64,27 +64,27 @@ void TestStreamConnection::connectionUpDown()
 			_sockets.destroy();
 		};
 
-		void __cancellation() throw () {
+		void __cancellation() noexcept {
 			_running = false;
 			_sockets.down();
 		}
 
-		void eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases) throw () {};
-		void eventTimeout() throw () {};
-		void eventError() throw () {};
-		void eventBundleRefused() throw () {};
-		void eventBundleForwarded() throw () {};
-		void eventBundleAck(const dtn::data::Length &ack) throw ()
+		void eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases) noexcept {};
+		void eventTimeout() noexcept {};
+		void eventError() noexcept {};
+		void eventBundleRefused() noexcept {};
+		void eventBundleForwarded() noexcept {};
+		void eventBundleAck(const dtn::data::Length &ack) noexcept
 		{
 			std::cout << "server: ack received, value: " << ack << std::endl;
 		};
-		void eventConnectionUp(const dtn::streams::StreamContactHeader&) throw () {};
-		void eventConnectionDown() throw () {};
+		void eventConnectionUp(const dtn::streams::StreamContactHeader&) noexcept {};
+		void eventConnectionDown() noexcept {};
 
 		unsigned int recv_bundles;
 
 	protected:
-		void run() throw ()
+		void run() noexcept
 		{
 			ibrcommon::vaddress peeraddr;
 
@@ -142,23 +142,23 @@ void TestStreamConnection::connectionUpDown()
 			join();
 		};
 
-		void __cancellation() throw () {
+		void __cancellation() noexcept {
 			_stream.shutdown(dtn::streams::StreamConnection::CONNECTION_SHUTDOWN_ERROR);
 			_client.close();
 		}
 
-		void eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases) throw () {};
-		void eventTimeout() throw () {};
-		void eventError() throw () {};
-		void eventBundleRefused() throw () {};
-		void eventBundleForwarded() throw () {};
-		void eventBundleAck(const dtn::data::Length &ack) throw ()
+		void eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases) noexcept {};
+		void eventTimeout() noexcept {};
+		void eventError() noexcept {};
+		void eventBundleRefused() noexcept {};
+		void eventBundleForwarded() noexcept {};
+		void eventBundleAck(const dtn::data::Length &ack) noexcept
 		{
 			// std::cout << "client: ack received, value: " << ack << std::endl;
 		};
 
-		void eventConnectionUp(const dtn::streams::StreamContactHeader&) throw () {};
-		void eventConnectionDown() throw () {};
+		void eventConnectionUp(const dtn::streams::StreamContactHeader&) noexcept {};
+		void eventConnectionDown() noexcept {};
 
 		void handshake()
 		{
@@ -202,7 +202,7 @@ void TestStreamConnection::connectionUpDown()
 		}
 
 	protected:
-		void run() throw ()
+		void run() noexcept
 		{
 			try {
 				while (_client.good())

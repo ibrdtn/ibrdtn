@@ -58,12 +58,12 @@ namespace dtn
 			return _stream;
 		}
 
-		void LOWPANConnection::setup() throw ()
+		void LOWPANConnection::setup() noexcept
 		{
 			_sender.start();
 		}
 
-		void LOWPANConnection::finally() throw ()
+		void LOWPANConnection::finally() noexcept
 		{
 			_sender.stop();
 			_sender.join();
@@ -72,7 +72,7 @@ namespace dtn
 			_cl.remove(this);
 		}
 
-		void LOWPANConnection::run() throw ()
+		void LOWPANConnection::run() noexcept
 		{
 			try {
 				// create a filter context
@@ -112,7 +112,7 @@ namespace dtn
 			}
 		}
 
-		void LOWPANConnection::__cancellation() throw ()
+		void LOWPANConnection::__cancellation() noexcept
 		{
 			_sender.stop();
 		}
@@ -133,7 +133,7 @@ namespace dtn
 			_queue.push(job);
 		}
 
-		void LOWPANConnectionSender::run() throw ()
+		void LOWPANConnectionSender::run() noexcept
 		{
 			try {
 				// create a filter context
@@ -176,7 +176,7 @@ namespace dtn
 			}
 		}
 
-		void LOWPANConnectionSender::__cancellation() throw ()
+		void LOWPANConnectionSender::__cancellation() noexcept
 		{
 			_queue.abort();
 		}

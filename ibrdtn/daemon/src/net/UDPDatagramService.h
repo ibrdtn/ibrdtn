@@ -41,7 +41,7 @@ namespace dtn
 			 * Bind to the local socket.
 			 * @throw If the bind fails, an DatagramException is thrown.
 			 */
-			virtual void bind() throw (DatagramException);
+			virtual void bind() noexcept (false);
 
 			/**
 			 * Shutdown the socket. Unblock all calls on the socket (recv, send, etc.)
@@ -54,14 +54,14 @@ namespace dtn
 			 * @param buf The buffer to send.
 			 * @param length The number of available bytes in the buffer.
 			 */
-			virtual void send(const char &type, const char &flags, const unsigned int &seqno, const std::string &address, const char *buf, size_t length) throw (DatagramException);
+			virtual void send(const char &type, const char &flags, const unsigned int &seqno, const std::string &address, const char *buf, size_t length) noexcept (false);
 
 			/**
 			 * Send the payload as datagram to all neighbors (broadcast)
 			 * @param buf The buffer to send.
 			 * @param length The number of available bytes in the buffer.
 			 */
-			virtual void send(const char &type, const char &flags, const unsigned int &seqno, const char *buf, size_t length) throw (DatagramException);
+			virtual void send(const char &type, const char &flags, const unsigned int &seqno, const char *buf, size_t length) noexcept (false);
 
 			/**
 			 * Receive an incoming datagram.
@@ -71,7 +71,7 @@ namespace dtn
 			 * @throw If the receive call failed for any reason, an DatagramException is thrown.
 			 * @return The number of received bytes.
 			 */
-			virtual size_t recvfrom(char *buf, size_t length, char &type, char &flags, unsigned int &seqno, std::string &address) throw (DatagramException);
+			virtual size_t recvfrom(char *buf, size_t length, char &type, char &flags, unsigned int &seqno, std::string &address) noexcept (false);
 
 			/**
 			 * Get the service description for this convergence layer. This
@@ -99,7 +99,7 @@ namespace dtn
 			virtual const DatagramService::Parameter& getParameter() const;
 
 		private:
-			void send(const char &type, const char &flags, const unsigned int &seqno, const ibrcommon::vaddress &destination, const char *buf, size_t length) throw (DatagramException);
+			void send(const char &type, const char &flags, const unsigned int &seqno, const ibrcommon::vaddress &destination, const char *buf, size_t length) noexcept (false);
 
 			static const std::string encode(const ibrcommon::vaddress &address, const int port = 0);
 			static void decode(const std::string &identifier, ibrcommon::vaddress &address);

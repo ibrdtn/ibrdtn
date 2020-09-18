@@ -51,7 +51,7 @@ namespace dtn
 			return "DiscoveryAgent";
 		}
 
-		void DiscoveryAgent::raiseEvent(const dtn::core::TimeEvent&) throw ()
+		void DiscoveryAgent::raiseEvent(const dtn::core::TimeEvent&) noexcept
 		{
 			const dtn::data::Timestamp ts = dtn::utils::Clock::getMonotonicTimestamp();
 
@@ -64,7 +64,7 @@ namespace dtn
 			}
 		}
 
-		void DiscoveryAgent::raiseEvent(const dtn::core::GlobalEvent &global) throw ()
+		void DiscoveryAgent::raiseEvent(const dtn::core::GlobalEvent &global) noexcept
 		{
 			if (global.getAction() == dtn::core::GlobalEvent::GLOBAL_START_DISCOVERY) {
 				// start sending discovery beacons
@@ -85,7 +85,7 @@ namespace dtn
 			}
 		}
 
-		void DiscoveryAgent::componentUp() throw ()
+		void DiscoveryAgent::componentUp() noexcept
 		{
 			// listen to global events (discovery start/stop)
 			dtn::core::EventDispatcher<dtn::core::GlobalEvent>::add(this);
@@ -94,7 +94,7 @@ namespace dtn
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::add(this);
 		}
 
-		void DiscoveryAgent::componentDown() throw ()
+		void DiscoveryAgent::componentDown() noexcept
 		{
 			// un-listen to global events (discovery start/stop)
 			dtn::core::EventDispatcher<dtn::core::GlobalEvent>::remove(this);

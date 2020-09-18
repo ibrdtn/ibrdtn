@@ -39,12 +39,12 @@ namespace dtn
 			inotifysocket();
 			virtual ~inotifysocket();
 
-			virtual void up() throw (ibrcommon::socket_exception);
-			virtual void down() throw (ibrcommon::socket_exception);
+			virtual void up() noexcept (false);
+			virtual void down() noexcept (false);
 
-			void watch(const ibrcommon::File &path, int opts) throw (ibrcommon::socket_exception);
+			void watch(const ibrcommon::File &path, int opts) noexcept (false);
 
-			ssize_t read(char *data, size_t len) throw (ibrcommon::socket_exception);
+			ssize_t read(char *data, size_t len) noexcept (false);
 
 		private:
 
@@ -63,11 +63,11 @@ namespace dtn
 			const std::string getName() const;
 
 		protected:
-			void componentUp() throw ();
-			void componentRun() throw ();
-			void componentDown() throw ();
+			void componentUp() noexcept;
+			void componentRun() noexcept;
+			void componentDown() noexcept;
 
-			void __cancellation() throw ();
+			void __cancellation() noexcept;
 
 		private:
 			void scan();

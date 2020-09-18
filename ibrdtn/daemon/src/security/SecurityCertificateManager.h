@@ -44,7 +44,7 @@ namespace dtn
 			SecurityCertificateException(std::string what = "verification failed") : ibrcommon::Exception(what)
 			{};
 
-			virtual ~SecurityCertificateException() throw() {};
+			virtual ~SecurityCertificateException() noexcept {};
 		};
 
 		/*!
@@ -61,7 +61,7 @@ namespace dtn
 			/**
 			 * Listen for changes of the configuration
 			 */
-			virtual void onConfigurationChanged(const dtn::daemon::Configuration &conf) throw ();
+			virtual void onConfigurationChanged(const dtn::daemon::Configuration &conf) noexcept;
 
 			/*!
 			 * \brief Validates if the CommonName in the given X509 certificate corresponds to the given EID
@@ -69,7 +69,7 @@ namespace dtn
 			 * \param eid The EID of the sender.
 			 * \return returns true if the EID fits, false otherwise
 			 */
-			static void validateSubject(X509 *certificate, const std::string &cn) throw (SecurityCertificateException);
+			static void validateSubject(X509 *certificate, const std::string &cn) noexcept (false);
 
 			/*!
 			 * \brief checks if this class has already been initialized with a certificate and private key
@@ -96,8 +96,8 @@ namespace dtn
 			const ibrcommon::File& getTrustedCAPath() const;
 
 			/* functions from IntegratedComponent */
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
 
 			virtual const std::string getName() const;
 

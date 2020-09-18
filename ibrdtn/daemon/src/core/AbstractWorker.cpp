@@ -45,7 +45,7 @@ namespace dtn
 			shutdown();
 		}
 
-		void AbstractWorker::AbstractWorkerAsync::raiseEvent(const dtn::routing::QueueBundleEvent &queued) throw ()
+		void AbstractWorker::AbstractWorkerAsync::raiseEvent(const dtn::routing::QueueBundleEvent &queued) noexcept
 		{
 			// ignore fragments - we can not deliver them directly to the client
 			if (queued.bundle.isFragment()) return;
@@ -89,7 +89,7 @@ namespace dtn
 			join();
 		}
 
-		void AbstractWorker::AbstractWorkerAsync::run() throw ()
+		void AbstractWorker::AbstractWorkerAsync::run() noexcept
 		{
 			dtn::storage::BundleStorage &storage = BundleCore::getInstance().getStorage();
 
@@ -135,7 +135,7 @@ namespace dtn
 			}
 		}
 
-		void AbstractWorker::AbstractWorkerAsync::__cancellation() throw ()
+		void AbstractWorker::AbstractWorkerAsync::__cancellation() noexcept
 		{
 			// cancel the main thread in here
 			_receive_bundles.abort();

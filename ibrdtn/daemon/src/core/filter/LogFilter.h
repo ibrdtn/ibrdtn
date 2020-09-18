@@ -35,11 +35,11 @@ namespace dtn
 			LogFilter(const ibrcommon::LogLevel::Level level, const std::string &msg);
 			LogFilter(const int debug_level, const std::string &msg);
 			virtual ~LogFilter();
-			virtual ACTION evaluate(const FilterContext&) const throw ();
-			virtual ACTION filter(const FilterContext&, dtn::data::Bundle&) const throw ();
+			virtual ACTION evaluate(const FilterContext&) const noexcept;
+			virtual ACTION filter(const FilterContext&, dtn::data::Bundle&) const noexcept;
 
 		private:
-			void log(const FilterContext &context) const throw ();
+			void log(const FilterContext &context) const noexcept;
 
 			const static std::string TAG;
 			const ibrcommon::LogLevel::Level _level;

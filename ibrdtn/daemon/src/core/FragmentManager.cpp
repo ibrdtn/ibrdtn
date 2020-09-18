@@ -59,20 +59,20 @@ namespace dtn
 			return "FragmentManager";
 		}
 
-		void FragmentManager::__cancellation() throw ()
+		void FragmentManager::__cancellation() noexcept
 		{
 			_running = false;
 			_incoming.abort();
 		}
 
-		void FragmentManager::componentUp() throw ()
+		void FragmentManager::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			dtn::core::EventDispatcher<dtn::routing::QueueBundleEvent>::add(this);
 			_running = true;
 		}
 
-		void FragmentManager::componentRun() throw ()
+		void FragmentManager::componentRun() noexcept
 		{
 			// get reference to the storage
 			dtn::storage::BundleStorage &storage = dtn::core::BundleCore::getInstance().getStorage();
@@ -166,7 +166,7 @@ namespace dtn
 			} catch (const ibrcommon::QueueUnblockedException&) { }
 		}
 
-		void FragmentManager::componentDown() throw ()
+		void FragmentManager::componentDown() noexcept
 		{
 			dtn::core::EventDispatcher<dtn::routing::QueueBundleEvent>::remove(this);
 
@@ -174,7 +174,7 @@ namespace dtn
 			join();
 		}
 
-		void FragmentManager::raiseEvent(const dtn::routing::QueueBundleEvent &queued) throw ()
+		void FragmentManager::raiseEvent(const dtn::routing::QueueBundleEvent &queued) noexcept
 		{
 			// process fragments
 			if (!queued.bundle.isFragment()) return;
@@ -204,9 +204,9 @@ namespace dtn
 
 				virtual ~BundleFilter() {};
 
-				virtual dtn::data::Size limit() const throw () { return 0; };
+				virtual dtn::data::Size limit() const noexcept { return 0; };
 
-				virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+				virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const noexcept (false)
 				{
 					// fragments only
 					if (!meta.isFragment()) return false;
@@ -232,7 +232,7 @@ namespace dtn
 			} catch (const dtn::storage::NoBundleFoundException&) { }
 		}
 
-		void FragmentManager::setOffset(const dtn::data::EID &peer, const dtn::data::BundleID &id, const dtn::data::Length &abs_offset, const dtn::data::Length &frag_offset) throw ()
+		void FragmentManager::setOffset(const dtn::data::EID &peer, const dtn::data::BundleID &id, const dtn::data::Length &abs_offset, const dtn::data::Length &frag_offset) noexcept
 		{
 			try {
 				Transmission t;
@@ -254,7 +254,7 @@ namespace dtn
 			} catch (const dtn::storage::NoBundleFoundException&) { };
 		}
 
-		dtn::data::Length FragmentManager::getOffset(const dtn::data::EID &peer, const dtn::data::BundleID &id) throw ()
+		dtn::data::Length FragmentManager::getOffset(const dtn::data::EID &peer, const dtn::data::BundleID &id) noexcept
 		{
 			ibrcommon::MutexLock l(_offsets_mutex);
 			for (std::set<Transmission>::const_iterator iter = _offsets.begin(); iter != _offsets.end(); ++iter)
@@ -268,7 +268,7 @@ namespace dtn
 			return 0;
 		}
 
-		dtn::data::Length FragmentManager::get_payload_offset(const dtn::data::Bundle &bundle, const dtn::data::Length &abs_offset, const dtn::data::Length &frag_offset) throw ()
+		dtn::data::Length FragmentManager::get_payload_offset(const dtn::data::Bundle &bundle, const dtn::data::Length &abs_offset, const dtn::data::Length &frag_offset) noexcept
 		{
 			try {
 				// build the dictionary for EID lookup
@@ -320,7 +320,7 @@ namespace dtn
 			}
 		}
 
-		void FragmentManager::split(const dtn::data::Bundle &bundle, const dtn::data::Length &maxPayloadLength, std::list<dtn::data::Bundle> &fragments) throw (FragmentationAbortedException)
+		void FragmentManager::split(const dtn::data::Bundle &bundle, const dtn::data::Length &maxPayloadLength, std::list<dtn::data::Bundle> &fragments) noexcept (false)
 		{
 			// get bundle DONT_FRAGMENT Flag
 			if (bundle.get(dtn::data::PrimaryBlock::DONT_FRAGMENT))

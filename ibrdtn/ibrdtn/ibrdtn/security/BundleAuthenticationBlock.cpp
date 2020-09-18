@@ -74,7 +74,7 @@ namespace dtn
 			bab_end._security_result.set(SecurityBlock::integrity_signature, sizehash_hash);
 		}
 
-		void BundleAuthenticationBlock::verify(const dtn::data::Bundle &bundle, const dtn::security::SecurityKey &key) throw (SecurityException)
+		void BundleAuthenticationBlock::verify(const dtn::data::Bundle &bundle, const dtn::security::SecurityKey &key) noexcept (false)
 		{
 			// store the correlator of the verified BABs
 			dtn::data::Number correlator;
@@ -110,7 +110,7 @@ namespace dtn
 			bundle.erase(std::remove(bundle.begin(), bundle.end(), BundleAuthenticationBlock::BLOCK_TYPE), bundle.end());
 		}
 
-		void BundleAuthenticationBlock::verify(const dtn::data::Bundle& bundle, const dtn::security::SecurityKey &key, dtn::data::Number &correlator) throw (SecurityException)
+		void BundleAuthenticationBlock::verify(const dtn::data::Bundle& bundle, const dtn::security::SecurityKey &key, dtn::data::Number &correlator) noexcept (false)
 		{
 			// get the blocks, with which the key should match
 			std::set<dtn::data::Number> correlators;

@@ -70,8 +70,8 @@ namespace dtn
 				bool isStalled();
 
 			protected:
-				void run() throw ();
-				virtual void __cancellation() throw ();
+				void run() noexcept;
+				virtual void __cancellation() noexcept;
 
 			private:
 				EventSwitch &_switch;
@@ -91,8 +91,8 @@ namespace dtn
 				void down();
 
 			protected:
-				void run() throw ();
-				virtual void __cancellation() throw ();
+				void run() noexcept;
+				virtual void __cancellation() noexcept;
 
 			private:
 				EventSwitch &_switch;
@@ -116,8 +116,8 @@ namespace dtn
 			void process(ibrcommon::TimeMeasurement &tm, bool &inprogress, bool profiling);
 
 		protected:
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
 
 			bool isStalled();
 

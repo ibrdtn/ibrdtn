@@ -45,11 +45,11 @@ namespace dtn
 			join();
 		}
 
-		void WifiP2PManager::__cancellation() throw ()
+		void WifiP2PManager::__cancellation() noexcept
 		{
 		}
 
-		void WifiP2PManager::componentUp() throw ()
+		void WifiP2PManager::componentUp() noexcept
 		{
 			IBRCOMMON_LOGGER_TAG(WifiP2PManager::TAG, info) << "initialized" << IBRCOMMON_LOGGER_ENDL;
 
@@ -59,7 +59,7 @@ namespace dtn
 			dtn::core::BundleCore::getInstance().getConnectionManager().add(this);
 		}
 
-		void WifiP2PManager::componentRun() throw ()
+		void WifiP2PManager::componentRun() noexcept
 		{
 			while (_running) {
 				try {
@@ -76,7 +76,7 @@ namespace dtn
 
 		}
 
-		void WifiP2PManager::componentDown() throw ()
+		void WifiP2PManager::componentDown() noexcept
 		{
 
 			// iterates over all connections being established

@@ -61,25 +61,25 @@ namespace dtn
 				 * should guarantee that blocking calls in componentRun()
 				 * will unblock.
 				 */
-				virtual void __cancellation() throw ();
+				virtual void __cancellation() noexcept;
 
 				/**
 				 * Is called in preparation of the component.
 				 * Before componentRun() is called.
 				 */
-				virtual void componentUp() throw ();
+				virtual void componentUp() noexcept;
 
 				/**
 				 * This is the run method. The component should loop in there
 				 * until componentDown() or __cancellation() is called.
 				 */
-				virtual void componentRun() throw ();
+				virtual void componentRun() noexcept;
 
 				/**
 				 * This method is called if the component should stop. Clean-up
 				 * code should be inserted here.
 				 */
-				virtual void componentDown() throw ();
+				virtual void componentDown() noexcept;
 
 				/**
 				 * Return an identifier for this component
@@ -95,8 +95,8 @@ namespace dtn
 				/**
 				 * Receives incoming events.
 				 */
-				virtual void raiseEvent(const dtn::security::KeyExchangeEvent &evt) throw ();
-				virtual void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
+				virtual void raiseEvent(const dtn::security::KeyExchangeEvent &evt) noexcept;
+				virtual void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
 
 				/**
 				 * KeyExchangeManager methods
@@ -114,7 +114,7 @@ namespace dtn
 						/**
 						 * Execute the code associated with this task.
 						 */
-						virtual void execute(KeyExchanger &exchanger) throw () = 0;
+						virtual void execute(KeyExchanger &exchanger) noexcept = 0;
 				};
 
 				class ExchangeTask : public Task
@@ -126,7 +126,7 @@ namespace dtn
 						/**
 						 * Execute the code associated with this task.
 						 */
-						virtual void execute(KeyExchanger &exchanger) throw ();
+						virtual void execute(KeyExchanger &exchanger) noexcept;
 
 					private:
 						const dtn::data::EID _peer;
@@ -142,7 +142,7 @@ namespace dtn
 						/**
 						 * Execute the code associated with this task.
 						 */
-						virtual void execute(KeyExchanger &exchanger) throw ();
+						virtual void execute(KeyExchanger &exchanger) noexcept;
 
 					private:
 						const dtn::data::Timestamp _timestamp;
@@ -150,7 +150,7 @@ namespace dtn
 
 				KeyExchangeSession& createSession(KeyExchangeProtocol &p, const dtn::data::EID &peer);
 				KeyExchangeSession& createSession(KeyExchangeProtocol &p, const dtn::data::EID &peer, const dtn::security::KeyExchangeData &data);
-				KeyExchangeSession& getSession(const dtn::data::EID &peer, const dtn::security::KeyExchangeData &data) throw (ibrcommon::Exception);
+				KeyExchangeSession& getSession(const dtn::data::EID &peer, const dtn::security::KeyExchangeData &data) noexcept (false);
 				void freeSession(const dtn::data::EID &peer, const unsigned int uniqueId);
 
 				void expire(const dtn::data::Timestamp timestamp);

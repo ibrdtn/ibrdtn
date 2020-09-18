@@ -37,7 +37,7 @@ public:
 		dtn::core::EventDispatcher<EVENT>::remove(this);
 	}
 
-	void raiseEvent(const EVENT&) throw () {
+	void raiseEvent(const EVENT&) noexcept {
 		ibrcommon::MutexLock l(event_cond);
 		event_counter++;
 		event_cond.signal(true);

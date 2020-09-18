@@ -36,17 +36,17 @@ namespace dtn
 			class Listener {
 			public:
 				virtual ~Listener() = 0;
-				virtual void eventBundleExpired(const dtn::data::MetaBundle&) throw () = 0;
+				virtual void eventBundleExpired(const dtn::data::MetaBundle&) noexcept = 0;
 			};
 
 			BundleList(BundleList::Listener *listener = NULL);
 			virtual ~BundleList();
 
-			virtual void add(const dtn::data::MetaBundle &bundle) throw ();
-			virtual void remove(const dtn::data::MetaBundle &bundle) throw ();
-			virtual void clear() throw ();
+			virtual void add(const dtn::data::MetaBundle &bundle) noexcept;
+			virtual void remove(const dtn::data::MetaBundle &bundle) noexcept;
+			virtual void clear() noexcept;
 
-			virtual void expire(const Timestamp &timestamp) throw ();
+			virtual void expire(const Timestamp &timestamp) noexcept;
 
 			typedef std::set<dtn::data::MetaBundle> meta_set;
 			typedef meta_set::iterator iterator;

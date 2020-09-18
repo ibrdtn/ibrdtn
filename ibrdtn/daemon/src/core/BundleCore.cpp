@@ -102,9 +102,9 @@ namespace dtn
 			dtn::core::EventDispatcher<dtn::net::TransferAbortedEvent>::remove(this);
 		}
 
-		void BundleCore::componentUp() throw ()
+		void BundleCore::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			onConfigurationChanged(dtn::daemon::Configuration::getInstance());
 
 			// initialize connection manager
@@ -123,7 +123,7 @@ namespace dtn
 			_disco_agent.startup();
 		}
 
-		void BundleCore::componentDown() throw ()
+		void BundleCore::componentDown() noexcept
 		{
 			ibrcommon::LinkManager::getInstance().removeEventListener(this);
 
@@ -137,7 +137,7 @@ namespace dtn
 			_clock.terminate();
 		}
 
-		void BundleCore::onConfigurationChanged(const dtn::daemon::Configuration &config) throw ()
+		void BundleCore::onConfigurationChanged(const dtn::daemon::Configuration &config) noexcept
 		{
 			// set local eid
 			dtn::core::BundleCore::local = config.getNodename();
@@ -282,7 +282,7 @@ namespace dtn
 			return _globally_connected;
 		}
 
-		void BundleCore::raiseEvent(const dtn::routing::QueueBundleEvent &queued) throw ()
+		void BundleCore::raiseEvent(const dtn::routing::QueueBundleEvent &queued) noexcept
 		{
 			try {
 				// get reference to the meta data of the bundle
@@ -341,7 +341,7 @@ namespace dtn
 			}
 		}
 
-		void BundleCore::raiseEvent(const dtn::net::TransferCompletedEvent &completed) throw ()
+		void BundleCore::raiseEvent(const dtn::net::TransferCompletedEvent &completed) noexcept
 		{
 			const dtn::data::MetaBundle &meta = completed.getBundle();
 			const dtn::data::EID &peer = completed.getPeer();
@@ -360,7 +360,7 @@ namespace dtn
 			}
 		}
 
-		void BundleCore::raiseEvent(const dtn::net::TransferAbortedEvent &aborted) throw ()
+		void BundleCore::raiseEvent(const dtn::net::TransferAbortedEvent &aborted) noexcept
 		{
 			if (aborted.reason != dtn::net::TransferAbortedEvent::REASON_REFUSED) return;
 
@@ -382,7 +382,7 @@ namespace dtn
 			} catch (const dtn::storage::NoBundleFoundException&) { };
 		}
 
-		void BundleCore::raiseEvent(const dtn::core::BundlePurgeEvent &purge) throw ()
+		void BundleCore::raiseEvent(const dtn::core::BundlePurgeEvent &purge) noexcept
 		{
 			// get the global storage
 			dtn::storage::BundleStorage &storage = dtn::core::BundleCore::getInstance().getStorage();
@@ -393,7 +393,7 @@ namespace dtn
 			} catch (const dtn::storage::NoBundleFoundException&) { };
 		}
 
-		void BundleCore::validate(const dtn::data::MetaBundle &obj) const throw (dtn::data::Validator::RejectedException)
+		void BundleCore::validate(const dtn::data::MetaBundle &obj) const noexcept (false)
 		{
 			if (dtn::utils::Clock::isExpired(obj)) {
 				// ... bundle is expired
@@ -435,7 +435,7 @@ namespace dtn
 				throw dtn::data::Validator::RejectedException("rejected by filter");
 		}
 
-		void BundleCore::validate(const dtn::data::PrimaryBlock &p) const throw (dtn::data::Validator::RejectedException)
+		void BundleCore::validate(const dtn::data::PrimaryBlock &p) const noexcept (false)
 		{
 			// check if the bundle is expired
 			if (dtn::utils::Clock::isExpired(p.timestamp, p.lifetime))
@@ -495,7 +495,7 @@ namespace dtn
 				throw dtn::data::Validator::RejectedException("rejected by filter");
 		}
 
-		void BundleCore::validate(const dtn::data::Block& block, const dtn::data::Number& size) const throw (dtn::data::Validator::RejectedException)
+		void BundleCore::validate(const dtn::data::Block& block, const dtn::data::Number& size) const noexcept (false)
 		{
 			// check for the size of the block
 			// reject a block if it exceeds the payload limit
@@ -514,7 +514,7 @@ namespace dtn
 				throw dtn::data::Validator::RejectedException("rejected by filter");
 		}
 
-		void BundleCore::validate(const dtn::data::PrimaryBlock &bundle, const dtn::data::Block& block, const dtn::data::Number& size) const throw (RejectedException)
+		void BundleCore::validate(const dtn::data::PrimaryBlock &bundle, const dtn::data::Block& block, const dtn::data::Number& size) const noexcept (false)
 		{
 			// check for the size of the foreign block
 			// reject a block if it exceeds the payload limit
@@ -550,7 +550,7 @@ namespace dtn
 				throw dtn::data::Validator::RejectedException("rejected by filter");
 		}
 
-		void BundleCore::validate(const dtn::data::Bundle &b) const throw (dtn::data::Validator::RejectedException)
+		void BundleCore::validate(const dtn::data::Bundle &b) const noexcept (false)
 		{
 			// reject bundles without destination
 			if (b.destination.isNone())
@@ -800,7 +800,7 @@ namespace dtn
 			_globally_connected = val;
 		}
 
-		void BundleCore::check_connection_state() throw ()
+		void BundleCore::check_connection_state() noexcept
 		{
 			const std::set<ibrcommon::vinterface> &global_nets = dtn::daemon::Configuration::getInstance().getNetwork().getInternetDevices();
 
@@ -817,7 +817,7 @@ namespace dtn
 			}
 		}
 
-		void BundleCore::reload_filter_tables() throw ()
+		void BundleCore::reload_filter_tables() noexcept
 		{
 			ibrcommon::RWLock l(_filter_mutex);
 

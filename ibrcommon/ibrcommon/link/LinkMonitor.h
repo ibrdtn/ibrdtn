@@ -43,12 +43,12 @@ namespace ibrcommon
 		LinkMonitor(LinkManager &lm);
 		virtual ~LinkMonitor();
 
-		void add(const ibrcommon::vinterface &iface) throw ();
-		void remove() throw ();
+		void add(const ibrcommon::vinterface &iface) noexcept;
+		void remove() noexcept;
 
 	protected:
-		void run() throw ();
-		void __cancellation() throw ();
+		void run() noexcept;
+		void __cancellation() noexcept;
 
 	private:
 		ibrcommon::Conditional _cond;

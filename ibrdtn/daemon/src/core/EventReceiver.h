@@ -33,7 +33,7 @@ namespace dtn
 		{
 		public:
 			virtual ~EventReceiver() { };
-			virtual void raiseEvent(const E &evt) throw () = 0;
+			virtual void raiseEvent(const E &evt) noexcept = 0;
 		};
 	}
 }

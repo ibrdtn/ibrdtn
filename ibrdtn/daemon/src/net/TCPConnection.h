@@ -68,12 +68,12 @@ namespace dtn
 			/**
 			 * This method is called after accept()
 			 */
-			virtual void initialize() throw ();
+			virtual void initialize() noexcept;
 
 			/**
 			 * shutdown the whole tcp connection
 			 */
-			void shutdown() throw ();
+			void shutdown() noexcept;
 
 			/**
 			 * Get the header of this connection
@@ -90,18 +90,18 @@ namespace dtn
 			/**
 			 * callback methods for tcpstream
 			 */
-			virtual void eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases csc) throw ();
-			virtual void eventTimeout() throw ();
-			virtual void eventError() throw ();
-			virtual void eventConnectionUp(const dtn::streams::StreamContactHeader &header) throw ();
-			virtual void eventConnectionDown() throw ();
+			virtual void eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases csc) noexcept;
+			virtual void eventTimeout() noexcept;
+			virtual void eventError() noexcept;
+			virtual void eventConnectionUp(const dtn::streams::StreamContactHeader &header) noexcept;
+			virtual void eventConnectionDown() noexcept;
 
-			virtual void eventBundleRefused() throw ();
-			virtual void eventBundleForwarded() throw ();
-			virtual void eventBundleAck(const dtn::data::Length &ack) throw ();
+			virtual void eventBundleRefused() noexcept;
+			virtual void eventBundleForwarded() noexcept;
+			virtual void eventBundleAck(const dtn::data::Length &ack) noexcept;
 
-			virtual void addTrafficIn(size_t) throw ();
-			virtual void addTrafficOut(size_t) throw ();
+			virtual void addTrafficIn(size_t) noexcept;
+			virtual void addTrafficOut(size_t) noexcept;
 
 			dtn::core::Node::Protocol getDiscoveryProtocol() const;
 
@@ -125,18 +125,18 @@ namespace dtn
 		protected:
 			void rejectTransmission();
 
-			void setup() throw ();
+			void setup() noexcept;
 			void connect();
-			void run() throw ();
-			void finally() throw ();
-			void __cancellation() throw ();
+			void run() noexcept;
+			void finally() noexcept;
+			void __cancellation() noexcept;
 
 			void clearQueue();
 
 			void keepalive();
 			bool good() const;
 
-			void initiateExtendedHandshake() throw (ibrcommon::Exception);
+			void initiateExtendedHandshake() noexcept (false);
 
 		private:
 			class KeepaliveSender : public ibrcommon::JoinableThread
@@ -148,12 +148,12 @@ namespace dtn
 				/**
 				 * run method of the thread
 				 */
-				void run() throw ();
+				void run() noexcept;
 
 				/**
 				 * soft-cancellation function
 				 */
-				void __cancellation() throw ();
+				void __cancellation() noexcept;
 
 			private:
 				ibrcommon::Conditional _wait;
@@ -168,9 +168,9 @@ namespace dtn
 				virtual ~Sender();
 
 			protected:
-				void run() throw ();
-				void finally() throw ();
-				void __cancellation() throw ();
+				void run() noexcept;
+				void finally() noexcept;
+				void __cancellation() noexcept;
 
 			private:
 				TCPConnection &_connection;
@@ -185,7 +185,7 @@ namespace dtn
 			 * Return a thread-safe reference to the protocol stream
 			 * This method will throw an exception if the stream is NULL
 			 */
-			safe_streamconnection getProtocolStream() throw (ibrcommon::Exception);
+			safe_streamconnection getProtocolStream() noexcept (false);
 
 			dtn::streams::StreamContactHeader _peer;
 			dtn::core::Node _node;

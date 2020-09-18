@@ -153,7 +153,7 @@ namespace dtn
 			return _st;
 		}
 
-		void SQLiteDatabase::Statement::reset() throw ()
+		void SQLiteDatabase::Statement::reset() noexcept
 		{
 			if (_st != NULL) {
 				sqlite3_reset(_st);
@@ -161,7 +161,7 @@ namespace dtn
 			}
 		}
 
-		int SQLiteDatabase::Statement::step() throw (SQLiteDatabase::SQLiteQueryException)
+		int SQLiteDatabase::Statement::step() noexcept (false)
 		{
 			if (_st == NULL)
 				throw SQLiteQueryException("statement not prepared");
@@ -188,7 +188,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::Statement::prepare() throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::Statement::prepare() noexcept (false)
 		{
 			if (_st != NULL)
 				throw SQLiteQueryException("already prepared");
@@ -210,7 +210,7 @@ namespace dtn
 		{
 		}
 
-		int SQLiteDatabase::getVersion() throw (SQLiteDatabase::SQLiteQueryException)
+		int SQLiteDatabase::getVersion() noexcept (false)
 		{
 			// Check version of SQLiteDB
 			int version = 0;
@@ -232,7 +232,7 @@ namespace dtn
 			return version;
 		}
 
-		void SQLiteDatabase::setVersion(int version) throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::setVersion(int version) noexcept (false)
 		{
 			std::stringstream ss; ss << version;
 			Statement st(_database, SET_SCHEMAVERSION);
@@ -247,7 +247,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::doUpgrade(int oldVersion, int newVersion) throw (ibrcommon::Exception)
+		void SQLiteDatabase::doUpgrade(int oldVersion, int newVersion) noexcept (false)
 		{
 			if (oldVersion > newVersion)
 			{
@@ -302,7 +302,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::open() throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::open() noexcept (false)
 		{
 			//Configure SQLite Library
 			SQLiteConfigure::configure();
@@ -361,7 +361,7 @@ namespace dtn
 			SQLiteConfigure::shutdown();
 		}
 
-		void SQLiteDatabase::get(const dtn::data::BundleID &id, dtn::data::MetaBundle &meta) const throw (SQLiteDatabase::SQLiteQueryException, NoBundleFoundException)
+		void SQLiteDatabase::get(const dtn::data::BundleID &id, dtn::data::MetaBundle &meta) const noexcept (false)
 		{
 			// lock the prepared statement
 			Statement st(_database, _sql_queries[BUNDLE_GET_ID]);
@@ -382,7 +382,7 @@ namespace dtn
 			get(st, meta);
 		}
 
-		void SQLiteDatabase::get(Statement &st, dtn::data::MetaBundle &bundle, int offset) const throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::get(Statement &st, dtn::data::MetaBundle &bundle, int offset) const noexcept (false)
 		{
 			try {
 				bundle.source = dtn::data::EID( (const char*) sqlite3_column_text(*st, offset) );
@@ -429,7 +429,7 @@ namespace dtn
 			bundle.setPayloadLength(sqlite3_column_int64(*st, offset + 13));
 		}
 
-		void SQLiteDatabase::get(Statement &st, dtn::data::Bundle &bundle, const int offset) const throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::get(Statement &st, dtn::data::Bundle &bundle, const int offset) const noexcept (false)
 		{
 			try {
 				bundle.source = dtn::data::EID( (const char*) sqlite3_column_text(*st, offset + 0) );
@@ -454,7 +454,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::iterateAll() throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::iterateAll() noexcept (false)
 		{
 			Statement st(_database, _sql_queries[BUNDLE_GET_ITERATOR]);
 			// abort if enough bundles are found
@@ -472,7 +472,7 @@ namespace dtn
 			st.reset();
 		}
 
-		void SQLiteDatabase::get(const BundleSelector &cb, BundleResult &ret) throw (NoBundleFoundException, BundleSelectorException)
+		void SQLiteDatabase::get(const BundleSelector &cb, BundleResult &ret) noexcept (false)
 		{
 			size_t items_added = 0;
 
@@ -523,7 +523,7 @@ namespace dtn
 			if (items_added == 0) throw dtn::storage::NoBundleFoundException();
 		}
 
-		void SQLiteDatabase::__get(const BundleSelector &cb, Statement &st, BundleResult &ret, size_t &items_added, const int bind_offset, const size_t offset, const size_t query_limit) const throw (SQLiteDatabase::SQLiteQueryException, NoBundleFoundException, BundleSelectorException)
+		void SQLiteDatabase::__get(const BundleSelector &cb, Statement &st, BundleResult &ret, size_t &items_added, const int bind_offset, const size_t offset, const size_t query_limit) const noexcept (false)
 		{
 			const bool unlimited = (cb.limit() <= 0);
 
@@ -562,7 +562,7 @@ namespace dtn
 			st.reset();
 		}
 
-		void SQLiteDatabase::get(const dtn::data::BundleID &id, dtn::data::Bundle &bundle, blocklist &blocks) const throw (SQLiteDatabase::SQLiteQueryException, NoBundleFoundException)
+		void SQLiteDatabase::get(const dtn::data::BundleID &id, dtn::data::Bundle &bundle, blocklist &blocks) const noexcept (false)
 		{
 			int err = 0;
 
@@ -623,7 +623,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::store(const dtn::data::Bundle &bundle, const dtn::data::Length &size) throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::store(const dtn::data::Bundle &bundle, const dtn::data::Length &size) noexcept (false)
 		{
 			int err;
 
@@ -694,7 +694,7 @@ namespace dtn
 			new_expire_time(expire_time);
 		}
 
-		void SQLiteDatabase::store(const dtn::data::BundleID &id, int index, const dtn::data::Block &block, const ibrcommon::File &file) throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::store(const dtn::data::BundleID &id, int index, const dtn::data::Block &block, const ibrcommon::File &file) noexcept (false)
 		{
 			int blocktyp = (int)block.getType();
 
@@ -720,7 +720,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::transaction() throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::transaction() noexcept (false)
 		{
 			char *zErrMsg = 0;
 
@@ -735,7 +735,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::rollback() throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::rollback() noexcept (false)
 		{
 			char *zErrMsg = 0;
 
@@ -750,7 +750,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::commit() throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::commit() noexcept (false)
 		{
 			char *zErrMsg = 0;
 
@@ -765,7 +765,7 @@ namespace dtn
 			}
 		}
 
-		dtn::data::Length SQLiteDatabase::remove(const dtn::data::BundleID &id) throw (SQLiteDatabase::SQLiteQueryException)
+		dtn::data::Length SQLiteDatabase::remove(const dtn::data::BundleID &id) noexcept (false)
 		{
 			// return value (size of the bundle in bytes)
 			dtn::data::Length ret = 0;
@@ -823,7 +823,7 @@ namespace dtn
 			return ret;
 		}
 
-		void SQLiteDatabase::clear() throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::clear() noexcept (false)
 		{
 			Statement vacuum(_database, _sql_queries[VACUUM]);
 			Statement bundle_clear(_database, _sql_queries[BUNDLE_CLEAR]);
@@ -840,7 +840,7 @@ namespace dtn
 			reset_expire_time();
 		}
 
-		bool SQLiteDatabase::contains(const dtn::data::BundleID &id) throw (SQLiteDatabase::SQLiteQueryException)
+		bool SQLiteDatabase::contains(const dtn::data::BundleID &id) noexcept (false)
 		{
 			// lock the prepared statement
 			Statement st(_database, _sql_queries[BUNDLE_GET_ID]);
@@ -852,7 +852,7 @@ namespace dtn
 			return !((st.step() != SQLITE_ROW) || _faulty);
 		}
 
-		bool SQLiteDatabase::empty() const throw (SQLiteDatabase::SQLiteQueryException)
+		bool SQLiteDatabase::empty() const noexcept (false)
 		{
 			Statement st(_database, _sql_queries[EMPTY_CHECK]);
 
@@ -866,7 +866,7 @@ namespace dtn
 			}
 		}
 
-		size_t SQLiteDatabase::count() const throw (SQLiteDatabase::SQLiteQueryException)
+		size_t SQLiteDatabase::count() const noexcept (false)
 		{
 			size_t rows = 0;
 			int err = 0;
@@ -887,7 +887,7 @@ namespace dtn
 			return rows;
 		}
 
-		const std::set<dtn::data::EID> SQLiteDatabase::getDistinctDestinations() throw (SQLiteDatabase::SQLiteQueryException)
+		const std::set<dtn::data::EID> SQLiteDatabase::getDistinctDestinations() noexcept (false)
 		{
 			std::set<dtn::data::EID> ret;
 
@@ -904,7 +904,7 @@ namespace dtn
 			return ret;
 		}
 
-		void SQLiteDatabase::update_expire_time() throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::update_expire_time() noexcept (false)
 		{
 			Statement st(_database, _sql_queries[EXPIRE_NEXT_TIMESTAMP]);
 
@@ -920,7 +920,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::expire(const dtn::data::Timestamp &timestamp) throw ()
+		void SQLiteDatabase::expire(const dtn::data::Timestamp &timestamp) noexcept
 		{
 			/*
 			 * Only if the actual time is bigger or equal than the time when the next bundle expires, deleteexpired is called.
@@ -998,13 +998,13 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::vacuum() throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::vacuum() noexcept (false)
 		{
 			Statement st(_database, _sql_queries[VACUUM]);
 			st.step();
 		}
 
-		void SQLiteDatabase::update(UPDATE_VALUES mode, const dtn::data::BundleID &id, const dtn::data::EID &eid) throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::update(UPDATE_VALUES mode, const dtn::data::BundleID &id, const dtn::data::EID &eid) noexcept (false)
 		{
 			if (mode == UPDATE_CUSTODIAN)
 			{
@@ -1026,7 +1026,7 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::new_expire_time(const dtn::data::Timestamp &ttl) throw ()
+		void SQLiteDatabase::new_expire_time(const dtn::data::Timestamp &ttl) noexcept
 		{
 			if (_next_expiration == 0 || ttl < _next_expiration)
 			{
@@ -1034,17 +1034,17 @@ namespace dtn
 			}
 		}
 
-		void SQLiteDatabase::reset_expire_time() throw ()
+		void SQLiteDatabase::reset_expire_time() noexcept
 		{
 			_next_expiration = 0;
 		}
 
-		const dtn::data::Timestamp& SQLiteDatabase::get_expire_time() const throw ()
+		const dtn::data::Timestamp& SQLiteDatabase::get_expire_time() const noexcept
 		{
 			return _next_expiration;
 		}
 
-		void SQLiteDatabase::set_bundleid(Statement &st, const dtn::data::BundleID &id, int offset) const throw (SQLiteDatabase::SQLiteQueryException)
+		void SQLiteDatabase::set_bundleid(Statement &st, const dtn::data::BundleID &id, int offset) const noexcept (false)
 		{
 			sqlite3_bind_text(*st, offset + 1, id.source.getString().c_str(), static_cast<int>(id.source.getString().length()), SQLITE_TRANSIENT);
 			sqlite3_bind_int64(*st, offset + 2, id.timestamp.get<uint64_t>());

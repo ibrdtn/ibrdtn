@@ -40,7 +40,7 @@ namespace dtn
 			join();
 		}
 
-		void IndependentComponent::initialize() throw ()
+		void IndependentComponent::initialize() noexcept
 		{
 			// reset thread if necessary
 			if (JoinableThread::isFinalized()) JoinableThread::reset();
@@ -48,7 +48,7 @@ namespace dtn
 			componentUp();
 		}
 
-		void IndependentComponent::startup() throw ()
+		void IndependentComponent::startup() noexcept
 		{
 			try {
 				JoinableThread::start();
@@ -57,13 +57,13 @@ namespace dtn
 			}
 		}
 
-		void IndependentComponent::terminate() throw ()
+		void IndependentComponent::terminate() noexcept
 		{
 			componentDown();
 			JoinableThread::stop();
 		}
 
-		void IndependentComponent::run() throw ()
+		void IndependentComponent::run() noexcept
 		{
 			componentRun();
 		}
@@ -76,17 +76,17 @@ namespace dtn
 		{
 		}
 
-		void IntegratedComponent::initialize() throw ()
+		void IntegratedComponent::initialize() noexcept
 		{
 			componentUp();
 		}
 
-		void IntegratedComponent::startup() throw ()
+		void IntegratedComponent::startup() noexcept
 		{
 			// nothing to do
 		}
 
-		void IntegratedComponent::terminate() throw ()
+		void IntegratedComponent::terminate() noexcept
 		{
 			componentDown();
 		}

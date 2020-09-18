@@ -145,7 +145,7 @@ namespace dtn
 			}
 		}
 
-		void NeighborDatabase::NeighborEntry::acquireTransfer(const dtn::data::BundleID &id) throw (NoMoreTransfersAvailable, AlreadyInTransitException)
+		void NeighborDatabase::NeighborEntry::acquireTransfer(const dtn::data::BundleID &id) noexcept (false)
 		{
 			// check if enough resources available to transfer the bundle
 			if (_transit_bundles.size() >= dtn::core::BundleCore::max_bundles_in_transit) throw NoMoreTransfersAvailable();
@@ -204,7 +204,7 @@ namespace dtn
 			}
 		}
 
-		NeighborDatabase::NeighborEntry& NeighborDatabase::create(const dtn::data::EID &eid) throw ()
+		NeighborDatabase::NeighborEntry& NeighborDatabase::create(const dtn::data::EID &eid) noexcept
 		{
 			neighbor_map::iterator iter = _entries.find(eid);
 			if (iter == _entries.end())
@@ -220,7 +220,7 @@ namespace dtn
 			return *(*iter).second;
 		}
 
-		NeighborDatabase::NeighborEntry& NeighborDatabase::get(const dtn::data::EID &eid, bool noCached) throw (EntryNotFoundException)
+		NeighborDatabase::NeighborEntry& NeighborDatabase::get(const dtn::data::EID &eid, bool noCached) noexcept (false)
 		{
 			if (noCached && !dtn::core::BundleCore::getInstance().getConnectionManager().isNeighbor(eid))
 				throw NeighborDatabase::EntryNotFoundException();

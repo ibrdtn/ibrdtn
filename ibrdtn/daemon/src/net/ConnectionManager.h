@@ -46,7 +46,7 @@ namespace dtn
 		class NodeNotAvailableException : public ibrcommon::Exception
 		{
 		public:
-			NodeNotAvailableException(string what = "The requested node is not a neighbor.") throw() : ibrcommon::Exception(what)
+			NodeNotAvailableException(string what = "The requested node is not a neighbor.") noexcept : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -54,7 +54,7 @@ namespace dtn
 		class ConnectionNotAvailableException : public ibrcommon::Exception
 		{
 		public:
-			ConnectionNotAvailableException(string what = "The requested connection is not available.") throw() : ibrcommon::Exception(what)
+			ConnectionNotAvailableException(string what = "The requested connection is not available.") noexcept : ibrcommon::Exception(what)
 			{
 			};
 		};
@@ -67,8 +67,8 @@ namespace dtn
 			ConnectionManager();
 			virtual ~ConnectionManager();
 
-			void add(const dtn::core::Node &n) throw ();
-			void remove(const dtn::core::Node &n) throw ();
+			void add(const dtn::core::Node &n) noexcept;
+			void remove(const dtn::core::Node &n) noexcept;
 
 			/**
 			 * Add a convergence layer
@@ -98,20 +98,20 @@ namespace dtn
 			/**
 			 * method to receive new events from the EventSwitch
 			 */
-			void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
-			void raiseEvent(const dtn::core::NodeEvent &evt) throw ();
-			void raiseEvent(const dtn::net::ConnectionEvent &evt) throw ();
-			void raiseEvent(const dtn::core::GlobalEvent &evt) throw ();
+			void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::NodeEvent &evt) noexcept;
+			void raiseEvent(const dtn::net::ConnectionEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::GlobalEvent &evt) noexcept;
 
 			class ShutdownException : public ibrcommon::Exception
 			{
 			public:
-				ShutdownException(string what = "System shutdown") throw() : ibrcommon::Exception(what)
+				ShutdownException(string what = "System shutdown") noexcept : ibrcommon::Exception(what)
 				{
 				};
 			};
 
-			void open(const dtn::core::Node &node) throw (ibrcommon::Exception);
+			void open(const dtn::core::Node &node) noexcept (false);
 
 
 			typedef std::set<dtn::core::Node::Protocol> protocol_set;
@@ -120,12 +120,12 @@ namespace dtn
 			/**
 			 * Returns a list of all supported protocols
 			 */
-			const protocol_set getSupportedProtocols() throw ();
+			const protocol_set getSupportedProtocols() noexcept;
 
 			/**
 			 * Returns a list of protocol supported by both, local BPA and the peer
 			 */
-			const protocol_list getSupportedProtocols(const dtn::data::EID &eid) throw (NodeNotAvailableException);
+			const protocol_list getSupportedProtocols(const dtn::data::EID &eid) noexcept (false);
 
 			/**
 			 * get a set with all neighbors
@@ -138,7 +138,7 @@ namespace dtn
 			 * @param
 			 * @return
 			 */
-			bool isNeighbor(const dtn::core::Node&) throw ();
+			bool isNeighbor(const dtn::core::Node&) noexcept;
 
 			/**
 			 * Get the neighbor with the given EID.
@@ -146,7 +146,7 @@ namespace dtn
 			 * @param eid The EID of the neighbor.
 			 * @return A node object with all neighbor data.
 			 */
-			const dtn::core::Node getNeighbor(const dtn::data::EID &eid) throw (NodeNotAvailableException);
+			const dtn::core::Node getNeighbor(const dtn::data::EID &eid) noexcept (false);
 
 			/**
 			 * Add collected data about a neighbor to the neighbor database.
@@ -172,8 +172,8 @@ namespace dtn
 			 */
 			void discovered(const dtn::core::Node &node);
 
-			virtual void componentUp() throw ();
-			virtual void componentDown() throw ();
+			virtual void componentUp() noexcept;
+			virtual void componentDown() noexcept;
 
 		private:
 			/**
@@ -194,12 +194,12 @@ namespace dtn
 			/**
 			 * check if the node is reachable by any convergence-layer
 			 */
-			bool isReachable(const dtn::core::Node &node) throw ();
+			bool isReachable(const dtn::core::Node &node) noexcept;
 
 			/**
 			 * get node
 			 */
-			dtn::core::Node& getNode(const dtn::data::EID &eid) throw (NodeNotAvailableException);
+			dtn::core::Node& getNode(const dtn::data::EID &eid) noexcept (false);
 
 			// mutex for the list of convergence layers
 			ibrcommon::Mutex _cl_lock;

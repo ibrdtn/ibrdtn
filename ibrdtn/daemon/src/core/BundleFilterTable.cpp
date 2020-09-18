@@ -64,7 +64,7 @@ namespace dtn
 			_chain.clear();
 		}
 
-		BundleFilter::ACTION BundleFilterTable::evaluate(const FilterContext &context) const throw ()
+		BundleFilter::ACTION BundleFilterTable::evaluate(const FilterContext &context) const noexcept
 		{
 			for (chain::const_iterator it = _chain.begin(); it != _chain.end(); ++it)
 			{
@@ -75,7 +75,7 @@ namespace dtn
 			return ACCEPT;
 		}
 
-		BundleFilter::ACTION BundleFilterTable::filter(const FilterContext &context, dtn::data::Bundle &bundle) const throw ()
+		BundleFilter::ACTION BundleFilterTable::filter(const FilterContext &context, dtn::data::Bundle &bundle) const noexcept
 		{
 			for (chain::const_iterator it = _chain.begin(); it != _chain.end(); ++it)
 			{

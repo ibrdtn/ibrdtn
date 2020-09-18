@@ -120,7 +120,7 @@ namespace dtn
 			_queue.abort();
 		}
 
-		void EMailSmtpService::run() throw ()
+		void EMailSmtpService::run() noexcept
 		{
 			while(true)
 			{
@@ -178,7 +178,7 @@ namespace dtn
 			}
 		}
 
-		void EMailSmtpService::__cancellation() throw ()
+		void EMailSmtpService::__cancellation() noexcept
 		{
 			_run = false;
 			disconnect();

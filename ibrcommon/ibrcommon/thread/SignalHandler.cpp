@@ -52,7 +52,7 @@ namespace ibrcommon
 		::signal(signal, _proxy_handler);
 	}
 
-	void SignalHandler::run(void) throw ()
+	void SignalHandler::run(void) noexcept
 	{
 		try {
 			int signal = _signal_queue.poll();
@@ -62,7 +62,7 @@ namespace ibrcommon
 		}
 	}
 
-	void SignalHandler::__cancellation() throw ()
+	void SignalHandler::__cancellation() noexcept
 	{
 		_signal_queue.abort();
 	}

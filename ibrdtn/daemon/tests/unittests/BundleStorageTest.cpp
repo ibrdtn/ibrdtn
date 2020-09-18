@@ -484,12 +484,12 @@ void BundleStorageTest::testConcurrentStoreGet(dtn::storage::BundleStorage &stor
 			join();
 		};
 
-		void __cancellation() throw ()
+		void __cancellation() noexcept
 		{
 		}
 
 	protected:
-		void run() throw ()
+		void run() noexcept
 		{
 			for (std::list<dtn::data::Bundle>::const_iterator iter = _list.begin(); iter != _list.end(); ++iter)
 			{
@@ -704,9 +704,9 @@ void BundleStorageTest::testSelector(dtn::storage::BundleStorage &storage)
 
 		virtual ~BundleFilter() {};
 
-		virtual dtn::data::Size limit() const throw () { return 5; };
+		virtual dtn::data::Size limit() const noexcept { return 5; };
 
-		virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+		virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const noexcept (false)
 		{
 			// select every second bundle
 			return (meta.destination == dtn::data::EID("dtn://node-two/6"));
@@ -992,9 +992,9 @@ void BundleStorageTest::testQueryBloomFilter(dtn::storage::BundleStorage &storag
 
 		virtual ~BundleFilter() {};
 
-		virtual dtn::data::Size limit() const throw () { return 1; };
+		virtual dtn::data::Size limit() const noexcept { return 1; };
 
-		virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+		virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const noexcept (false)
 		{
 			// select the bundle if it is in the filter
 			return meta.isIn(_filter);

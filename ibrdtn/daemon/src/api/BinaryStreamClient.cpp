@@ -50,19 +50,19 @@ namespace dtn
 			return _eid;
 		}
 
-		void BinaryStreamClient::eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases) throw ()
+		void BinaryStreamClient::eventShutdown(dtn::streams::StreamConnection::ConnectionShutdownCases) noexcept
 		{
 		}
 
-		void BinaryStreamClient::eventTimeout() throw ()
+		void BinaryStreamClient::eventTimeout() noexcept
 		{
 		}
 
-		void BinaryStreamClient::eventError() throw ()
+		void BinaryStreamClient::eventError() noexcept
 		{
 		}
 
-		void BinaryStreamClient::eventConnectionUp(const dtn::streams::StreamContactHeader &header) throw ()
+		void BinaryStreamClient::eventConnectionUp(const dtn::streams::StreamContactHeader &header) noexcept
 		{
 			Registration &reg = _client.getRegistration();
 
@@ -83,7 +83,7 @@ namespace dtn
 			reg.subscribe(_eid);
 		}
 
-		void BinaryStreamClient::eventConnectionDown() throw ()
+		void BinaryStreamClient::eventConnectionDown() noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG("BinaryStreamClient", 40) << "BinaryStreamClient::eventConnectionDown()" << IBRCOMMON_LOGGER_ENDL;
 
@@ -97,7 +97,7 @@ namespace dtn
 			}
 		}
 
-		void BinaryStreamClient::eventBundleRefused() throw ()
+		void BinaryStreamClient::eventBundleRefused() noexcept
 		{
 			try {
 				const dtn::data::Bundle bundle = _sentqueue.take();
@@ -110,7 +110,7 @@ namespace dtn
 			}
 		}
 
-		void BinaryStreamClient::eventBundleForwarded() throw ()
+		void BinaryStreamClient::eventBundleForwarded() noexcept
 		{
 			try {
 				const dtn::data::Bundle bundle = _sentqueue.take();
@@ -126,12 +126,12 @@ namespace dtn
 			}
 		}
 
-		void BinaryStreamClient::eventBundleAck(const dtn::data::Length &ack) throw ()
+		void BinaryStreamClient::eventBundleAck(const dtn::data::Length &ack) noexcept
 		{
 			_lastack = ack;
 		}
 
-		void BinaryStreamClient::__cancellation() throw ()
+		void BinaryStreamClient::__cancellation() noexcept
 		{
 			// shutdown
 			_connection.shutdown(dtn::streams::StreamConnection::CONNECTION_SHUTDOWN_ERROR);
@@ -211,7 +211,7 @@ namespace dtn
 			ibrcommon::JoinableThread::join();
 		}
 
-		void BinaryStreamClient::Sender::__cancellation() throw ()
+		void BinaryStreamClient::Sender::__cancellation() noexcept
 		{
 			// cancel the main thread in here
 			this->abort();
@@ -220,7 +220,7 @@ namespace dtn
 			_client._client.getRegistration().abort();
 		}
 
-		void BinaryStreamClient::Sender::run() throw ()
+		void BinaryStreamClient::Sender::run() noexcept
 		{
 			Registration &reg = _client._client.getRegistration();
 

@@ -52,7 +52,7 @@ namespace dtn
 			class RegistrationException : public ibrcommon::Exception
 			{
 			public:
-				RegistrationException(string what = "") throw() : Exception(what)
+				RegistrationException(string what = "") noexcept : Exception(what)
 				{
 				}
 			};
@@ -60,7 +60,7 @@ namespace dtn
 			class AlreadyAttachedException : public RegistrationException
 			{
 			public:
-				AlreadyAttachedException(string what = "") throw() : RegistrationException(what)
+				AlreadyAttachedException(string what = "") noexcept : RegistrationException(what)
 				{
 				}
 			};
@@ -68,7 +68,7 @@ namespace dtn
 			class NotFoundException : public RegistrationException
 			{
 			public:
-				NotFoundException(string what = "") throw() : RegistrationException(what)
+				NotFoundException(string what = "") noexcept : RegistrationException(what)
 				{
 				}
 			};
@@ -76,7 +76,7 @@ namespace dtn
 			class NotPersistentException : public RegistrationException
 			{
 			public:
-				NotPersistentException(string what = "") throw() : RegistrationException(what)
+				NotPersistentException(string what = "") noexcept : RegistrationException(what)
 				{
 				}
 			};
@@ -156,9 +156,9 @@ namespace dtn
 			 * and the queue is empty an exception is thrown.
 			 * @return
 			 */
-			dtn::data::Bundle receive() throw (dtn::storage::NoBundleFoundException);
+			dtn::data::Bundle receive() noexcept (false);
 
-			dtn::data::MetaBundle receiveMetaBundle() throw (dtn::storage::NoBundleFoundException);
+			dtn::data::MetaBundle receiveMetaBundle() noexcept (false);
 
 			/**
 			 * notify a bundle as delivered (and delete it if singleton destination)
@@ -263,34 +263,34 @@ namespace dtn
 				 * This method is used by the storage.
 				 * @see dtn::storage::BundleResult::put()
 				 */
-				virtual void put(const dtn::data::MetaBundle &bundle) throw ();
+				virtual void put(const dtn::data::MetaBundle &bundle) noexcept;
 
 				/**
 				 * Get the next bundle of the queue.
 				 * An exception is thrown if the queue is empty or the queue has been aborted
 				 * before.
 				 */
-				dtn::data::MetaBundle pop() throw (const ibrcommon::QueueUnblockedException);
+				dtn::data::MetaBundle pop() noexcept (false);
 
 				/**
 				 * Expire bundles in the received bundle set
 				 */
-				void expire(const dtn::data::Timestamp &timestamp) throw ();
+				void expire(const dtn::data::Timestamp &timestamp) noexcept;
 
 				/**
 				 * Abort all blocking call on the queue
 				 */
-				void abort() throw ();
+				void abort() noexcept;
 
 				/**
 				 * Reset the queue state. If called, blocking calls are allowed again.
 				 */
-				void reset() throw ();
+				void reset() noexcept;
 
 				/**
 				 * Check if a bundle has been received before
 				 */
-				bool has(const dtn::data::BundleID &bundle) const throw ();
+				bool has(const dtn::data::BundleID &bundle) const noexcept;
 
 			private:
 				// protect variables against concurrent altering

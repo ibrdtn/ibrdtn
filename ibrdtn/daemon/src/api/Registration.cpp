@@ -171,7 +171,7 @@ namespace dtn
 			}
 		}
 
-		dtn::data::Bundle Registration::receive() throw (dtn::storage::NoBundleFoundException)
+		dtn::data::Bundle Registration::receive() noexcept (false)
 		{
 			// get the global storage
 			dtn::storage::BundleStorage &storage = dtn::core::BundleCore::getInstance().getStorage();
@@ -183,7 +183,7 @@ namespace dtn
 			return storage.get(b);
 		}
 
-		dtn::data::MetaBundle Registration::receiveMetaBundle() throw (dtn::storage::NoBundleFoundException)
+		dtn::data::MetaBundle Registration::receiveMetaBundle() noexcept (false)
 		{
 			ibrcommon::MutexLock l(_receive_lock);
 
@@ -232,9 +232,9 @@ namespace dtn
 
 				virtual ~BundleFilter() {};
 
-				virtual dtn::data::Size limit() const throw () { return dtn::core::BundleCore::max_bundles_in_transit; };
+				virtual dtn::data::Size limit() const noexcept { return dtn::core::BundleCore::max_bundles_in_transit; };
 
-				virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const throw (dtn::storage::BundleSelectorException)
+				virtual bool shouldAdd(const dtn::data::MetaBundle &meta) const noexcept (false)
 				{
 					// filter fragments if requested
 					if (meta.isFragment() && _fragment_filter)
@@ -267,7 +267,7 @@ namespace dtn
 				};
 
 #ifdef HAVE_SQLITE
-				const std::string getWhere() const throw ()
+				const std::string getWhere() const noexcept
 				{
 					if (_endpoints.size() > 1)
 					{
@@ -290,7 +290,7 @@ namespace dtn
 					}
 				};
 
-				int bind(sqlite3_stmt *st, int offset) const throw ()
+				int bind(sqlite3_stmt *st, int offset) const noexcept
 				{
 					int o = offset;
 
@@ -332,7 +332,7 @@ namespace dtn
 		{
 		}
 
-		void Registration::RegistrationQueue::put(const dtn::data::MetaBundle &bundle) throw ()
+		void Registration::RegistrationQueue::put(const dtn::data::MetaBundle &bundle) noexcept
 		{
 			try {
 				_queue.push(bundle);
@@ -344,29 +344,29 @@ namespace dtn
 			} catch (const ibrcommon::Exception&) { }
 		}
 
-		dtn::data::MetaBundle Registration::RegistrationQueue::pop() throw (const ibrcommon::QueueUnblockedException)
+		dtn::data::MetaBundle Registration::RegistrationQueue::pop() noexcept (false)
 		{
 			return _queue.take();
 		}
 
-		bool Registration::RegistrationQueue::has(const dtn::data::BundleID &bundle) const throw ()
+		bool Registration::RegistrationQueue::has(const dtn::data::BundleID &bundle) const noexcept
 		{
 			ibrcommon::MutexLock l(const_cast<ibrcommon::Mutex&>(_lock));
 			return _recv_bundles.has(bundle);
 		}
 
-		void Registration::RegistrationQueue::expire(const dtn::data::Timestamp &timestamp) throw ()
+		void Registration::RegistrationQueue::expire(const dtn::data::Timestamp &timestamp) noexcept
 		{
 			ibrcommon::MutexLock l(_lock);
 			_recv_bundles.expire(timestamp);
 		}
 
-		void Registration::RegistrationQueue::abort() throw ()
+		void Registration::RegistrationQueue::abort() noexcept
 		{
 			_queue.abort();
 		}
 
-		void Registration::RegistrationQueue::reset() throw ()
+		void Registration::RegistrationQueue::reset() noexcept
 		{
 			_queue.reset();
 		}

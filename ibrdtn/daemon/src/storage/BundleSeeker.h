@@ -30,7 +30,7 @@ namespace dtn
 			 * @param cb The instance of the BundleSelector class.
 			 * @return A list of bundles.
 			 */
-			virtual void get(const BundleSelector &cb, BundleResult &result) throw (NoBundleFoundException, BundleSelectorException) = 0;
+			virtual void get(const BundleSelector &cb, BundleResult &result) noexcept (false) = 0;
 
 			/**
 			 * Return a set of distinct destinations for all bundles in the storage.

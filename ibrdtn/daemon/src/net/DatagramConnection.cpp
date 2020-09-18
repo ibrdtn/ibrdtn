@@ -67,7 +67,7 @@ namespace dtn
 			__cancellation();
 		}
 
-		void DatagramConnection::__cancellation() throw ()
+		void DatagramConnection::__cancellation() noexcept
 		{
 			// close the stream
 			try {
@@ -75,7 +75,7 @@ namespace dtn
 			} catch (const ibrcommon::Exception&) { };
 		}
 
-		void DatagramConnection::run() throw ()
+		void DatagramConnection::run() noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConnection::TAG, 40) << "run()" << IBRCOMMON_LOGGER_ENDL;
 
@@ -130,7 +130,7 @@ namespace dtn
 			}
 		}
 
-		void DatagramConnection::setup() throw ()
+		void DatagramConnection::setup() noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConnection::TAG, 40) << "setup()" << IBRCOMMON_LOGGER_ENDL;
 
@@ -138,7 +138,7 @@ namespace dtn
 			_sender.start();
 		}
 
-		void DatagramConnection::finally() throw ()
+		void DatagramConnection::finally() noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConnection::TAG, 40) << "finally()" << IBRCOMMON_LOGGER_ENDL;
 
@@ -275,7 +275,7 @@ namespace dtn
 			}
 		}
 
-		void DatagramConnection::stream_send(const char *buf, const dtn::data::Length &len, bool last) throw (DatagramException)
+		void DatagramConnection::stream_send(const char *buf, const dtn::data::Length &len, bool last) noexcept (false)
 		{
 			// build the right flags
 			char flags = 0;
@@ -610,7 +610,7 @@ namespace dtn
 		{
 		}
 
-		void DatagramConnection::Stream::queue(const char *buf, const dtn::data::Length &len, bool isFirst) throw (DatagramException)
+		void DatagramConnection::Stream::queue(const char *buf, const dtn::data::Length &len, bool isFirst) noexcept (false)
 		{
 			try {
 				ibrcommon::MutexLock l(_queue_buf_cond);
@@ -773,14 +773,14 @@ namespace dtn
 		{
 		}
 
-		void DatagramConnection::Sender::skip() throw ()
+		void DatagramConnection::Sender::skip() noexcept
 		{
 			// skip all data of the current transmission
 			_skip = true;
 			_stream.skip();
 		}
 
-		void DatagramConnection::Sender::run() throw ()
+		void DatagramConnection::Sender::run() noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG(DatagramConnection::TAG, 40) << "Sender::run()"<< IBRCOMMON_LOGGER_ENDL;
 
@@ -848,11 +848,11 @@ namespace dtn
 			}
 		}
 
-		void DatagramConnection::Sender::finally() throw ()
+		void DatagramConnection::Sender::finally() noexcept
 		{
 		}
 
-		void DatagramConnection::Sender::__cancellation() throw ()
+		void DatagramConnection::Sender::__cancellation() noexcept
 		{
 			// abort all blocking operations on the stream
 			_stream.close();

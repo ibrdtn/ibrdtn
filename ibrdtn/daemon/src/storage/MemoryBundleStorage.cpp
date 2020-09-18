@@ -44,19 +44,19 @@ namespace dtn
 		{
 		}
 
-		void MemoryBundleStorage::componentUp() throw ()
+		void MemoryBundleStorage::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::add(this);
 		}
 
-		void MemoryBundleStorage::componentDown() throw ()
+		void MemoryBundleStorage::componentDown() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 			dtn::core::EventDispatcher<dtn::core::TimeEvent>::remove(this);
 		}
 
-		void MemoryBundleStorage::raiseEvent(const dtn::core::TimeEvent &time) throw ()
+		void MemoryBundleStorage::raiseEvent(const dtn::core::TimeEvent &time) noexcept
 		{
 			if (time.getAction() == dtn::core::TIME_SECOND_TICK)
 			{
@@ -89,7 +89,7 @@ namespace dtn
 			return _bundles.size();
 		}
 
-		void MemoryBundleStorage::get(const BundleSelector &cb, BundleResult &result) throw (NoBundleFoundException, BundleSelectorException)
+		void MemoryBundleStorage::get(const BundleSelector &cb, BundleResult &result) noexcept (false)
 		{
 			size_t items_added = 0;
 
@@ -254,7 +254,7 @@ namespace dtn
 			clearSpace();
 		}
 
-		void MemoryBundleStorage::eventBundleExpired(const dtn::data::MetaBundle &b) throw ()
+		void MemoryBundleStorage::eventBundleExpired(const dtn::data::MetaBundle &b) noexcept
 		{
 			// search for the bundle in the bundle list
 			const bundle_list::iterator iter = find(_bundles.begin(), _bundles.end(), b);

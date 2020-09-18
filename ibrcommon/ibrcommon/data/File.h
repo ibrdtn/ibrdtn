@@ -189,7 +189,7 @@ namespace ibrcommon
 	class FileNotExistsException : public ibrcommon::IOException
 	{
 	public:
-		FileNotExistsException(ibrcommon::File f) throw() : IOException("The file " + f.getPath() + " does not exists.")
+		FileNotExistsException(ibrcommon::File f) noexcept : IOException("The file " + f.getPath() + " does not exists.")
 		{
 		};
 	};

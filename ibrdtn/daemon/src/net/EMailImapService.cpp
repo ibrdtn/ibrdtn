@@ -180,7 +180,7 @@ namespace dtn
 			}
 		}
 
-		void EMailImapService::run() throw ()
+		void EMailImapService::run() noexcept
 		{
 			while(true)
 			{
@@ -202,7 +202,7 @@ namespace dtn
 			}
 		}
 
-		void EMailImapService::__cancellation() throw ()
+		void EMailImapService::__cancellation() noexcept
 		{
 			_run = false;
 			disconnect();

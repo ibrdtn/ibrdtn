@@ -84,7 +84,7 @@ namespace dtn
 			_interfaces.insert(net);
 		}
 
-		void IPNDAgent::join(const ibrcommon::vinterface &iface, const ibrcommon::vaddress &addr) throw ()
+		void IPNDAgent::join(const ibrcommon::vinterface &iface, const ibrcommon::vaddress &addr) noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG(TAG, 10) << "Join on " << iface.toString() << " (" << addr.toString() << ", family: " << addr.family() << ")" << IBRCOMMON_LOGGER_ENDL;
 
@@ -131,7 +131,7 @@ namespace dtn
 			_socket.add(msock, iface);
 		}
 
-		void IPNDAgent::leave(const ibrcommon::vinterface &iface, const ibrcommon::vaddress &addr) throw ()
+		void IPNDAgent::leave(const ibrcommon::vinterface &iface, const ibrcommon::vaddress &addr) noexcept
 		{
 			IBRCOMMON_LOGGER_DEBUG_TAG(TAG, 10) << "Leave " << iface.toString() << " (" << addr.toString() << ", family: " << addr.family() << ")" << IBRCOMMON_LOGGER_ENDL;
 
@@ -162,7 +162,7 @@ namespace dtn
 			}
 		}
 
-		void IPNDAgent::leave(const ibrcommon::vinterface &iface) throw ()
+		void IPNDAgent::leave(const ibrcommon::vinterface &iface) noexcept
 		{
 			// get all sockets bound to the given interface
 			ibrcommon::socketset ifsocks = _socket.get(iface);
@@ -187,7 +187,7 @@ namespace dtn
 			}
 		}
 
-		void IPNDAgent::join(const ibrcommon::vinterface &iface) throw ()
+		void IPNDAgent::join(const ibrcommon::vinterface &iface) noexcept
 		{
 			std::list<ibrcommon::vaddress> addrs = iface.getAddresses();
 
@@ -199,7 +199,7 @@ namespace dtn
 			}
 		}
 
-		void IPNDAgent::onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) throw ()
+		void IPNDAgent::onAdvertiseBeacon(const ibrcommon::vinterface &iface, const DiscoveryBeacon &beacon) noexcept
 		{
 			// serialize announcement
 			stringstream ss; ss << beacon;
@@ -237,7 +237,7 @@ namespace dtn
 			}
 		}
 
-		void IPNDAgent::raiseEvent(const dtn::net::P2PDialupEvent &dialup) throw ()
+		void IPNDAgent::raiseEvent(const dtn::net::P2PDialupEvent &dialup) noexcept
 		{
 			switch (dialup.type)
 			{
@@ -329,9 +329,9 @@ namespace dtn
 			}
 		}
 
-		void IPNDAgent::componentUp() throw ()
+		void IPNDAgent::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 
 			try {
 				// setup the sockets
@@ -401,7 +401,7 @@ namespace dtn
 			}
 		}
 
-		void IPNDAgent::componentDown() throw ()
+		void IPNDAgent::componentDown() noexcept
 		{
 			// un-listen to P2P dial-up events
 			dtn::core::EventDispatcher<dtn::net::P2PDialupEvent>::remove(this);
@@ -422,7 +422,7 @@ namespace dtn
 			ibrcommon::JoinableThread::join();
 		}
 
-		void IPNDAgent::componentRun() throw ()
+		void IPNDAgent::componentRun() noexcept
 		{
 			struct timeval tv;
 
@@ -511,7 +511,7 @@ namespace dtn
 			}
 		}
 
-		void IPNDAgent::__cancellation() throw ()
+		void IPNDAgent::__cancellation() noexcept
 		{
 			// shutdown and interrupt the receiving thread
 			_socket.down();

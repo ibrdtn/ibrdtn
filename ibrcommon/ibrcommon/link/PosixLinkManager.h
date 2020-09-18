@@ -22,15 +22,15 @@ namespace ibrcommon
 		PosixLinkManager();
 		virtual ~PosixLinkManager();
 
-		void up() throw();
-		void down() throw();
+		void up() noexcept;
+		void down() noexcept;
 
 		const vinterface getInterface(int index) const;
 		const std::list<vaddress> getAddressList(const vinterface &iface, const std::string &scope = "");
 
-		virtual void addEventListener(const vinterface &iface, LinkManager::EventCallback *cb) throw ();
-		virtual void removeEventListener(const vinterface&, LinkManager::EventCallback*) throw ();
-		virtual void removeEventListener(LinkManager::EventCallback*) throw ();
+		virtual void addEventListener(const vinterface &iface, LinkManager::EventCallback *cb) noexcept;
+		virtual void removeEventListener(const vinterface&, LinkManager::EventCallback*) noexcept;
+		virtual void removeEventListener(LinkManager::EventCallback*) noexcept;
 
 	private:
 		LinkMonitor _lm;

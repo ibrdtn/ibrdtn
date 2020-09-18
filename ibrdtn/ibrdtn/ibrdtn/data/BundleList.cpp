@@ -35,7 +35,7 @@ namespace dtn
 		BundleList::~BundleList()
 		{ }
 
-		void BundleList::add(const dtn::data::MetaBundle &bundle) throw ()
+		void BundleList::add(const dtn::data::MetaBundle &bundle) noexcept
 		{
 			// insert the bundle to the public list
 			pair<iterator,bool> ret = _meta_bundles.insert(bundle);
@@ -46,7 +46,7 @@ namespace dtn
 			}
 		}
 
-		void BundleList::remove(const dtn::data::MetaBundle &bundle) throw ()
+		void BundleList::remove(const dtn::data::MetaBundle &bundle) noexcept
 		{
 			// search for the bundle in the public list
 			const std::set<dtn::data::MetaBundle>::iterator it = _meta_bundles.find(bundle);
@@ -62,13 +62,13 @@ namespace dtn
 			}
 		}
 
-		void BundleList::clear() throw ()
+		void BundleList::clear() noexcept
 		{
 			_bundles.clear();
 			_meta_bundles.clear();
 		}
 
-		void BundleList::expire(const Timestamp &timestamp) throw ()
+		void BundleList::expire(const Timestamp &timestamp) noexcept
 		{
 			// we can not expire bundles if we have no idea of time
 			if (timestamp == 0) return;

@@ -76,7 +76,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeSession::TAG, 15) << "Session destroyed" << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		void NativeSession::destroy() throw ()
+		void NativeSession::destroy() noexcept
 		{
 			// un-listen from QueueBundleEvents
 			dtn::core::EventDispatcher<dtn::routing::QueueBundleEvent>::remove(&_receiver);
@@ -84,33 +84,33 @@ namespace dtn
 			_registration.abort();
 		}
 
-		const dtn::data::EID& NativeSession::getNodeEID() const throw ()
+		const dtn::data::EID& NativeSession::getNodeEID() const noexcept
 		{
 			return dtn::core::BundleCore::local;
 		}
 
-		void NativeSession::fireNotificationBundle(const dtn::data::BundleID &id) throw ()
+		void NativeSession::fireNotificationBundle(const dtn::data::BundleID &id) noexcept
 		{
 			ibrcommon::MutexLock l(_cb_mutex);
 			if (_session_cb == NULL) return;
 			_session_cb->notifyBundle(id);
 		}
 
-		void NativeSession::fireNotificationStatusReport(const dtn::data::EID &source, const dtn::data::StatusReportBlock &report) throw ()
+		void NativeSession::fireNotificationStatusReport(const dtn::data::EID &source, const dtn::data::StatusReportBlock &report) noexcept
 		{
 			ibrcommon::MutexLock l(_cb_mutex);
 			if (_session_cb == NULL) return;
 			_session_cb->notifyStatusReport(source, report);
 		}
 
-		void NativeSession::fireNotificationCustodySignal(const dtn::data::EID &source, const dtn::data::CustodySignalBlock &custody) throw ()
+		void NativeSession::fireNotificationCustodySignal(const dtn::data::EID &source, const dtn::data::CustodySignalBlock &custody) noexcept
 		{
 			ibrcommon::MutexLock l(_cb_mutex);
 			if (_session_cb == NULL) return;
 			_session_cb->notifyCustodySignal(source, custody);
 		}
 
-		void NativeSession::setEndpoint(const std::string &suffix) throw (NativeSessionException)
+		void NativeSession::setEndpoint(const std::string &suffix) noexcept (false)
 		{
 			// error checking
 			if (suffix.length() <= 0)
@@ -132,7 +132,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeSession::TAG, 20) << "Endpoint set to " << _endpoint.getString() << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		void NativeSession::resetEndpoint() throw ()
+		void NativeSession::resetEndpoint() noexcept
 		{
 			_registration.unsubscribe(_endpoint);
 			_endpoint = _registration.getDefaultEID();
@@ -141,7 +141,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeSession::TAG, 20) << "Endpoint set to " << _endpoint.getString() << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		void NativeSession::addEndpoint(const std::string &suffix) throw (NativeSessionException)
+		void NativeSession::addEndpoint(const std::string &suffix) noexcept (false)
 		{
 			// error checking
 			if (suffix.length() <= 0)
@@ -158,7 +158,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeSession::TAG, 20) << "Endpoint " << suffix << " added" << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		void NativeSession::removeEndpoint(const std::string &suffix) throw (NativeSessionException)
+		void NativeSession::removeEndpoint(const std::string &suffix) noexcept (false)
 		{
 			// error checking
 			if (suffix.length() <= 0)
@@ -175,7 +175,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeSession::TAG, 20) << "Endpoint " << suffix << " removed" << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		void NativeSession::addRegistration(const dtn::data::EID &eid) throw (NativeSessionException)
+		void NativeSession::addRegistration(const dtn::data::EID &eid) noexcept (false)
 		{
 			// error checking
 			if (eid == dtn::data::EID())
@@ -190,7 +190,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeSession::TAG, 20) << "Registration " << eid.getString() << " added" << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		void NativeSession::removeRegistration(const dtn::data::EID &eid) throw (NativeSessionException)
+		void NativeSession::removeRegistration(const dtn::data::EID &eid) noexcept (false)
 		{
 			// error checking
 			if (eid == dtn::data::EID())
@@ -205,7 +205,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeSession::TAG, 20) << "Registration " << eid.getString() << " removed" << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		void NativeSession::clearRegistration() throw ()
+		void NativeSession::clearRegistration() noexcept
 		{
 			resetEndpoint();
 
@@ -220,7 +220,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeSession::TAG, 20) << "Registrations cleared" << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		std::vector<std::string> NativeSession::getSubscriptions() throw ()
+		std::vector<std::string> NativeSession::getSubscriptions() noexcept
 		{
 			const std::set<dtn::data::EID> subs = _registration.getSubscriptions();
 			std::vector<std::string> ret;
@@ -230,7 +230,7 @@ namespace dtn
 			return ret;
 		}
 
-		void NativeSession::next(RegisterIndex ri) throw (BundleNotFoundException)
+		void NativeSession::next(RegisterIndex ri) noexcept (false)
 		{
 			try {
 				const dtn::data::BundleID id = _bundle_queue.take();
@@ -244,7 +244,7 @@ namespace dtn
 			}
 		}
 
-		void NativeSession::load(RegisterIndex ri, const dtn::data::BundleID &id) throw (BundleNotFoundException)
+		void NativeSession::load(RegisterIndex ri, const dtn::data::BundleID &id) noexcept (false)
 		{
 			// load the bundle
 			try {
@@ -266,7 +266,7 @@ namespace dtn
 			}
 		}
 
-		void NativeSession::get(RegisterIndex ri) throw ()
+		void NativeSession::get(RegisterIndex ri) noexcept
 		{
 			ibrcommon::MutexLock l(_cb_mutex);
 			if (_serializer_cb == NULL) return;
@@ -279,7 +279,7 @@ namespace dtn
 			}
 		}
 
-		void NativeSession::getInfo(RegisterIndex ri) throw ()
+		void NativeSession::getInfo(RegisterIndex ri) noexcept
 		{
 			ibrcommon::MutexLock l(_cb_mutex);
 			if (_serializer_cb == NULL) return;
@@ -292,7 +292,7 @@ namespace dtn
 			}
 		}
 
-		void NativeSession::free(RegisterIndex ri) throw (BundleNotFoundException)
+		void NativeSession::free(RegisterIndex ri) noexcept (false)
 		{
 			try {
 				dtn::core::BundleCore::getInstance().getStorage().remove(_bundle[ri]);
@@ -302,12 +302,12 @@ namespace dtn
 			}
 		}
 
-		void NativeSession::clear(RegisterIndex ri) throw ()
+		void NativeSession::clear(RegisterIndex ri) noexcept
 		{
 			_bundle[ri] = dtn::data::Bundle();
 		}
 
-		void NativeSession::delivered(const dtn::data::BundleID &id) const throw (BundleNotFoundException)
+		void NativeSession::delivered(const dtn::data::BundleID &id) const noexcept (false)
 		{
 			try {
 				// announce this bundle as delivered
@@ -320,7 +320,7 @@ namespace dtn
 			}
 		}
 
-		dtn::data::BundleID NativeSession::send(RegisterIndex ri) throw ()
+		dtn::data::BundleID NativeSession::send(RegisterIndex ri) noexcept
 		{
 			// forward the bundle to the storage processing
 			dtn::api::Registration::processIncomingBundle(_endpoint, _bundle[ri]);
@@ -330,13 +330,13 @@ namespace dtn
 			return _bundle[ri];
 		}
 
-		void NativeSession::put(RegisterIndex ri, const dtn::data::Bundle &b) throw ()
+		void NativeSession::put(RegisterIndex ri, const dtn::data::Bundle &b) noexcept
 		{
 			// Copy the given bundle into the local register
 			_bundle[ri] = b;
 		}
 
-		void NativeSession::put(RegisterIndex ri, const dtn::data::PrimaryBlock &p) throw ()
+		void NativeSession::put(RegisterIndex ri, const dtn::data::PrimaryBlock &p) noexcept
 		{
 			// clear all blocks in the register
 			_bundle[ri].clear();
@@ -345,7 +345,7 @@ namespace dtn
 			((dtn::data::PrimaryBlock&)_bundle[ri]) = p;
 		}
 
-		void NativeSession::write(RegisterIndex ri, const char *buf, const size_t len, const size_t offset) throw ()
+		void NativeSession::write(RegisterIndex ri, const char *buf, const size_t len, const size_t offset) noexcept
 		{
 			try {
 				dtn::data::PayloadBlock &payload = _bundle[ri].find<dtn::data::PayloadBlock>();
@@ -383,7 +383,7 @@ namespace dtn
 			IBRCOMMON_LOGGER_DEBUG_TAG(NativeSession::TAG, 25) << len << " bytes added to the payload" << IBRCOMMON_LOGGER_ENDL;
 		}
 
-		void NativeSession::read(RegisterIndex ri, char *buf, size_t &len, const size_t offset) throw ()
+		void NativeSession::read(RegisterIndex ri, char *buf, size_t &len, const size_t offset) noexcept
 		{
 			try {
 				dtn::data::PayloadBlock &payload = _bundle[ri].find<dtn::data::PayloadBlock>();
@@ -410,7 +410,7 @@ namespace dtn
 		{
 		}
 
-		void NativeSession::BundleReceiver::raiseEvent(const dtn::routing::QueueBundleEvent &queued) throw ()
+		void NativeSession::BundleReceiver::raiseEvent(const dtn::routing::QueueBundleEvent &queued) noexcept
 		{
 			// ignore fragments - we can not deliver them directly to the client
 			if (queued.bundle.isFragment()) return;
@@ -421,7 +421,7 @@ namespace dtn
 			}
 		}
 
-		void NativeSession::receive() throw (NativeSessionException)
+		void NativeSession::receive() noexcept (false)
 		{
 			Registration &reg = _registration;
 			try {

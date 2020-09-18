@@ -43,8 +43,8 @@ namespace dtn
 			FileConvergenceLayer();
 			virtual ~FileConvergenceLayer();
 
-			void raiseEvent(const dtn::core::NodeEvent &evt) throw ();
-			void raiseEvent(const dtn::core::TimeEvent &evt) throw ();
+			void raiseEvent(const dtn::core::NodeEvent &evt) noexcept;
+			void raiseEvent(const dtn::core::TimeEvent &evt) noexcept;
 
 			dtn::core::Node::Protocol getDiscoveryProtocol() const;
 
@@ -54,11 +54,11 @@ namespace dtn
 			const std::string getName() const;
 
 		protected:
-			void componentUp() throw ();
-			void componentRun() throw ();
-			void componentDown() throw ();
+			void componentUp() noexcept;
+			void componentRun() noexcept;
+			void componentDown() noexcept;
 
-			void __cancellation() throw ();
+			void __cancellation() noexcept;
 
 		private:
 			class Task

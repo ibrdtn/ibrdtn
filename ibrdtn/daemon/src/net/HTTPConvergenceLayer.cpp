@@ -143,7 +143,7 @@ namespace dtn
 		 * a BundleReceivedEvent will be raised.
 		 *
 		 */
-		void DownloadThread::run() throw ()
+		void DownloadThread::run() noexcept
 		{
 			try  {
 				// create a filter context
@@ -175,7 +175,7 @@ namespace dtn
 			}
 		}
 
-		void DownloadThread::__cancellation() throw ()
+		void DownloadThread::__cancellation() noexcept
 		{
 		}
 
@@ -310,9 +310,9 @@ namespace dtn
 		 * Method from IndependentComponent interface, this method is called before
 		 * the componentRun() method is called. At time here is nothing to do.
 		 */
-		void HTTPConvergenceLayer::componentUp() throw ()
+		void HTTPConvergenceLayer::componentUp() noexcept
 		{
-			// routine checked for throw() on 15.02.2013
+			// routine checked for noexcept on 15.02.2013
 		}
 
 		/**
@@ -326,7 +326,7 @@ namespace dtn
 		 * DownloadThread the iobuffer will be initialize, when disconnecting the iobuffer
 		 * will finalize.
 		 */
-		void HTTPConvergenceLayer::componentRun() throw ()
+		void HTTPConvergenceLayer::componentRun() noexcept
 		{
 
 			std::string url = _server + "?eid=" + dtn::core::BundleCore::local.getString();
@@ -403,7 +403,7 @@ namespace dtn
 		 * the IBR-DTN is shutting down. This method trys to stop the DownloadThread
 		 * and to finalize the iobuffer, for a clean shut down.
 		 */
-		void HTTPConvergenceLayer::componentDown() throw ()
+		void HTTPConvergenceLayer::componentDown() noexcept
 		{
 		}
 
@@ -411,7 +411,7 @@ namespace dtn
 		 * This method is from IndependentComponent interface. It could abort
 		 * the componentRun() thread on the hard way.
 		 */
-		void HTTPConvergenceLayer::__cancellation() throw ()
+		void HTTPConvergenceLayer::__cancellation() noexcept
 		{
 			_running = false;
 

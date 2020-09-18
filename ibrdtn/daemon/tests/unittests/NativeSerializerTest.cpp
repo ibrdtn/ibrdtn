@@ -29,23 +29,23 @@ void NativeSerializerTest::callbackStreamTest() {
 		virtual ~Callback() {
 		}
 
-		virtual void beginBundle(const dtn::data::PrimaryBlock &block) throw () {
+		virtual void beginBundle(const dtn::data::PrimaryBlock &block) noexcept {
 			bundle_count++;
 		}
 
-		virtual void endBundle() throw () {
+		virtual void endBundle() noexcept {
 			bundle_count++;
 		}
 
-		virtual void beginBlock(const dtn::data::Block &block, const size_t payload_length) throw () {
+		virtual void beginBlock(const dtn::data::Block &block, const size_t payload_length) noexcept {
 			block_count++;
 		}
 
-		virtual void endBlock() throw () {
+		virtual void endBlock() noexcept {
 			block_count++;
 		}
 
-		virtual void payload(const char *data, const size_t len) throw () {
+		virtual void payload(const char *data, const size_t len) noexcept {
 			payload_count += len;
 		}
 	} _callback;
@@ -73,23 +73,23 @@ void NativeSerializerTest::serializeBundle() {
 		virtual ~Callback() {
 		}
 
-		virtual void beginBundle(const dtn::data::PrimaryBlock &block) throw () {
+		virtual void beginBundle(const dtn::data::PrimaryBlock &block) noexcept {
 			bundle_count++;
 		}
 
-		virtual void endBundle() throw () {
+		virtual void endBundle() noexcept {
 			bundle_count++;
 		}
 
-		virtual void beginBlock(const dtn::data::Block &block, const size_t payload_length) throw () {
+		virtual void beginBlock(const dtn::data::Block &block, const size_t payload_length) noexcept {
 			block_count++;
 		}
 
-		virtual void endBlock() throw () {
+		virtual void endBlock() noexcept {
 			block_count++;
 		}
 
-		virtual void payload(const char *data, const size_t len) throw () {
+		virtual void payload(const char *data, const size_t len) noexcept {
 			payload_count += len;
 		}
 	} _callback;
