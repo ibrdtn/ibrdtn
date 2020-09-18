@@ -42,7 +42,7 @@ namespace ibrcommon
 		pthread_mutexattr_destroy(&m_attr);
 	}
 
-	void Mutex::trylock() throw (MutexException)
+	void Mutex::trylock() noexcept (false)
 	{
 		int ret = pthread_mutex_trylock( &m_mutex );
 
@@ -57,7 +57,7 @@ namespace ibrcommon
 		}
 	}
 
-	void Mutex::enter() throw (MutexException)
+	void Mutex::enter() noexcept (false)
 	{
 		switch (pthread_mutex_lock( &m_mutex ))
 		{
@@ -95,7 +95,7 @@ namespace ibrcommon
 		}
 	}
 
-	void Mutex::leave() throw (MutexException)
+	void Mutex::leave() noexcept (false)
 	{
 		if (0 != pthread_mutex_unlock( &m_mutex ))
 		{

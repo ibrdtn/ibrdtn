@@ -47,17 +47,17 @@ namespace ibrcommon
 		sem_post(&count_sem);
 	}
 
-	void Semaphore::trylock() throw (MutexException)
+	void Semaphore::trylock() noexcept (false)
 	{
 		throw MutexException("trylock is not available for semaphores");
 	}
 
-	void Semaphore::enter() throw (MutexException)
+	void Semaphore::enter() noexcept (false)
 	{
 		wait();
 	}
 
-	void Semaphore::leave() throw (MutexException)
+	void Semaphore::leave() noexcept (false)
 	{
 		post();
 	}

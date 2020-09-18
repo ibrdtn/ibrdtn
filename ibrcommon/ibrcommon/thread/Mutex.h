@@ -40,9 +40,9 @@ namespace ibrcommon
 	public:
 		virtual ~MutexInterface() = 0;
 
-		virtual void trylock() throw (MutexException) = 0;
-		virtual void enter() throw (MutexException) = 0;
-		virtual void leave() throw (MutexException) = 0;
+		virtual void trylock() noexcept (false) = 0;
+		virtual void enter() noexcept (false) = 0;
+		virtual void leave() noexcept (false) = 0;
 	};
 
 	class MutexMock : public MutexInterface
@@ -51,9 +51,9 @@ namespace ibrcommon
 		MutexMock() {};
 		virtual ~MutexMock() {};
 
-		virtual void trylock() throw (MutexException) {};
-		virtual void enter() throw (MutexException) {};
-		virtual void leave() throw (MutexException) {};
+		virtual void trylock() noexcept (false) {};
+		virtual void enter() noexcept (false) {};
+		virtual void leave() noexcept (false) {};
 	};
 
 	class Mutex : public MutexInterface
@@ -69,9 +69,9 @@ namespace ibrcommon
 			Mutex(MUTEX_TYPE type = MUTEX_NORMAL);
 			virtual ~Mutex();
 
-			virtual void trylock() throw (MutexException);
-			virtual void enter() throw (MutexException);
-			virtual void leave() throw (MutexException);
+			virtual void trylock() noexcept (false);
+			virtual void enter() noexcept (false);
+			virtual void leave() noexcept (false);
 
 			static MutexInterface& dummy();
 

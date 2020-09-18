@@ -42,9 +42,9 @@ namespace ibrcommon
 			void wait();
 			void post();
 
-			void trylock() throw (MutexException);
-			void enter() throw (MutexException);
-			void leave() throw (MutexException);
+			void trylock() noexcept (false);
+			void enter() noexcept (false);
+			void leave() noexcept (false);
 		private:
 			sem_t count_sem;
 	};
