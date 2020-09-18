@@ -121,19 +121,19 @@ namespace ibrcommon
 		/**
 		 * Enable all sockets and turn into the up state.
 		 */
-		void up() throw (socket_exception);
+		void up() noexcept (false);
 
 		/**
 		 * Disable all sockets and turn into the down state.
 		 */
-		void down() throw ();
+		void down() noexcept;
 
 		/**
 		 * Execute a select on all associated sockets.
 		 * @param callback
 		 * @param tv
 		 */
-		void select(socketset *readset, socketset *writeset, socketset *errorset, struct timeval *tv = NULL) throw (socket_exception);
+		void select(socketset *readset, socketset *writeset, socketset *errorset, struct timeval *tv = NULL) noexcept (false);
 
 	private:
 		class pipesocket : public basesocket
@@ -141,13 +141,13 @@ namespace ibrcommon
 		public:
 			pipesocket();
 			virtual ~pipesocket();
-			virtual void up() throw (socket_exception);
-			virtual void down() throw (socket_exception);
+			virtual void up() noexcept (false);
+			virtual void down() noexcept (false);
 
-			void read(char *buf, size_t len) throw (socket_exception);
-			void write(const char *buf, size_t len) throw (socket_exception);
+			void read(char *buf, size_t len) noexcept (false);
+			void write(const char *buf, size_t len) noexcept (false);
 
-			int getOutput() const throw (socket_exception);
+			int getOutput() const noexcept (false);
 
 		private:
 			int _output_fd;

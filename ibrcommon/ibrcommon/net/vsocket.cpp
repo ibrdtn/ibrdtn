@@ -189,13 +189,13 @@ namespace ibrcommon
 	{
 	}
 
-	int vsocket::pipesocket::getOutput() const throw (socket_exception)
+	int vsocket::pipesocket::getOutput() const noexcept (false)
 	{
 		if (_state == SOCKET_DOWN) throw socket_exception("output fd not available");
 		return _output_fd;
 	}
 
-	void vsocket::pipesocket::up() throw (socket_exception)
+	void vsocket::pipesocket::up() noexcept (false)
 	{
 		if (_state != SOCKET_DOWN)
 			throw socket_exception("socket is already up");
@@ -218,7 +218,7 @@ namespace ibrcommon
 		_state = SOCKET_UP;
 	}
 
-	void vsocket::pipesocket::down() throw (socket_exception)
+	void vsocket::pipesocket::down() noexcept (false)
 	{
 		if (_state != SOCKET_UP)
 			throw socket_exception("socket is not up");
@@ -229,7 +229,7 @@ namespace ibrcommon
 		_state = SOCKET_DOWN;
 	}
 
-	void vsocket::pipesocket::read(char *buf, size_t len) throw (socket_exception)
+	void vsocket::pipesocket::read(char *buf, size_t len) noexcept (false)
 	{
 		ssize_t ret = piperead(this->fd(), buf, len);
 		if (ret == -1)
@@ -238,7 +238,7 @@ namespace ibrcommon
 			throw socket_exception("end of file");
 	}
 
-	void vsocket::pipesocket::write(const char *buf, size_t len) throw (socket_exception)
+	void vsocket::pipesocket::write(const char *buf, size_t len) noexcept (false)
 	{
 		ssize_t ret = pipewrite(_output_fd, buf, len);
 		if (ret == -1)
@@ -636,7 +636,7 @@ namespace ibrcommon
 		return (*iter).second;
 	}
 
-	void vsocket::up() throw (socket_exception)
+	void vsocket::up() noexcept (false)
 	{
 		{
 			ibrcommon::MutexLock l(_state);
@@ -664,7 +664,7 @@ namespace ibrcommon
 		_state.set(SocketState::IDLE);
 	}
 
-	void vsocket::down() throw ()
+	void vsocket::down() noexcept
 	{
 		try {
 			ibrcommon::MutexLock l(_state);
@@ -706,7 +706,7 @@ namespace ibrcommon
 		_pipe.write("i", 1);
 	}
 
-	void vsocket::select(socketset *readset, socketset *writeset, socketset *errorset, struct timeval *tv) throw (socket_exception)
+	void vsocket::select(socketset *readset, socketset *writeset, socketset *errorset, struct timeval *tv) noexcept (false)
 	{
 		fd_set fds_read;
 		fd_set fds_write;
