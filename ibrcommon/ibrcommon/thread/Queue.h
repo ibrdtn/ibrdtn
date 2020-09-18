@@ -197,13 +197,13 @@ namespace ibrcommon
 			}
 		}
 
-		void abort() noexcept()
+		void abort() noexcept
 		{
 			ibrcommon::MutexLock l(_cond);
 			_cond.abort();
 		}
 
-		void reset() noexcept()
+		void reset() noexcept
 		{
 			_cond.reset();
 		}

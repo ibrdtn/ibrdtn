@@ -36,7 +36,7 @@ namespace ibrcommon
 	class ThreadException : public ibrcommon::Exception
 	{
 	public:
-		ThreadException(int err = 0, string what = "An error occured during a thread operation.") throw() : ibrcommon::Exception(what), error(err)
+		ThreadException(int err = 0, string what = "An error occured during a thread operation.") noexcept : ibrcommon::Exception(what), error(err)
 		{
 		};
 
@@ -103,7 +103,7 @@ namespace ibrcommon
 		/**
 		 * Reset this thread to initial state
 		 */
-		void reset() throw (ThreadException);
+		void reset() noexcept(false);
 
 		/**
 		 * Yield execution context of the current thread. This is a static
@@ -128,17 +128,17 @@ namespace ibrcommon
 		/**
 		 * This method is called before the run.
 		 */
-		virtual void setup(void) throw ()  { };
+		virtual void setup(void) noexcept { };
 
 		/**
 		 * Abstract interface for thread context run method.
 		 */
-		virtual void run(void) throw () = 0;
+		virtual void run(void) noexcept = 0;
 
 		/**
 		 * This method is called when the run() method finishes.
 		 */
-		virtual void finally(void) throw () { };
+		virtual void finally(void) noexcept { };
 
 		/**
 		 * Set concurrency level of process.  This is essentially a portable
@@ -149,7 +149,7 @@ namespace ibrcommon
 		/**
 		 * Returns true if this thread was started and finalized before.
 		 */
-		inline bool isFinalized(void) throw ()
+		inline bool isFinalized(void) noexcept
 			{ return _state == THREAD_FINALIZED; };
 
 		/**
@@ -170,8 +170,8 @@ namespace ibrcommon
 		/**
 		 * Cancel the running thread context.
 		 */
-		void cancel() throw ();
-		virtual void __cancellation() throw () = 0;
+		void cancel() noexcept;
+		virtual void __cancellation() noexcept = 0;
 
 		/**
 		 * Determine if two thread identifiers refer to the same thread.
@@ -184,7 +184,7 @@ namespace ibrcommon
 		/**
 		 * static execute thread method
 		 */
-		static void* __execute__(void *obj) throw ();
+		static void* __execute__(void *obj) noexcept;
 	};
 
 	/**
@@ -218,7 +218,7 @@ namespace ibrcommon
 		 * now depreciated behavior and in the future will not be supported.
 		 * Threads should always return through their run() method.
 		 */
-		void join(void) throw (ThreadException);
+		void join(void) noexcept (false);
 
 		/**
 		 * Start execution of child context.  This must be called after the
@@ -228,12 +228,12 @@ namespace ibrcommon
 		 * of the thread when it starts under realtime priority.
 		 * @param priority of child thread.
 		 */
-		void start(int priority = 0) throw (ThreadException);
+		void start(int priority = 0) noexcept (false);
 
 		/**
 		 * Stop the execution of child context.
 		 */
-		void stop() throw ();
+		void stop() noexcept;
 	};
 
 	/**
@@ -266,12 +266,12 @@ namespace ibrcommon
 		 * the new thread context, which then calls the object's run method.
 		 * @param priority to start thread with.
 		 */
-		void start(int priority = 0) throw (ThreadException);
+		void start(int priority = 0) noexcept (false);
 
 		/**
 		 * Stop the execution of child context.
 		 */
-		void stop() throw (ThreadException);
+		void stop() noexcept (false);
 	};
 }
 

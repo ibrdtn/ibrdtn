@@ -69,7 +69,7 @@ namespace ibrcommon
 #endif
 	}
 
-	void* Thread::__execute__(void *obj) throw ()
+	void* Thread::__execute__(void *obj) noexcept
 	{
 #ifdef __DEVELOPMENT_ASSERTIONS__
 		// the given object should never be null
@@ -153,7 +153,7 @@ namespace ibrcommon
 		pthread_attr_destroy(&attr);
 	}
 
-	void Thread::reset() throw (ThreadException)
+	void Thread::reset() noexcept (false)
 	{
 		if ( _state != THREAD_FINALIZED )
 			throw ThreadException(0, "invalid state for reset");
@@ -178,7 +178,7 @@ namespace ibrcommon
 		return pthread_kill(tid, sig);
 	}
 
-	void Thread::cancel() throw ()
+	void Thread::cancel() noexcept
 	{
 		// block multiple cancel calls
 		{
@@ -230,7 +230,7 @@ namespace ibrcommon
 		join();
 	}
 
-	void JoinableThread::start(int adj) throw (ThreadException)
+	void JoinableThread::start(int adj) noexcept (false)
 	{
 		int ret;
 
@@ -309,12 +309,12 @@ namespace ibrcommon
 #endif
 	}
 
-	void JoinableThread::stop() throw ()
+	void JoinableThread::stop() noexcept
 	{
 		Thread::cancel();
 	}
 
-	void JoinableThread::join(void) throw (ThreadException)
+	void JoinableThread::join(void) noexcept (false)
 	{
 		ibrcommon::ThreadsafeState<THREAD_STATE>::Locked ls = _state.lock();
 
@@ -360,7 +360,7 @@ namespace ibrcommon
 	{
 	}
 
-	void DetachedThread::start(int adj) throw (ThreadException)
+	void DetachedThread::start(int adj) noexcept (false)
 	{
 		int ret = 0;
 
@@ -443,7 +443,7 @@ namespace ibrcommon
 #endif
 	}
 
-	void DetachedThread::stop() throw (ThreadException)
+	void DetachedThread::stop() noexcept (false)
 	{
 		Thread::cancel();
 	}
