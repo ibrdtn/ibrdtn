@@ -1,5 +1,6 @@
 ## Source directory
 
+AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS=unittests stress
 
 h_sources = \

@@ -1,6 +1,7 @@
 ## top directory
 
 #Build in these directories:
+AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = $(GENERIC_LIBRARY_NAME)
 
 #Distribute these directories:
