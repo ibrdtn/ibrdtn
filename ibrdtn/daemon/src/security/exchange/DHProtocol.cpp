@@ -30,6 +30,7 @@
 
 #include <openssl/rand.h>
 #include <openssl/pem.h>
+#include "openssl_compat.h"
 
 #define DH_KEY_LENGTH 1024
 
@@ -132,6 +133,7 @@ namespace dtn
 
 		void DHProtocol::begin(KeyExchangeSession &session, KeyExchangeData &data)
 		{
+			const BIGNUM *pub_key, *p, *g;
 			// get session state
 			DHState &state = session.getState<DHState>();
 
@@ -159,9 +161,12 @@ namespace dtn
 			// prepare request
 			KeyExchangeData request(KeyExchangeData::REQUEST, session);
 
-			write(request, state.dh->pub_key);
-			write(request, state.dh->p);
-			write(request, state.dh->g);
+			DH_get0_pqg(state.dh, &p, NULL, &g);
+			DH_get0_key(state.dh, &pub_key, NULL);
+
+			write(request, pub_key);
+			write(request, p);
+			write(request, g);
 
 			manager.submit(session, request);
 		}
@@ -177,6 +182,15 @@ namespace dtn
 				{
 					if (data.getAction() == KeyExchangeData::REQUEST)
 					{
+						BIGNUM *p = BN_new();
+						BIGNUM *g = BN_new();
+						if (p == NULL || g == NULL)
+						{
+							BN_free(p);
+							BN_free(g);
+							throw ibrcommon::Exception("Error while allocating space for DH parameters");
+						}
+
 						BIGNUM* pub_key = BN_new();
 						read(data, &pub_key);
 
@@ -184,8 +198,16 @@ namespace dtn
 						state.dh = DH_new();
 
 						// read p and g paramter from message
-						read(data, &state.dh->p);
-						read(data, &state.dh->g);
+						read(data, &p);
+						read(data, &g);
+
+						if (DH_set0_pqg(state.dh, p, NULL, g))
+						{
+							BN_free(p);
+							BN_free(g);
+							BN_free(pub_key);
+							throw ibrcommon::Exception("Error while setting DH parameters");
+						}
 
 						int codes;
 						if (!DH_check(state.dh, &codes))
@@ -213,7 +235,9 @@ namespace dtn
 						state.secret.assign((const char*)secret, length);
 
 						KeyExchangeData response(KeyExchangeData::RESPONSE, session);
-						write(response, state.dh->pub_key);
+						const BIGNUM *state_dh_pub_key;
+						DH_get0_key(state.dh, &state_dh_pub_key, NULL);
+						write(response, state_dh_pub_key);
 
 						manager.submit(session, response);
 
