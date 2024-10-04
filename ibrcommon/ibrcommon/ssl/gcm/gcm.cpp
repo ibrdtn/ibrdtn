@@ -89,7 +89,7 @@ ret_type gcm_init_and_key(                      /* initialise mode and set key  
 #elif defined( TABLES_256 )
 #define gf_mul_hh(a, ctx, scr)  gf_mul_256(a, ctx->gf_t256, scr)
 #else
-#define gf_mul_hh(a, ctx, scr)  gf_mul(a, ui8_ptr(ctx->ghash_h))
+#define gf_mul_hh(a, ctx, scr)  ibrdtn_gf_mul(a, ui8_ptr(ctx->ghash_h))
 #endif
 
 ret_type gcm_init_message(                      /* initialise a new message     */
@@ -334,9 +334,9 @@ ret_type gcm_compute_tag(                       /* compute authentication tag   
         memcpy(tbuf, ctx->ghash_h, BLOCK_SIZE);
         for( ; ; )
         {
-            if(ln & 1) gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
+            if(ln & 1) ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
             if(!(ln >>= 1)) break;
-            gf_mul(tbuf, tbuf);
+            ibrdtn_gf_mul(tbuf, tbuf);
         }
     }
 #else   /* this one seems slower on x86 and x86_64 :-( */
@@ -348,12 +348,12 @@ ret_type gcm_compute_tag(                       /* compute authentication tag   
         tbuf[0] = 0x80;
         while(i)
         {
-            gf_mul(tbuf, tbuf);
+            ibrdtn_gf_mul(tbuf, tbuf);
             if(i & ln)
                 gf_mul_hh(tbuf, ctx, scratch);
             i >>= 1;
         }
-        gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
+        ibrdtn_gf_mul(ui8_ptr(ctx->hdr_ghv), tbuf);
     }
 #endif
     i = BLOCK_SIZE; ln = (uint_32t)(ctx->txt_acnt << 3);
