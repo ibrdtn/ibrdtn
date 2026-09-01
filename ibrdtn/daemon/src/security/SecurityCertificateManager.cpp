@@ -146,8 +146,8 @@ namespace dtn
 				throw SecurityCertificateException("certificate or common-name is empty");
 			}
 
-			X509_NAME *cert_name;
-			X509_NAME_ENTRY *name_entry;
+			const X509_NAME *cert_name;
+			const X509_NAME_ENTRY *name_entry;
 			ASN1_STRING *eid_string;
 			int lastpos = -1;
 			unsigned char *utf8_eid;
@@ -188,7 +188,7 @@ namespace dtn
 				}
 
 				/* retrieve the string */
-				ASN1_STRING *asn1 = X509_NAME_ENTRY_get_data(name_entry);
+				const ASN1_STRING *asn1 = X509_NAME_ENTRY_get_data(name_entry);
 				if(!asn1){
 					IBRCOMMON_LOGGER_TAG(SecurityCertificateManager::TAG, error) << "X509_NAME_ENTRY_get_data returned NULL unexpectedly." << IBRCOMMON_LOGGER_ENDL;
 					continue;
