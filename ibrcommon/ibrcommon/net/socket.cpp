@@ -326,6 +326,17 @@ namespace ibrcommon
 		}
 	}
 
+        int basesocket::get_port()
+	{
+	  struct   sockaddr_in sin;
+	  socklen_t addrlen = sizeof(sin);
+	  memset(&sin, 0, addrlen);
+	  getsockname(_fd,(struct sockaddr*)&sin,&addrlen);  
+	  int port = ntohs(sin.sin_port);
+	  
+	  return port;
+	}
+
 	clientsocket::clientsocket()
 	{
 	}
@@ -706,9 +717,33 @@ namespace ibrcommon
 		this->set_reuseaddr(true);
 
 		try {
-			// try to bind on port and/or address
-			this->bind(_address);
-			this->listen(_listen);
+                  // Get port number from _address
+                  int port;
+                  std::string service;
+                  try {
+                    service = _address.service();
+                    port = atoi(service.c_str());
+                  } catch (const vaddress::address_not_set&) {
+                    port = 0;
+                  };
+
+		  // try to bind on port and/or address
+		  //
+                  // Bind only if port number != 0. Otherwise
+                  // let the OS assign a port number.
+                  if (port != 0) {
+		    this->bind(_address);
+		  }
+		  
+		  this->listen(_listen);
+
+		  // Now that the socket is open, let
+                  // us try to get its port number and update
+                  // _address accordingly
+                  if (port == 0) {
+                    port = get_port();
+                    _address.setService(port);
+                  }
 		} catch (const socket_exception&) {
 			// clean-up socket
 			__close(_fd);

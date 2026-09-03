@@ -402,6 +402,13 @@ namespace dtn
 					// bring up
 					msock->up();
 
+					// If dynamic port assignment has been used, retrieve the
+					// port number assigned by the OS
+					if (_port == 0) {
+					  _port = msock->get_port();
+					  IBRCOMMON_LOGGER_TAG(IPNDAgent::TAG, info) << "Assigned local port=" << _port << " dynamically (was 0)" << IBRCOMMON_LOGGER_ENDL;
+					}
+					
 					// add multicast socket to _socket
 					_socket.add(msock, any_iface);
 				} catch (const ibrcommon::socket_exception &ex) {

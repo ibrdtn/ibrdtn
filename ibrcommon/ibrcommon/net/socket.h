@@ -167,6 +167,11 @@ namespace ibrcommon {
 		 */
 		static bool hasSupport(const sa_family_t family, const int type = SOCK_DGRAM, const int protocol = 0) throw ();
 
+		/**
+		 * Returns the local port number of this socket.
+		 */
+		int get_port();
+
 	protected:
 		/**
 		 * The socket state determine if the socket file descriptor
@@ -349,7 +354,7 @@ namespace ibrcommon {
 		void bind(const vaddress &addr) throw (socket_exception);
 
 	private:
-		const vaddress _address;
+		vaddress _address;
 		const int _listen;
 	};
 
