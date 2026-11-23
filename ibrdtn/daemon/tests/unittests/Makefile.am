@@ -26,11 +26,10 @@ unittest_SOURCES = \
 
 # what flags you want to pass to the C compiler & linker
 AM_CPPFLAGS = $(ibrdtn_CFLAGS) $(CPPUNIT_CFLAGS) $(CURL_CFLAGS) $(SQLITE_CFLAGS)
-AM_LDFLAGS = $(ibrdtn_LIBS) $(CPPUNIT_LIBS) $(CURL_LIBS) $(SQLITE_LIBS)
+TEST_LIBS = $(ibrdtn_LIBS) $(CPPUNIT_LIBS) $(CURL_LIBS) $(SQLITE_LIBS)
 
 check_PROGRAMS = unittest
 unittest_CXXFLAGS = $(AM_CPPFLAGS) $(CPPUNIT_CFLAGS) -I$(top_srcdir)/tests/unittests -I$(top_srcdir)/src
-unittest_LDFLAGS = $(AM_LDFLAGS) $(CPPUNIT_LIBS)
-unittest_LDADD = $(top_srcdir)/src/libdtnd.la
+unittest_LDADD = $(top_builddir)/src/libdtnd.la $(TEST_LIBS)
 
 TESTS = unittest

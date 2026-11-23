@@ -1,7 +1,14 @@
+dnl Prefer pkg-config, retaining cppunit-config for older installations.
+AC_DEFUN([AM_PATH_CPPUNIT], [
+  PKG_CHECK_MODULES([CPPUNIT], [cppunit >= $1],
+    [m4_ifval([$2], [$2], [:])],
+    [AM_PATH_CPPUNIT_LEGACY([$1], [$2], [$3])])
+])
+
 dnl
 dnl AM_PATH_CPPUNIT(MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 dnl
-AC_DEFUN([AM_PATH_CPPUNIT],
+AC_DEFUN([AM_PATH_CPPUNIT_LEGACY],
 [
 
 AC_ARG_WITH(cppunit-prefix,[  --with-cppunit-prefix=PFX   Prefix where CppUnit is installed (optional)],
