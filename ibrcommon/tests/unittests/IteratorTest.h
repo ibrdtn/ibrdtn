@@ -28,6 +28,7 @@
 class IteratorTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(IteratorTest);
 	CPPUNIT_TEST(listTest);
+	CPPUNIT_TEST(keyTest);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -36,6 +37,7 @@ public:
 
 protected:
 	void listTest();
+	void keyTest();
 };
 
 #endif /* ITERATORTEST_H_ */
