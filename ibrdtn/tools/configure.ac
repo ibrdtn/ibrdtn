@@ -25,6 +25,23 @@ dnl Checks for programs.
 dnl -----------------------------------------------
 
 AC_PROG_CXX
+
+# Dynamic exception specifications were removed in C++17.
+# Respect explicit language standards and select C++14 otherwise.
+case " $CXXFLAGS " in
+  *-std=*|*/std:*) ;;
+  *) CXXFLAGS="$CXXFLAGS -std=gnu++14" ;;
+esac
+AC_LANG_PUSH([C++])
+AC_MSG_CHECKING([whether C++ dynamic exception specifications are supported])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+void ibrdtn_exception_specification_test() throw(int) {}
+int main() { return 0; }
+]])], [AC_MSG_RESULT([yes])], [
+  AC_MSG_RESULT([no])
+  AC_MSG_ERROR([C++14 dynamic exception specifications are required; try CXXFLAGS=-std=gnu++14.])
+])
+AC_LANG_POP([C++])
 AC_PROG_CC
 
 AC_PROG_AWK

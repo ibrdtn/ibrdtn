@@ -23,7 +23,7 @@ AM_CPPFLAGS += -I@top_srcdir@
 
 check_PROGRAMS = testsuite
 testsuite_CXXFLAGS = ${AM_CPPFLAGS} ${CPPUNIT_CFLAGS} -I@top_srcdir@/tests
-testsuite_LDFLAGS = ${AM_LDFLAGS} ${CPPUNIT_LIBS}
+testsuite_LDADD = ${AM_LDFLAGS} ${CPPUNIT_LIBS}
 testsuite_SOURCES = $(h_sources) $(cc_sources)
 
 TESTS = testsuite

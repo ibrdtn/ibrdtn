@@ -63,16 +63,22 @@ namespace ibrcommon
 	class key_iterator {
 		typename map::const_iterator iter_;
 	public:
+		typedef std::forward_iterator_tag iterator_category;
+		typedef typename map::key_type value_type;
+		typedef typename map::difference_type difference_type;
+		typedef const value_type* pointer;
+		typedef const value_type& reference;
 		key_iterator() {}
 		key_iterator(typename map::iterator iter) :iter_(iter) {}
 		key_iterator(typename map::const_iterator iter) :iter_(iter) {}
 		key_iterator(const key_iterator& b) :iter_(b.iter_) {}
 		key_iterator& operator=(const key_iterator& b) {iter_ = b.iter_; return *this;}
 		key_iterator& operator++() {++iter_; return *this;}
-		key_iterator operator++(int) {return KeyIterator(iter_++);}
-		const typename map::key_type& operator*() {return iter_->first;}
-		bool operator==(const key_iterator& b) {return iter_==b.iter_;}
-		bool operator!=(const key_iterator& b) {return iter_!=b.iter_;}
+		key_iterator operator++(int) {return key_iterator(iter_++);}
+		reference operator*() const {return iter_->first;}
+		pointer operator->() const {return &iter_->first;}
+		bool operator==(const key_iterator& b) const {return iter_==b.iter_;}
+		bool operator!=(const key_iterator& b) const {return iter_!=b.iter_;}
 	};
 }
 

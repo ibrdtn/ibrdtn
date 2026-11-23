@@ -1,0 +1,64 @@
+name: Build and test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.compiler }} / netlink ${{ matrix.netlink }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+        netlink: [enabled, disabled]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential clang autoconf automake libtool libtool-bin pkg-config \
+            libcppunit-dev libssl-dev zlib1g-dev libsqlite3-dev libcurl4-openssl-dev \
+            libdaemon-dev libnl-3-dev libnl-cli-3-dev libnl-genl-3-dev \
+            libnl-nf-3-dev libnl-route-3-dev libarchive-dev libxml2-dev
+      - name: Configure
+        working-directory: ibrdtn
+        env:
+          COMPILER: ${{ matrix.compiler }}
+          NETLINK: ${{ matrix.netlink }}
+        run: |
+          if [ "$COMPILER" = clang ]; then
+            export CC=clang CXX=clang++
+          else
+            export CC=gcc CXX=g++
+          fi
+          options=(--without-vmime --disable-dtndht --with-openssl --with-curl
+                   --with-sqlite --with-compression --with-xml --with-tls)
+          if [ "$NETLINK" = disabled ]; then
+            options+=(--disable-netlink)
+          fi
+          ./autogen.sh
+          ./configure "${options[@]}"
+      - name: Build
+        working-directory: ibrdtn
+        run: make -j2
+      - name: Test
+        working-directory: ibrdtn
+        run: make -j2 check
+      - name: Upload test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{ matrix.compiler }}-netlink-${{ matrix.netlink }}
+          path: |
+            ibrcommon/**/test-suite.log
+            ibrdtn/**/test-suite.log
+            ibrdtn/**/config.log
+            ibrcommon/config.log
+          if-no-files-found: ignore

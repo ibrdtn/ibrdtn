@@ -22,6 +22,9 @@
 #include "IteratorTest.h"
 #include <ibrcommon/Iterator.h>
 #include <list>
+#include <map>
+#include <set>
+#include <iterator>
 #include <string>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IteratorTest);
@@ -61,4 +64,21 @@ void IteratorTest::listTest() {
 	}
 
 	CPPUNIT_ASSERT_EQUAL(4, data_count);
+}
+
+void IteratorTest::keyTest() {
+	typedef std::map<int, std::string> Map;
+	Map values;
+	values[1] = "one";
+	values[2] = "two";
+	ibrcommon::key_iterator<Map> first(values.begin()), end(values.end());
+	CPPUNIT_ASSERT_EQUAL(1, *first++);
+	CPPUNIT_ASSERT_EQUAL(2, *first);
+	const ibrcommon::key_iterator<Map> current(first);
+	CPPUNIT_ASSERT_EQUAL(2, *current.operator->());
+	CPPUNIT_ASSERT(current != end);
+	ibrcommon::key_iterator<Map> begin(values.begin());
+	std::set<int> keys(begin, end);
+	CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), keys.size());
+	CPPUNIT_ASSERT_EQUAL(static_cast<std::ptrdiff_t>(2), std::distance(begin, end));
 }

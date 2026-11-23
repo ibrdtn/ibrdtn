@@ -73,7 +73,7 @@ namespace ibrcommon
 	template <class T>
 	class Queue
 	{
-		ibrcommon::Conditional _cond;
+		mutable ibrcommon::Conditional _cond;
 		std::queue<T> _queue;
 		ibrcommon::Semaphore _sem;
 		bool _limit;

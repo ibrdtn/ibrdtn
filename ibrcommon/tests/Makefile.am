@@ -38,7 +38,7 @@ AM_LDFLAGS = -L@top_builddir@/ibrcommon/.libs -librcommon $(OPENSSL_LIBS)
 
 check_PROGRAMS = testsuite
 testsuite_CXXFLAGS = ${AM_CPPFLAGS} ${CPPUNIT_CFLAGS} -I@top_srcdir@/tests -I@top_srcdir@
-testsuite_LDFLAGS = ${AM_LDFLAGS} ${CPPUNIT_LIBS}
+testsuite_LDADD = ${AM_LDFLAGS} ${CPPUNIT_LIBS}
 testsuite_SOURCES = $(h_sources) $(cc_sources) Main.cpp
 
 TESTS = testsuite

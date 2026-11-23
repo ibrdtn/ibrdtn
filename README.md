@@ -1,8 +1,7 @@
 IBR-DTN - A modular and lightweight implementation of the bundle protocol.
 ==========================================================================
 
-[![Build Status](https://travis-ci.org/ibrdtn/ibrdtn.svg?branch=master)](https://travis-ci.org/ibrdtn/ibrdtn)
-[![Coverage Status](https://img.shields.io/coveralls/ibrdtn/ibrdtn.svg)](https://coveralls.io/r/ibrdtn/ibrdtn)
+[![Build and test](https://github.com/ibrdtn/ibrdtn/actions/workflows/ci.yml/badge.svg)](https://github.com/ibrdtn/ibrdtn/actions/workflows/ci.yml)
 
 This implementation of the bundle protocol RFC5050 is designed for embedded
 systems like the RouterBoard 532A or Ubiquiti RouterStation Pro and can be
