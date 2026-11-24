@@ -122,8 +122,22 @@ namespace dtn
 				if (net.isAny())
 				{
 					// Bind once to ANY interface
-					_vsocket.add(new ibrcommon::tcpserversocket(port));
+				        ibrcommon::tcpserversocket *sock = new ibrcommon::tcpserversocket(port);
+					// If dynamic port assignment is required, enable the
+					// socket temporarily so as to retrieve the port number
+					// assigned by the OS
+					if (port == 0) {
+					  sock->up();
+					  port = sock->get_port();
+					  sock->down();
+					  IBRCOMMON_LOGGER_TAG(TCPConvergenceLayer::TAG, info) << "Assigned local port=" << port << " dynamically (was 0)" << IBRCOMMON_LOGGER_ENDL;
+					}
+	    			        _vsocket.add(sock);
 					_any_port = port;
+
+					ibrcommon::MutexLock l(_portmap_lock);
+					_portmap[net] = port;
+
 					return;
 				}
 
